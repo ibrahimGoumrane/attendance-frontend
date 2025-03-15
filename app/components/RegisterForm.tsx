@@ -23,13 +23,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import { Class } from "@/lib/types";
 
-const RegisterForm = () => {
-  const [error, setError] = useState<string>('');
+interface RegisterFormProps {
+  classes: Array<Class>;
+}
+
+const RegisterForm = ({classes} : RegisterFormProps) => {
+  const [error, setError] = useState<string | undefined>("");
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -41,8 +49,9 @@ const RegisterForm = () => {
     setError(error);
   };
 
+  const pending = form.formState.isSubmitting;
   return (
-    <Card className="w-1/2">
+    <Card className="w-1/2 h-full overflow-y-auto">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription>Make a new account</CardDescription>
@@ -52,13 +61,12 @@ const RegisterForm = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {error && <p className="text-destructive text-sm">{error}</p>}
             <div className="space-y-4">
-              {/* Email Field */}
               <FormField
                 control={form.control}
-                name="email"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -68,7 +76,61 @@ const RegisterForm = () => {
                   </FormItem>
                 )}
               />
-              {/* Password Field */}
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <div className="min-h-[1.25rem]">
+                      <FormMessage className="text-sm"/>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example@school-domain.com" {...field} />
+                    </FormControl>
+                    <div className="min-h-[1.25rem]">
+                      <FormMessage className="text-sm"/>
+                    </div>
+                  </FormItem>
+                )}
+              />
+                            <FormField
+                control={form.control}
+                name="section_promo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Class</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a class" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {classes.map((cls) => (
+                          <SelectItem key={cls.id} value={cls.id.toString()}>
+                            {cls.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="text-sm" />
+                  </FormItem>
+                )}
+              />
+            
               <FormField
                 control={form.control}
                 name="password"
@@ -84,7 +146,6 @@ const RegisterForm = () => {
                   </FormItem>
                 )}
               />
-              {/* Confirm Password Field */}
               <FormField
                 control={form.control}
                 name="confirmPassword"
@@ -101,7 +162,7 @@ const RegisterForm = () => {
                 )}
               />
             </div>
-            <Button type="submit">Register</Button>
+            <Button disabled={pending} type="submit">Register</Button>
           </form>
         </Form>
       </CardContent>
