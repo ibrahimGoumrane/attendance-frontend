@@ -6,4 +6,7 @@ export const sessionSchema = z.object({
 
 export const userSchema = z.object({
   email: z.string().email(),
+  role: z.enum(["admin", "student", "teacher"]),
+  firstName: z.string(),
+  lastName: z.string(),
 })

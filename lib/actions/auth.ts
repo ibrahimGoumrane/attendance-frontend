@@ -1,9 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { loginEndpointRequestSchema, loginFormSchema, registerEndpointRequestSchema, registerFormSchema } from "../schemas/auth";
+import { loginFormSchema, registerEndpointRequestSchema, registerFormSchema } from "../schemas/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { User } from "../types";
 
 const SESSION_COOKIE_NAME = "sessionid";
 const CSRF_TOKEN_NAME = "csrftoken";
@@ -21,8 +22,8 @@ export async function login(formData: z.infer<typeof loginFormSchema>) {
     body: JSON.stringify(data),
     credentials: "include",
   });
-  const jsonResponse = await response.json();
-  console.log(jsonResponse);
+  const user : User = await response.json();
+  console.log(user);
   if (!response.ok) {
     return "Account creation failed. Please try again.";
   }
@@ -52,8 +53,14 @@ export async function login(formData: z.infer<typeof loginFormSchema>) {
   } else {
     console.error("No cookies present in the response.");
   }
-
-  // redirect("/");
+  switch (user.role) {
+    case 'admin':
+      redirect("/admin");
+    case 'student':
+      redirect("/student");
+    case 'teacher':
+      redirect("/teacher");
+  }
 }
 
 export async function register(formData: z.infer<typeof registerFormSchema>) {
@@ -103,5 +110,5 @@ export async function register(formData: z.infer<typeof registerFormSchema>) {
     console.error("No cookies present in the response.");
   }
 
-  // redirect("/");
+  redirect("/student");
 }
