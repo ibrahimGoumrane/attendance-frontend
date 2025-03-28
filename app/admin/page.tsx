@@ -5,7 +5,7 @@ export default async function Home() {
   console.log(user);
   return (
     <div>
-      STUDENT
+      ADMIN
       {user?.email}
     </div>
   );
