@@ -19,6 +19,27 @@ export const registerFormSchema = z
     path: ["confirmPassword"],
   });
 
+export const teacherFormSchema = z
+  .object({
+    email: z.string().nonempty("Email is required").email(),
+    firstName: z.string().nonempty("First name is required."),
+    lastName: z.string().nonempty("Last name is required"),
+    department: z.string(),
+    password: z.string().min(8, "Password must be at least 8 characters long"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
+
+export const teacherEndpointRequestSchema = teacherFormSchema.transform(
+  ({ email, firstName, lastName, password, department }) => ({
+    user: { email, firstName, lastName, password },
+    department,
+  })
+);
+
 export const registerEndpointRequestSchema = registerFormSchema.transform(
   ({ email, firstName, lastName, password, section_promo }) => ({
     user: { email, firstName, lastName, password },
