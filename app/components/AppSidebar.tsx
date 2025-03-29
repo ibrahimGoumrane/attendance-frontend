@@ -11,7 +11,7 @@ import {
 import { AppSidebarProps } from "@/lib/types/sidebar";
 import Link from "next/link";
 
-export function AppSidebar({ items }: AppSidebarProps) {
+export function AppSidebar({ items, baseUrlPath }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarContent>
@@ -22,7 +22,7 @@ export function AppSidebar({ items }: AppSidebarProps) {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url}>
+                    <Link href={baseUrlPath + item.url}>
                       <item.icon className="h-5 w-5"/>
                       <span>{item.title}</span>
                     </Link>

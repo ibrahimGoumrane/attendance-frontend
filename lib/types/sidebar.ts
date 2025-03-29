@@ -6,4 +6,5 @@ export interface SidebarItemProps {
 
 export interface AppSidebarProps {
   items: SidebarItemProps[];
+  baseUrlPath: string
 }
