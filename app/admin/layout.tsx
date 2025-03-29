@@ -10,9 +10,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     {title: 'Teachers', url: '/teachers', icon: UsersRound}
   ]
   return (
-    <SidebarProvider>
+    <SidebarProvider className="w-full flex">
       <AppSidebar baseUrlPath="/admin" items={adminSidebarItems}/>
-      <main className="p-4">
+      <main className="p-4 flex-1">
         {/* <SidebarTrigger /> */}
         {children}
       </main>

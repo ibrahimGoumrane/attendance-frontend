@@ -1,7 +1,7 @@
 import { getAllTeachers } from "@/lib/services/teachers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mail } from "lucide-react";
+import { Mail, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default async function Teachers() {
@@ -9,7 +9,7 @@ export default async function Teachers() {
 
   return (
     <>
-      <h1 className="font-bold text-2xl">Teachers</h1>
+      <h1 className="font-bold text-2xl flex items-center gap-2">Teachers <Button size={"sm"} className="ml-auto text-xs" variant={"outline"}><PlusCircle/> Add New</Button></h1>
       <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
         {teachers.map((teacher) => (
           <Card className="gap-2" key={teacher.id}>
