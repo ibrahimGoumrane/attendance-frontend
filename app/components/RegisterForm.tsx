@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
-import { Class } from "@/lib/types";
+import { Class } from "@/lib/types/api";
 
 interface RegisterFormProps {
   classes: Array<Class>;

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { loginFormSchema, registerEndpointRequestSchema, registerFormSchema } from "../schemas/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { User } from "../types";
+import { User } from "../types/api";
 
 const SESSION_COOKIE_NAME = "sessionid";
 const CSRF_TOKEN_NAME = "csrftoken";
