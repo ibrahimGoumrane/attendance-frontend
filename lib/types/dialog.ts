@@ -5,4 +5,6 @@ export interface AppDialogProps {
   content?: React.ReactNode;
   footer?: React.ReactNode;
   header?: React.ReactNode;
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }

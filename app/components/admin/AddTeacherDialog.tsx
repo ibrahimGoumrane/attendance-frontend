@@ -9,8 +9,10 @@ import TeacherForm from "./TeacherForm";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { addTeacher } from "@/lib/services/teachers";
+import { Teacher } from "@/lib/types/api";
+import { useState } from "react";
 
-export default function AddTeacherDialog() {
+export default function AddTeacherDialog({onTeacherAdded} : {onTeacherAdded: (arg: Teacher) => void}) {
   const form = useForm<z.infer<typeof teacherFormSchema>>({
     resolver: zodResolver(teacherFormSchema),
     defaultValues: {
@@ -23,6 +25,8 @@ export default function AddTeacherDialog() {
     },
   });
 
+  const [open, setOpen] = useState(false);
+
   const setErrorsFromObject = (errorObject: TeacherFormErrors) => {
     Object.entries(errorObject).forEach(([key, message]) => {
       form.setError(key as keyof TeacherFormErrors, {
@@ -33,9 +37,15 @@ export default function AddTeacherDialog() {
   };
 
   const onSubmit = async (values: z.infer<typeof teacherFormSchema>) => {
-    const error = await addTeacher(values);
-    if (error) {
-      setErrorsFromObject(error);
+    const response = await addTeacher(values);
+    console.log(response);
+    if (response.success) {
+      onTeacherAdded(response.data);
+      setOpen(false);
+    } else {
+      console.log("aaaa");
+      console.log(response.errors);
+      setErrorsFromObject(response.errors);
     }
   };
 
@@ -44,6 +54,8 @@ export default function AddTeacherDialog() {
 
   return (
     <AppDialog
+      open={open}
+      onOpenChange={setOpen}
       trigger={
         <Button size="sm" className="ml-auto text-xs" variant="outline">
           Add New

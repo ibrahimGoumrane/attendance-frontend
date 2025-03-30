@@ -1,5 +1,12 @@
 import {z} from "zod";
 import { ErrorWithRoot } from "../types/errors";
+import { userSchema } from "./user";
+
+export const teacherSchema = z.object({
+  id: z.string(),
+  department: z.string(),
+  user: userSchema,
+});
 
 export const teacherFormSchema = z
   .object({

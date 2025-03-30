@@ -1,20 +1,46 @@
-import { getAllTeachers } from "@/lib/services/teachers";
-import TeacherCard from "@/app/components/admin/TeacherCard";
-import AddTeacherDialog from "@/app/components/admin/AddTeacherDialog";
+'use client';
 
-export default async function Teachers() {
-  const teachers = await getAllTeachers();
+import { useEffect, useState } from 'react';
+import { getAllTeachers } from '@/lib/services/teachers';
+import AddTeacherDialog from '@/app/components/admin/AddTeacherDialog';
+import TeacherGrid from '@/app/components/admin/TeacherGrid';
+import { Teacher } from '@/lib/types/api';
+
+export default function Teachers() {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const addTeacherToState = (teacher: Teacher) => {
+    setTeachers([...teachers, teacher]);
+  }
+
+  useEffect(() => {
+    async function fetchTeachers() {
+      try {
+        const data = await getAllTeachers();
+        setTeachers(data);
+      } catch {
+        setError('Failed to fetch teachers');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTeachers();
+  }, []);
+
   return (
     <>
       <h1 className="font-bold text-2xl flex items-center gap-2">
-        Teachers{" "}
-        <AddTeacherDialog/>
+        Teachers <AddTeacherDialog onTeacherAdded={addTeacherToState}/>
       </h1>
-      <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
-        {teachers.map((teacher) => (
-          <TeacherCard key={teacher.id} teacher={teacher} />
-        ))}
-      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <TeacherGrid teachers={teachers} />
+      )}
     </>
   );
 }

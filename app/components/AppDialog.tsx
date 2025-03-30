@@ -16,10 +16,12 @@ export default function AppDialog({
   description, 
   content, 
   footer, 
-  header 
+  header,
+  open,
+  onOpenChange
 }: AppDialogProps) {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
           {header}
