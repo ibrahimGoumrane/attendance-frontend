@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ErrorWithRoot } from "../types/errors";
 
 export const loginFormSchema = z.object({
   email: z.string().nonempty("Email is required").email("Invalid email"),
@@ -32,6 +33,8 @@ export const teacherFormSchema = z
     message: "Passwords must match",
     path: ["confirmPassword"],
   });
+
+export type TeacherFormErrors = ErrorWithRoot<z.infer<typeof teacherFormSchema>>
 
 export const teacherEndpointRequestSchema = teacherFormSchema.transform(
   ({ email, firstName, lastName, password, department }) => ({

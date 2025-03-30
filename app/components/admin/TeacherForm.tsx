@@ -14,12 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 
 export default function TeacherForm({form} : {form: ReturnType<typeof useForm<z.infer<typeof teacherFormSchema>>>}) {
-
-  // const pending = form.formState.isSubmitting;
-
+ 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(() => {})}>
+        
         <div className="space-y-2 grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
