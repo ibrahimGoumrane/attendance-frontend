@@ -1,9 +1,5 @@
 import { getAllTeachers } from "@/lib/services/teachers";
 import TeacherCard from "@/app/components/admin/TeacherCard";
-import { PlusCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import AppDialog from "@/app/components/AppDialog";
-import TeacherForm from "@/app/components/admin/TeacherForm";
 import AddTeacherDialog from "@/app/components/admin/AddTeacherDialog";
 
 export default async function Teachers() {

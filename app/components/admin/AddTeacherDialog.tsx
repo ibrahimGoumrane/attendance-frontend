@@ -8,15 +8,27 @@ import AppDialog from "../AppDialog";
 import TeacherForm from "./TeacherForm";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { addTeacher } from "@/lib/services/teachers";
 
 export default function AddTeacherDialog() {
   const form = useForm<z.infer<typeof teacherFormSchema>>({
     resolver: zodResolver(teacherFormSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      department: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
-  const onSubmit = (values: z.infer<typeof teacherFormSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof teacherFormSchema>) => {
+    const error = await addTeacher(values);
+    console.log(error);
   };
+
+  const pending = form.formState.isSubmitting;
 
   return (
     <AppDialog
@@ -33,7 +45,9 @@ export default function AddTeacherDialog() {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button onClick={form.handleSubmit(onSubmit)}>Save</Button>
+          <Button disabled={pending} onClick={form.handleSubmit(onSubmit)}>
+            Save
+          </Button>
         </div>
       }
     />
