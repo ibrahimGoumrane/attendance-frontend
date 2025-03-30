@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TeacherFormErrors, teacherFormSchema } from "@/lib/schemas/auth";
+import { TeacherFormErrors, teacherFormSchema } from "@/lib/schemas/teachers";
 import AppDialog from "../AppDialog";
 import TeacherForm from "./TeacherForm";
 import { DialogClose } from "@/components/ui/dialog";

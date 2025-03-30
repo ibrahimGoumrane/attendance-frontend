@@ -7,7 +7,7 @@ import {
   teacherEndpointRequestSchema,
   TeacherFormErrors,
   teacherFormSchema,
-} from "../schemas/auth";
+} from "../schemas/teachers";
 import { serverFetch } from "../serverUtils";
 
 export async function getAllTeachers() {

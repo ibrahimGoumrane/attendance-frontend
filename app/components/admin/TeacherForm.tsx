@@ -1,6 +1,6 @@
 "use client";
 
-import { teacherFormSchema } from "@/lib/schemas/auth";
+import { teacherFormSchema } from "@/lib/schemas/teachers";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
