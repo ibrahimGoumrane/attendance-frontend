@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TeacherFormErrors, teacherFormSchema } from "@/lib/schemas/teachers";
 import AppDialog from "../AppDialog";
-import TeacherForm from "./TeacherForm";
+import TeacherForm from "./AddTeacherForm";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { addTeacher } from "@/lib/services/teachers";

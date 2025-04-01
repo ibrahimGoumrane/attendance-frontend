@@ -6,12 +6,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mail, Pencil } from "lucide-react";
+import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DeleteTeacherDialog from "./DeleteTeacherDialog";
 import { TeacherCardProps } from "@/lib/types/teacherGrid";
+import EditTeacherDialog from "./EditTeacherDialog";
 
-export default function TeacherCard({ teacher, onTeacherDeleted, onTeacherEdited }: TeacherCardProps) {
+export default function TeacherCard({
+  teacher,
+  onTeacherDeleted,
+  onTeacherEdited,
+}: TeacherCardProps) {
   return (
     <Card className="gap-2 py-4" key={teacher.id}>
       <CardHeader className="pb-2 flex items-center gap-2">
@@ -42,14 +47,11 @@ export default function TeacherCard({ teacher, onTeacherDeleted, onTeacherEdited
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button
-          className="cursor-pointer mr-2 border-1 rounded-sm size-8 p-0"
-          variant={"ghost"}
-          size={"icon"}
-        >
-          <Pencil className="size-4" />
-        </Button>
-        <DeleteTeacherDialog teacher={teacher} onTeacherDeleted={onTeacherDeleted} />
+        <EditTeacherDialog teacher={teacher} onTeacherEdited={onTeacherEdited}/>
+        <DeleteTeacherDialog
+          teacher={teacher}
+          onTeacherDeleted={onTeacherDeleted}
+        />
       </CardFooter>
     </Card>
   );

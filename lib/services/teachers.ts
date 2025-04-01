@@ -4,6 +4,9 @@ import { z } from "zod";
 import { Teacher } from "../types/api";
 import { getAllResource } from "./utils";
 import {
+  editTeacherEndpointRequestSchema,
+  EditTeacherFormErrors,
+  editTeacherFormSchema,
   teacherEndpointRequestSchema,
   TeacherFormErrors,
   teacherFormSchema,
@@ -45,10 +48,45 @@ export async function addTeacher(
   return { success: true, data: jsonResponse as Teacher };
 }
 
-export async function deleteTeacher(id : string) : Promise<boolean> {
-  const response = await serverFetch(`${process.env.API_URL}/teachers/${id}`, { method: 'DELETE' });
+export async function editTeacher(
+  id: string,
+  formData: z.infer<typeof editTeacherFormSchema>
+): Promise<
+  | { success: true; data: Teacher }
+  | { success: false; errors: EditTeacherFormErrors }
+> {
+  const { success, data } = editTeacherEndpointRequestSchema.safeParse(formData);
+  console.log(success, data);
+  if (!success) {
+    return {
+      success: false,
+      errors: { root: "Teacher account editing failed" },
+    };
+  }
+  const response = await serverFetch(`${process.env.API_URL}/teachers/${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const jsonResponse = await response.json();
+  console.log(jsonResponse);
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: jsonResponse.error || { root: "Teacher account editing failed" },
+    };
+  }
+  return { success: true, data: jsonResponse as Teacher };
+}
+
+export async function deleteTeacher(id: string): Promise<boolean> {
+  const response = await serverFetch(`${process.env.API_URL}/teachers/${id}`, {
+    method: "DELETE",
+  });
   if (!response.ok) {
     return false;
   }
   return true;
-} 
+}
