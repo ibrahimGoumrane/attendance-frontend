@@ -10,3 +10,9 @@ export type Class = {
   id: string;
   name: string;
 };
+
+export type Department = {
+  id: string,
+  name: string,
+  description?: string
+}

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import AppDialog from "../AppDialog";
 import { Pencil } from "lucide-react";
-import { Teacher } from "@/lib/types/api";
+import { Department, Teacher } from "@/lib/types/api";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
 import {
@@ -19,8 +19,10 @@ import { useState } from "react";
 export default function EditTeacherDialog({
   teacher,
   onTeacherEdited,
+  departments,
 }: {
   teacher: Teacher;
+  departments: Department[]
   onTeacherEdited: (teacher: Teacher) => void;
 }) {
   const form = useForm<z.infer<typeof editTeacherFormSchema>>({
@@ -83,7 +85,7 @@ export default function EditTeacherDialog({
           )}
         </>
       }
-      content={<EditTeacherForm form={form} />}
+      content={<EditTeacherForm departments={departments} form={form} />}
       footer={
         <div className="flex justify-end gap-2">
           <DialogClose asChild>

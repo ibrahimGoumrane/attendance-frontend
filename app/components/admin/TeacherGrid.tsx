@@ -7,6 +7,7 @@ export default function TeacherGrid({
   teachers,
   onTeacherDeleted,
   onTeacherEdited,
+  departments,
 }: TeacherGridProps) {
   return (
     <div className="mt-4 gap-3 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
@@ -14,6 +15,7 @@ export default function TeacherGrid({
         <TeacherCard
           key={teacher.id}
           teacher={teacher}
+          departments={departments}
           onTeacherDeleted={onTeacherDeleted}
           onTeacherEdited={onTeacherEdited}
         />

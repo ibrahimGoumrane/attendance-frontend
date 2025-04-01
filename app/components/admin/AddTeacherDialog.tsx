@@ -9,10 +9,16 @@ import TeacherForm from "./AddTeacherForm";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { addTeacher } from "@/lib/services/teachers";
-import { Teacher } from "@/lib/types/api";
+import { Department, Teacher } from "@/lib/types/api";
 import { useState } from "react";
 
-export default function AddTeacherDialog({onTeacherAdded} : {onTeacherAdded: (arg: Teacher) => void}) {
+export default function AddTeacherDialog({
+  onTeacherAdded,
+  departments,
+}: {
+  onTeacherAdded: (arg: Teacher) => void;
+  departments: Department[];
+}) {
   const form = useForm<z.infer<typeof teacherFormSchema>>({
     resolver: zodResolver(teacherFormSchema),
     defaultValues: {
@@ -70,7 +76,7 @@ export default function AddTeacherDialog({onTeacherAdded} : {onTeacherAdded: (ar
           )}
         </>
       }
-      content={<TeacherForm form={form} />}
+      content={<TeacherForm form={form} departments={departments}/>}
       footer={
         <div className="flex justify-end gap-2">
           <DialogClose asChild>

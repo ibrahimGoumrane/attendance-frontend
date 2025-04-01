@@ -23,7 +23,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 import { Class } from "@/lib/types/api";
 
@@ -31,7 +37,7 @@ interface RegisterFormProps {
   classes: Array<Class>;
 }
 
-const RegisterForm = ({classes} : RegisterFormProps) => {
+const RegisterForm = ({ classes }: RegisterFormProps) => {
   const [error, setError] = useState<string | undefined>("");
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -71,7 +77,7 @@ const RegisterForm = ({classes} : RegisterFormProps) => {
                       <Input {...field} />
                     </FormControl>
                     <div className="min-h-[1.25rem]">
-                      <FormMessage className="text-sm"/>
+                      <FormMessage className="text-sm" />
                     </div>
                   </FormItem>
                 )}
@@ -86,7 +92,7 @@ const RegisterForm = ({classes} : RegisterFormProps) => {
                       <Input {...field} />
                     </FormControl>
                     <div className="min-h-[1.25rem]">
-                      <FormMessage className="text-sm"/>
+                      <FormMessage className="text-sm" />
                     </div>
                   </FormItem>
                 )}
@@ -98,21 +104,27 @@ const RegisterForm = ({classes} : RegisterFormProps) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="example@school-domain.com" {...field} />
+                      <Input
+                        placeholder="example@school-domain.com"
+                        {...field}
+                      />
                     </FormControl>
                     <div className="min-h-[1.25rem]">
-                      <FormMessage className="text-sm"/>
+                      <FormMessage className="text-sm" />
                     </div>
                   </FormItem>
                 )}
               />
-                            <FormField
+              <FormField
                 control={form.control}
                 name="section_promo"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Class</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a class" />
@@ -130,7 +142,7 @@ const RegisterForm = ({classes} : RegisterFormProps) => {
                   </FormItem>
                 )}
               />
-            
+
               <FormField
                 control={form.control}
                 name="password"
@@ -141,7 +153,7 @@ const RegisterForm = ({classes} : RegisterFormProps) => {
                       <Input type="password" {...field} />
                     </FormControl>
                     <div className="min-h-[1.25rem]">
-                      <FormMessage className="text-sm"/>
+                      <FormMessage className="text-sm" />
                     </div>
                   </FormItem>
                 )}
@@ -156,13 +168,15 @@ const RegisterForm = ({classes} : RegisterFormProps) => {
                       <Input type="password" {...field} />
                     </FormControl>
                     <div className="min-h-[1.25rem]">
-                      <FormMessage className="text-sm"/>
+                      <FormMessage className="text-sm" />
                     </div>
                   </FormItem>
                 )}
               />
             </div>
-            <Button disabled={pending} type="submit">Register</Button>
+            <Button disabled={pending} type="submit">
+              Register
+            </Button>
           </form>
         </Form>
       </CardContent>

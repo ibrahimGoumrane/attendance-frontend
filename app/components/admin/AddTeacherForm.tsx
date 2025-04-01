@@ -12,13 +12,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Department } from "@/lib/types/api";
 
-export default function TeacherForm({form} : {form: ReturnType<typeof useForm<z.infer<typeof teacherFormSchema>>>}) {
- 
+export default function TeacherForm({
+  form,
+  departments,
+}: {
+  form: ReturnType<typeof useForm<z.infer<typeof teacherFormSchema>>>;
+  departments: Department[];
+}) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(() => {})}>
-        
         <div className="space-y-2 grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -56,9 +68,23 @@ export default function TeacherForm({form} : {form: ReturnType<typeof useForm<z.
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Department</FormLabel>
-                <FormControl>
-                  <Input placeholder="Department" {...field} />
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value?.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a department" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {departments.map((department) => (
+                      <SelectItem key={department.id} value={department.id.toString()}>
+                        {department.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <div className="min-h-[1.25rem]">
                   <FormMessage className="text-sm" />
                 </div>
