@@ -1,7 +1,7 @@
 "use client";
 
 import TeacherCard from "./TeacherCard";
-import { TeacherGridProps } from "@/lib/types/teacherGrid";
+import { TeacherGridProps } from "@/lib/types/teacherProps";
 
 export default function TeacherGrid({
   teachers,
