@@ -14,5 +14,6 @@ export type Class = {
 export type Department = {
   id: string,
   name: string,
-  description?: string
+  description?: string,
+  teacherCount?: number
 }

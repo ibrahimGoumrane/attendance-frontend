@@ -2,6 +2,7 @@
 
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,6 +17,7 @@ export default function DepartmentCard({ department } : DepartmentCardProps) {
           {department.name}
         </CardTitle>
       </CardHeader>
+      {department.teacherCount !== undefined && <CardContent className="text-center italic">{department.teacherCount} teachers</CardContent>}
     </Card>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAllDepartments } from "@/lib/services/departments";
+import { getAllDepartmentsWithTeacherCount } from "@/lib/services/departments";
 import { Department } from "@/lib/types/api";
 import DepartmentGrid from "@/app/components/admin/DepartmentGrid";
 
@@ -29,7 +29,7 @@ export default function Departments() {
   useEffect(() => {
     async function fetchDepartments() {
       try {
-        const departmentsData = await getAllDepartments();
+        const departmentsData = await getAllDepartmentsWithTeacherCount();
         setDepartments(departmentsData);
       } catch {
         setError("Failed to fetch departments");
