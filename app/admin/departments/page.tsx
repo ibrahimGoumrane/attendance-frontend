@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllDepartmentsWithTeacherCount } from "@/lib/services/departments";
 import { Department } from "@/lib/types/api";
 import DepartmentGrid from "@/app/components/admin/DepartmentGrid";
+import AddDepartmentDialog from "@/app/components/admin/AddDepartmentDialog";
 
 export default function Departments() {
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -11,6 +12,7 @@ export default function Departments() {
   const [error, setError] = useState<string | null>(null);
 
   const addDepartmentToState = (department: Department) => {
+    department.teacherCount = 0;
     setDepartments([...departments, department]);
   };
 
@@ -43,7 +45,7 @@ export default function Departments() {
   return (
     <>
       <h1 className="font-bold text-2xl flex items-center gap-2">
-        Departments
+        Departments <AddDepartmentDialog onDepartmentAdded={addDepartmentToState}/>
       </h1>
       {loading ? (
         <p>Loading...</p>
