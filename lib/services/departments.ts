@@ -3,11 +3,15 @@
 import { z } from "zod";
 import { DeparmentFormErrors, departmentFormSchema } from "../schemas/departments";
 import { serverFetch } from "../serverUtils";
-import { Department } from "../types/api";
+import { Department, Teacher } from "../types/api";
 import { getAllResource } from "./utils";
 
 export async function getAllDepartments() {
   return getAllResource<Department[]>('departments');
+}
+
+export async function getDepartmentTeachers(id : string) {
+  return getAllResource<Teacher[]>(`departments/${id}/teachers`)
 }
 
 export async function getAllDepartmentsWithTeacherCount() {

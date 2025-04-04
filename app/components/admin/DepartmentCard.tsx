@@ -9,9 +9,13 @@ import {
 
 import { DepartmentCardProps } from "@/lib/types/departmentProps";
 
-export default function DepartmentCard({ department } : DepartmentCardProps) {
+export default function DepartmentCard({ department, onClick }: DepartmentCardProps & { onClick?: () => void }) {
   return (
-    <Card className="gap-2 py-4" key={department.id}>
+    <Card 
+      className="gap-2 py-4 cursor-pointer hover:bg-muted/50" 
+      key={department.id}
+      onClick={onClick}
+    >
       <CardHeader className="pb-2 flex items-center gap-2">
         <CardTitle className="text-xl ml-2 text-center w-full">
           {department.name}
