@@ -10,7 +10,7 @@ export default function Departments() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  console.log(departments);
   const addDepartmentToState = (department: Department) => {
     department.teacherCount = 0;
     setDepartments([...departments, department]);

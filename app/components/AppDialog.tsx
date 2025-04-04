@@ -14,7 +14,8 @@ export default function AppDialog({
   trigger, 
   title, 
   description, 
-  content, 
+  content,
+  contentClassName, 
   footer, 
   header,
   open,
@@ -23,7 +24,7 @@ export default function AppDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className={contentClassName}>
           {header}
           {(title || description) && (
             <DialogHeader>

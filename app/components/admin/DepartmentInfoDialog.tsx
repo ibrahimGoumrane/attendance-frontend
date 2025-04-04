@@ -6,7 +6,6 @@ import AppDialog from "../AppDialog";
 import DepartmentCard from "./DepartmentCard";
 import { DepartmentCardProps } from "@/lib/types/departmentProps";
 import { Teacher } from "@/lib/types/api";
-import TeacherCard from "./TeacherCard";
 import TeacherGrid from "./TeacherGrid";
 
 export function DepartmentInfoDialog({
@@ -49,12 +48,17 @@ export function DepartmentInfoDialog({
       }
       title={department.name + " " + "Department"}
       content={
-        loading ? (
-          <p>Loading...</p>
-        ) : (
-          <TeacherGrid teachers={deptTeachers}/>
-        )
+        <>
+          {department.description && <p className="italic">{department.description}</p>}
+          <h3 className="text-xl font-semibold">Teachers</h3>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <TeacherGrid teachers={deptTeachers} />
+          )}
+        </>
       }
+      contentClassName="sm:max-w-2/3 w-full"
     />
   );
 }
