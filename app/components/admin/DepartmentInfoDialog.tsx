@@ -6,6 +6,8 @@ import AppDialog from "../AppDialog";
 import DepartmentCard from "./DepartmentCard";
 import { DepartmentCardProps } from "@/lib/types/departmentProps";
 import { Teacher } from "@/lib/types/api";
+import TeacherCard from "./TeacherCard";
+import TeacherGrid from "./TeacherGrid";
 
 export function DepartmentInfoDialog({
   department,
@@ -50,16 +52,7 @@ export function DepartmentInfoDialog({
         loading ? (
           <p>Loading...</p>
         ) : (
-          <ul>
-            {deptTeachers.map((teacher) => (
-              <li key={teacher.user.email}>
-                {teacher.user.firstName} {teacher.user.lastName} -{" "}
-                <a href={`mailto:${teacher.user.email}`}>
-                  {teacher.user.email}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <TeacherGrid teachers={deptTeachers}/>
         )
       }
     />

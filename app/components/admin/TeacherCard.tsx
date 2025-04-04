@@ -16,7 +16,7 @@ export default function TeacherCard({
   teacher,
   onTeacherDeleted,
   onTeacherEdited,
-  departments
+  departments,
 }: TeacherCardProps) {
   return (
     <Card className="gap-2 py-4" key={teacher.id}>
@@ -24,9 +24,11 @@ export default function TeacherCard({
         <CardTitle className="text-xl ml-2">
           {teacher.user.firstName} {teacher.user.lastName}
         </CardTitle>
-        <Badge variant="outline" className="w-fit text-[0.75rem]">
+        {departments && (
+          <Badge variant="outline" className="w-fit text-[0.75rem]">
             {departments.find((d) => d.id === teacher.department)?.name}
-        </Badge>
+          </Badge>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex items-center text-sm text-slate-700">
@@ -48,11 +50,19 @@ export default function TeacherCard({
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <EditTeacherDialog teacher={teacher} onTeacherEdited={onTeacherEdited} departments={departments}/>
-        <DeleteTeacherDialog
-          teacher={teacher}
-          onTeacherDeleted={onTeacherDeleted}
-        />
+        {onTeacherEdited && departments && (
+          <EditTeacherDialog
+            teacher={teacher}
+            onTeacherEdited={onTeacherEdited}
+            departments={departments}
+          />
+        )}
+        {onTeacherDeleted && (
+          <DeleteTeacherDialog
+            teacher={teacher}
+            onTeacherDeleted={onTeacherDeleted}
+          />
+        )}
       </CardFooter>
     </Card>
   );
