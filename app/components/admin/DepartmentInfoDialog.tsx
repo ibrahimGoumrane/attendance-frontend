@@ -8,6 +8,7 @@ import { DepartmentCardProps } from "@/lib/types/departmentProps";
 import { Teacher } from "@/lib/types/api";
 import TeacherGrid from "./TeacherGrid";
 import DeleteDepartmentDialog from "./DeleteDepartmentDialog";
+import EditDepartmentDialog from "./EditDepartmentDialog";
 
 export function DepartmentInfoDialog({
   department,
@@ -57,6 +58,15 @@ export function DepartmentInfoDialog({
               setOpen(false);
             }}
           />
+          <span>
+            <EditDepartmentDialog
+              department={department}
+              onDepartmentEdited={(department) => {
+                onDepartmentEdited(department);
+                setOpen(false);
+              }}
+            />
+          </span>
         </div>
       }
       content={

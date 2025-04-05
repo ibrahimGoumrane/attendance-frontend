@@ -46,6 +46,36 @@ export async function addDepartment(
   return { success: true, data: jsonResponse as Department };
 }
 
+export async function editDepartment(
+  id: string,
+  formData: z.infer<typeof departmentFormSchema>
+): Promise<
+  | { success: true; data: Department }
+  | { success: false; errors: DeparmentFormErrors }
+> {
+
+  const response = await serverFetch(`${process.env.API_URL}/departments/${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const jsonResponse = await response.json();
+  console.log(jsonResponse);
+
+  if (!response.ok) {
+    return {
+      success: false,
+      errors: jsonResponse.error || { root: "Department creation failed" },
+    };
+  }
+
+  return { success: true, data: jsonResponse as Department };
+}
+
+
 export async function deleteDepartment(id: string): Promise<boolean> {
   return deleteResource("departments", id);
 }
