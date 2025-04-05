@@ -7,6 +7,7 @@ import DepartmentCard from "./DepartmentCard";
 import { DepartmentCardProps } from "@/lib/types/departmentProps";
 import { Teacher } from "@/lib/types/api";
 import TeacherGrid from "./TeacherGrid";
+import DeleteDepartmentDialog from "./DeleteDepartmentDialog";
 
 export function DepartmentInfoDialog({
   department,
@@ -46,10 +47,23 @@ export function DepartmentInfoDialog({
           department={department}
         />
       }
-      title={department.name + " " + "Department"}
+      title={
+        <div className="flex items-center gap-2">
+          {department.name + " " + "Department"}
+          <DeleteDepartmentDialog
+            department={department}
+            onDepartmentDeleted={(id: string) => {
+              onDepartmentDeleted(id);
+              setOpen(false);
+            }}
+          />
+        </div>
+      }
       content={
         <>
-          {department.description && <p className="italic">{department.description}</p>}
+          {department.description && (
+            <p className="italic">{department.description}</p>
+          )}
           <h3 className="text-xl font-semibold">Teachers</h3>
           {loading ? (
             <p>Loading...</p>
