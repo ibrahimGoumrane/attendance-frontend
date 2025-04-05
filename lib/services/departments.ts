@@ -4,7 +4,7 @@ import { z } from "zod";
 import { DeparmentFormErrors, departmentFormSchema } from "../schemas/departments";
 import { serverFetch } from "../serverUtils";
 import { Department, Teacher } from "../types/api";
-import { getAllResource } from "./utils";
+import { deleteResource, getAllResource } from "./utils";
 
 export async function getAllDepartments() {
   return getAllResource<Department[]>('departments');
@@ -44,4 +44,8 @@ export async function addDepartment(
   }
 
   return { success: true, data: jsonResponse as Department };
+}
+
+export async function deleteDepartment(id: string): Promise<boolean> {
+  return deleteResource("departments", id);
 }

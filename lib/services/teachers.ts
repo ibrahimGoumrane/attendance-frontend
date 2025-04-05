@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { Teacher } from "../types/api";
-import { getAllResource } from "./utils";
+import { deleteResource, getAllResource } from "./utils";
 import {
   editTeacherEndpointRequestSchema,
   EditTeacherFormErrors,
@@ -82,11 +82,5 @@ export async function editTeacher(
 }
 
 export async function deleteTeacher(id: string): Promise<boolean> {
-  const response = await serverFetch(`${process.env.API_URL}/teachers/${id}`, {
-    method: "DELETE",
-  });
-  if (!response.ok) {
-    return false;
-  }
-  return true;
+  return deleteResource("teachers", id);
 }
