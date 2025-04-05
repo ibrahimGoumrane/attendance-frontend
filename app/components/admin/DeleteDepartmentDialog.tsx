@@ -43,7 +43,13 @@ export default function DeleteDepartmentDialog({
         </Button>
       }
       title={`Delete ${department.name}?`}
-      description={"This action cannot be undone."}
+      description={
+        <>
+          This action cannot be undone.{" "}
+          <span className="text-red-500 font-bold">This
+          will also delete all department teacher accounts.</span> 
+        </>
+      }
       footer={
         <>
           <DialogClose asChild>
