@@ -61,10 +61,7 @@ export function DepartmentInfoDialog({
           <span>
             <EditDepartmentDialog
               department={department}
-              onDepartmentEdited={(department) => {
-                onDepartmentEdited(department);
-                setOpen(false);
-              }}
+              onDepartmentEdited={onDepartmentEdited}
             />
           </span>
         </div>
