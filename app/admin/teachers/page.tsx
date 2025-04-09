@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllTeachers } from "@/lib/services/teachers";
-import AddTeacherDialog from "@/app/components/admin/AddTeacherDialog";
+import { AddTeacherDialog } from "@/app/components/admin/TeacherDialogs";
 import TeacherGrid from "@/app/components/admin/TeacherGrid";
 import { Department, Teacher } from "@/lib/types/api";
 import { getAllDepartments } from "@/lib/services/departments";

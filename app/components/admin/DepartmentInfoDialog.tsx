@@ -7,8 +7,7 @@ import DepartmentCard from "./DepartmentCard";
 import { DepartmentCardProps } from "@/lib/types/departmentProps";
 import { Teacher } from "@/lib/types/api";
 import TeacherGrid from "./TeacherGrid";
-import DeleteDepartmentDialog from "./DeleteDepartmentDialog";
-import EditDepartmentDialog from "./EditDepartmentDialog";
+import { DeleteDepartmentDialog, EditDepartmentDialog } from "./DepartmentDialogs";
 
 export function DepartmentInfoDialog({
   department,

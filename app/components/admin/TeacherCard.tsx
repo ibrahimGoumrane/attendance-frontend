@@ -8,9 +8,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import DeleteTeacherDialog from "./DeleteTeacherDialog";
+import { EditTeacherDialog, DeleteTeacherDialog } from "./TeacherDialogs";
 import { TeacherCardProps } from "@/lib/types/teacherProps";
-import EditTeacherDialog from "./EditTeacherDialog";
 
 export default function TeacherCard({
   teacher,

@@ -11,7 +11,7 @@ import { Department } from "@/lib/types/api";
 import GenericFormDialog from "./GenericFormDialog";
 import AddDepartmentForm from "./AddDepartmentForm";
 
-export default function AddDepartmentDialog({
+export function AddDepartmentDialog({
   onDepartmentAdded,
 }: {
   onDepartmentAdded: (arg: Department) => void;
