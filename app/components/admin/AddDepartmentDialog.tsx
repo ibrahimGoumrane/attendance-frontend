@@ -28,7 +28,7 @@ export default function AddDepartmentDialog({
       title="Add New Department"
       description="Input new data"
       defaultValues={{name: '', description: ''}}
-      onSubmit={addDepartment}
+      addAction={addDepartment}
       onSuccess={onDepartmentAdded}
       schema={departmentFormSchema}
       formComponent={(form) => <AddDepartmentForm form={form}/>}

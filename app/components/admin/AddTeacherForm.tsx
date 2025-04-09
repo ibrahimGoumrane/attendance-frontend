@@ -70,7 +70,8 @@ export default function TeacherForm({
                 <FormLabel>Department</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value?.toString()}
+                  // Because department was undefined at some point on first render?
+                  value={field.value ? field.value.toString() : ""}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -79,7 +80,7 @@ export default function TeacherForm({
                   </FormControl>
                   <SelectContent>
                     {departments.map((department) => (
-                      <SelectItem key={department.id} value={department.id.toString()}>
+                      <SelectItem key={department.id} value={department.id}>
                         {department.name}
                       </SelectItem>
                     ))}
