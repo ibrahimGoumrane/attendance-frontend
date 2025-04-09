@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { getAllDepartmentsWithTeacherCount } from "@/lib/services/departments";
 import { Department } from "@/lib/types/api";
-import DepartmentGrid from "@/app/components/admin/display/DepartmentGrid";
-import { AddDepartmentDialog } from "@/app/components/admin/dialogs/DepartmentDialogs";
+import DepartmentGrid from "@/components/admin/display/DepartmentGrid";
+import { AddDepartmentDialog } from "@/components/admin/dialogs/DepartmentDialogs";
 
 export default function Departments() {
   const [departments, setDepartments] = useState<Department[]>([]);
