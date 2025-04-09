@@ -6,16 +6,16 @@ import {
   editTeacherFormSchema,
 } from "@/lib/schemas/teachers";
 import { Department, Teacher } from "@/lib/types/api";
-import EditTeacherForm from "./EditTeacherForm";
+import EditTeacherForm from "../forms/EditTeacherForm";
 import {
   addTeacher,
   editTeacher,
   deleteTeacher,
 } from "@/lib/services/teachers";
-import GenericFormDialog from "./GenericFormDialog";
+import GenericFormDialog from "../../GenericFormDialog";
 
-import GenericDeleteDialog from "./GenericDeleteDialog";
-import AddTeacherForm from "./AddTeacherForm";
+import GenericDeleteDialog from "../../GenericDeleteDialog";
+import AddTeacherForm from "../forms/AddTeacherForm";
 
 import { Trash, Pencil } from "lucide-react";
 

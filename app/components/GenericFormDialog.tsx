@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Path, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TypeOf, z, ZodType } from "zod";
-import AppDialog from "../AppDialog";
+import AppDialog from "./AppDialog";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { ErrorWithRoot } from "@/lib/types/errors";

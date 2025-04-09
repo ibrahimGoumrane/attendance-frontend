@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import AppDialog from "../AppDialog";
+import AppDialog from "./AppDialog";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@radix-ui/react-dialog";
 

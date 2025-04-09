@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { getDepartmentTeachers } from "@/lib/services/departments";
-import AppDialog from "../AppDialog";
-import DepartmentCard from "./DepartmentCard";
+import AppDialog from "../../AppDialog";
+import DepartmentCard from "../display/DepartmentCard";
 import { DepartmentCardProps } from "@/lib/types/departmentProps";
 import { Teacher } from "@/lib/types/api";
-import TeacherGrid from "./TeacherGrid";
+import TeacherGrid from "../display/TeacherGrid";
 import { DeleteDepartmentDialog, EditDepartmentDialog } from "./DepartmentDialogs";
 
 export function DepartmentInfoDialog({

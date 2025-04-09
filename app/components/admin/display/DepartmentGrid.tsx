@@ -1,7 +1,7 @@
 "use client";
 
 import { DepartmentGridProps } from "@/lib/types/departmentProps";
-import { DepartmentInfoDialog } from "./DepartmentInfoDialog";
+import { DepartmentInfoDialog } from "../dialogs/DepartmentInfoDialog";
 
 export default function DepartmentGrid({
   departments,

@@ -10,9 +10,9 @@ import {
   editDepartment,
 } from "@/lib/services/departments";
 import { Department } from "@/lib/types/api";
-import GenericFormDialog from "./GenericFormDialog";
-import GenericDeleteDialog from "./GenericDeleteDialog";
-import AddDepartmentForm from "./AddDepartmentForm";
+import GenericFormDialog from "../../GenericFormDialog";
+import GenericDeleteDialog from "../../GenericDeleteDialog";
+import AddDepartmentForm from "../forms/AddDepartmentForm";
 
 import { Pencil, Trash } from "lucide-react";
 
