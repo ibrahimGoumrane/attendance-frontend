@@ -1,5 +1,5 @@
 import { getAllClasses } from "@/lib/services/classes";
-import RegisterForm from "../../components/RegisterForm";
+import RegisterForm from "../../components/auth/RegisterForm";
 
 
 export default async function Page() {
