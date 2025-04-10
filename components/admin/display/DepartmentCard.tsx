@@ -9,10 +9,13 @@ import {
 
 import { DepartmentCardProps } from "@/lib/types/departmentProps";
 
-export default function DepartmentCard({ department, onClick }: DepartmentCardProps & { onClick?: () => void }) {
+export default function DepartmentCard({
+  department,
+  onClick,
+}: DepartmentCardProps & { onClick?: () => void }) {
   return (
-    <Card 
-      className="gap-2 py-4 cursor-pointer hover:bg-muted/50" 
+    <Card
+      className="gap-2 py-4 cursor-pointer hover:bg-muted/50"
       key={department.id}
       onClick={onClick}
     >
@@ -21,7 +24,15 @@ export default function DepartmentCard({ department, onClick }: DepartmentCardPr
           {department.name}
         </CardTitle>
       </CardHeader>
-      {department.teacherCount !== undefined && <CardContent className="text-center italic">{department.teacherCount} teachers</CardContent>}
+      {department.teacherCount !== undefined && (
+        <CardContent className="text-center italic">
+          {department.teacherCount === 0
+            ? "No teachers"
+            : department.teacherCount === 1
+            ? "1 teacher"
+            : `${department.teacherCount} teachers`}
+        </CardContent>
+      )}
     </Card>
   );
 }
