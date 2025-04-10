@@ -1,5 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "../components/AppSidebar"
+import { AppSidebar } from "@/components/AppSidebar"
 import { GraduationCap, UsersRound, LibraryBig } from "lucide-react"
 import { SidebarItemProps } from "@/lib/types/sidebar"
 

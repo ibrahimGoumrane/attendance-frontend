@@ -80,7 +80,7 @@ export default function TeacherForm({
                   </FormControl>
                   <SelectContent>
                     {departments.map((department) => (
-                      <SelectItem key={department.id} value={department.id}>
+                      <SelectItem key={department.id} value={department.id.toString()}>
                         {department.name}
                       </SelectItem>
                     ))}
