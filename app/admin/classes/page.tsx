@@ -1,7 +1,7 @@
 "use client";
 
 import ClassGrid from "@/components/admin/display/ClassGrid";
-import { getAllClasses } from "@/lib/services/classes";
+import { getAllClassesWithStudentCount } from "@/lib/services/classes";
 import { Class } from "@/lib/types/api";
 import { useEffect, useState } from "react";
 
@@ -12,7 +12,7 @@ export default function Classes() {
   useEffect(() => {
     async function fetchClasses() {
       try {
-        const classes = await getAllClasses();
+        const classes = await getAllClassesWithStudentCount();
         setClasses(classes);
       } catch {
         setError("Failed to fetch classes");
