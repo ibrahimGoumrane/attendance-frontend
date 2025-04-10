@@ -9,6 +9,7 @@ export type Teacher = z.infer<typeof teacherSchema>;
 export type Class = {
   id: string;
   name: string;
+  studentCount?: number
 };
 
 export type Department = {
