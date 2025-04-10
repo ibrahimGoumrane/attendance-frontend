@@ -1,3 +1,5 @@
+"use server"
+
 import { Class } from "../types/api";
 import { getAllResource } from "./utils";
 
