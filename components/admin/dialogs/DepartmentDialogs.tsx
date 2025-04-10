@@ -56,7 +56,7 @@ export function EditDepartmentDialog({
       }
       title="Add New Department"
       description="Input new data"
-      defaultValues={{ name: "", description: "" }}
+      defaultValues={{ name: department.name, description: department.description }}
       editAction={editDepartment}
       id={department.id}
       onSuccess={onDepartmentEdited}
