@@ -2,7 +2,12 @@
 
 import { z } from "zod";
 import { Teacher } from "../types/api";
-import { deleteResource, getAllResource } from "./utils";
+import {
+  addResource,
+  deleteResource,
+  editResource,
+  getAllResource,
+} from "./utils";
 import {
   editTeacherEndpointRequestSchema,
   EditTeacherFormErrors,
@@ -11,7 +16,6 @@ import {
   TeacherFormErrors,
   teacherFormSchema,
 } from "../schemas/teachers";
-import { serverFetch } from "../serverUtils";
 
 export async function getAllTeachers() {
   return getAllResource<Teacher[]>("teachers");
@@ -24,28 +28,19 @@ export async function addTeacher(
   | { success: false; errors: TeacherFormErrors }
 > {
   const { success, data } = teacherEndpointRequestSchema.safeParse(formData);
+
   if (!success) {
     return {
       success: false,
       errors: { root: "Teacher account creation failed" },
     };
   }
-  const response = await serverFetch(`${process.env.API_URL}/teachers/`, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  const jsonResponse = await response.json();
-  console.log(jsonResponse);
-  if (!response.ok) {
-    return {
-      success: false,
-      errors: jsonResponse.error || { root: "Teacher account creation failed" },
-    };
-  }
-  return { success: true, data: jsonResponse as Teacher };
+
+  return addResource<typeof data, Teacher, TeacherFormErrors>(
+    "teachers",
+    data,
+    "Teacher account creation failed"
+  );
 }
 
 export async function editTeacher(
@@ -55,30 +50,22 @@ export async function editTeacher(
   | { success: true; data: Teacher }
   | { success: false; errors: EditTeacherFormErrors }
 > {
-  const { success, data } = editTeacherEndpointRequestSchema.safeParse(formData);
-  console.log(success, data);
+  const { success, data } =
+    editTeacherEndpointRequestSchema.safeParse(formData);
+
   if (!success) {
     return {
       success: false,
       errors: { root: "Teacher account editing failed" },
     };
   }
-  const response = await serverFetch(`${process.env.API_URL}/teachers/${id}/`, {
-    method: "PATCH",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  const jsonResponse = await response.json();
-  console.log(jsonResponse);
-  if (!response.ok) {
-    return {
-      success: false,
-      errors: jsonResponse.error || { root: "Teacher account editing failed" },
-    };
-  }
-  return { success: true, data: jsonResponse as Teacher };
+
+  return editResource<typeof data, Teacher, EditTeacherFormErrors>(
+    "teachers",
+    id,
+    data,
+    "Teacher account editing failed"
+  );
 }
 
 export async function deleteTeacher(id: string): Promise<boolean> {
