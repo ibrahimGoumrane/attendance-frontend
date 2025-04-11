@@ -10,7 +10,9 @@ export async function getAllClasses() {
 }
 
 export async function getClassById(id: string) {
-  return getResourceById<Class>("classes", id);
+  // Weird work around with the id because the shape of the url is /api/classes/id/with-student-count
+  // Fix later?
+  return getResourceById<Class>(`classes/${id}/with-student-count`, '');
 }
 
 export async function getAllClassesWithStudentCount() {
