@@ -11,6 +11,23 @@ export async function getAllResource<T>(endpoint: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+/*
+ * Retrieves resource of specified id from given endpoint
+ * @param endpoint - The API endpoint to fetch data from.
+ * @param id - The ID of the requested resource
+ * @returns A promise that resolves to the fetched data of type T.
+ * @template T - The type of the data returned by the API.
+ */
+export async function getResourceById<T>(
+  endpoint: string,
+  id: string
+): Promise<T> {
+  const response = await serverFetch(
+    `${process.env.API_URL}/${endpoint}/${id}`
+  );
+  return response.json() as Promise<T>;
+}
+
 /**
  * Adds a new resource to the API.
  * @param endpoint - The API endpoint to send the resource data to.
@@ -25,7 +42,9 @@ export async function addResource<TFormData, TData, TError = { root: string }>(
   endpoint: string,
   formData: TFormData,
   rootError: string = "Resource creation failed"
-): Promise< { success: true; data: TData } | { success: false; errors: TError } > {
+): Promise<
+  { success: true; data: TData } | { success: false; errors: TError }
+> {
   const response = await serverFetch(`${process.env.API_URL}/${endpoint}/`, {
     method: "POST",
     headers: {
@@ -65,7 +84,9 @@ export async function editResource<TFormData, TData, TError = { root: string }>(
   formData: TFormData,
   rootError: string = "Resource update failed",
   method: "PATCH" | "PUT" = "PATCH"
-): Promise< { success: true; data: TData } | { success: false; errors: TError } > {
+): Promise<
+  { success: true; data: TData } | { success: false; errors: TError }
+> {
   const response = await serverFetch(
     `${process.env.API_URL}/${endpoint}/${id}/`,
     {

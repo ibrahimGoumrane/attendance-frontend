@@ -2,11 +2,15 @@
 
 import { z } from "zod";
 import { Class } from "../types/api";
-import { addResource, getAllResource } from "./utils";
+import { addResource, getAllResource, getResourceById } from "./utils";
 import { ClassFormErrors, classFormSchema } from "../schemas/classes";
 
 export async function getAllClasses() {
   return getAllResource<Class[]>("classes");
+}
+
+export async function getClassById(id: string) {
+  return getResourceById<Class>("classes", id);
 }
 
 export async function getAllClassesWithStudentCount() {
