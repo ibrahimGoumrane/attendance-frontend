@@ -6,7 +6,7 @@ import TeacherCard from "./TeacherCard";
 export default function TeacherGrid({
   readOnly = false,
 }: {
-  readOnly: boolean;
+  readOnly?: boolean;
 }) {
   const { items: teachers } = useTeacherContext();
   return (
