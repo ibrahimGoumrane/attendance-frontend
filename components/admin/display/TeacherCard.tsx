@@ -14,11 +14,15 @@ import {
 } from "../dialogs/TeacherDialogs";
 import { Teacher } from "@/lib/types/api";
 import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 
-export default function TeacherCard({ teacher }: { teacher: Teacher }) {
+export default function TeacherCard({
+  teacher,
+  readOnly = false,
+}: {
+  teacher: Teacher;
+  readOnly: boolean;
+}) {
   const { items: departments } = useDepartmentContext();
-  const teacherContext = useTeacherContext();
   return (
     <Card className="gap-2 py-4" key={teacher.id}>
       <CardHeader className="pb-2 flex items-center gap-2">
@@ -51,15 +55,10 @@ export default function TeacherCard({ teacher }: { teacher: Teacher }) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        {/* If used inside the teacher grid */}
-        {teacherContext && (
+        {!readOnly && (
           <>
-            <EditTeacherDialog
-              teacher={teacher}
-            />
-            <DeleteTeacherDialog
-              teacher={teacher}
-            />
+            <EditTeacherDialog teacher={teacher} />
+            <DeleteTeacherDialog teacher={teacher} />
           </>
         )}
       </CardFooter>

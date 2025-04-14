@@ -15,13 +15,10 @@ import GenericDeleteDialog from "../../GenericDeleteDialog";
 import AddDepartmentForm from "../forms/AddDepartmentForm";
 
 import { Pencil, Trash } from "lucide-react";
+import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
 
-
-export function AddDepartmentDialog({
-  onDepartmentAdded,
-}: {
-  onDepartmentAdded: (arg: Department) => void;
-}) {
+export function AddDepartmentDialog() {
+  const { addItem } = useDepartmentContext();
   return (
     <GenericFormDialog
       trigger={
@@ -33,7 +30,7 @@ export function AddDepartmentDialog({
       description="Input new data"
       defaultValues={{ name: "", description: "" }}
       addAction={addDepartment}
-      onSuccess={onDepartmentAdded}
+      onSuccess={addItem}
       schema={departmentFormSchema}
       formComponent={(form) => <AddDepartmentForm form={form} />}
     />
@@ -42,11 +39,10 @@ export function AddDepartmentDialog({
 
 export function EditDepartmentDialog({
   department,
-  onDepartmentEdited,
 }: {
   department: Department;
-  onDepartmentEdited: (arg: Department) => void;
 }) {
+  const { editItem } = useDepartmentContext();
   return (
     <GenericFormDialog
       trigger={
@@ -56,10 +52,18 @@ export function EditDepartmentDialog({
       }
       title="Add New Department"
       description="Input new data"
-      defaultValues={{ name: department.name, description: department.description }}
+      defaultValues={{
+        name: department.name,
+        description: department.description,
+      }}
       editAction={editDepartment}
       id={department.id}
-      onSuccess={onDepartmentEdited}
+      onSuccess={(data) => {
+        // This is done because after editing, the state is set to the API's return
+        // which does NOT contain the teacherCount property
+        data.teacherCount = department.teacherCount;
+        editItem(data);
+      }}
       schema={departmentFormSchema}
       formComponent={(form) => <AddDepartmentForm form={form} />}
     />
@@ -68,11 +72,10 @@ export function EditDepartmentDialog({
 
 export function DeleteDepartmentDialog({
   department,
-  onDepartmentDeleted,
 }: {
   department: Department;
-  onDepartmentDeleted: (id: string) => void;
 }) {
+  const { deleteItem } = useDepartmentContext();
   return (
     <GenericDeleteDialog
       trigger={
@@ -95,7 +98,7 @@ export function DeleteDepartmentDialog({
       }
       deleteAction={deleteDepartment}
       id={department.id}
-      onSuccess={onDepartmentDeleted}
+      onSuccess={deleteItem}
     />
   );
 }

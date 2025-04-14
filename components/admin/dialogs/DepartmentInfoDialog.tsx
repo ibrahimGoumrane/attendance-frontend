@@ -4,18 +4,20 @@ import { useEffect, useState } from "react";
 import { getDepartmentTeachers } from "@/lib/services/departments";
 import AppDialog from "../../AppDialog";
 import DepartmentCard from "../display/DepartmentCard";
-import { DepartmentCardProps } from "@/lib/types/departmentProps";
-import { Teacher } from "@/lib/types/api";
+import { Department, Teacher } from "@/lib/types/api";
 import TeacherGrid from "../display/TeacherGrid";
-import { DeleteDepartmentDialog, EditDepartmentDialog } from "./DepartmentDialogs";
+import {
+  DeleteDepartmentDialog,
+  EditDepartmentDialog,
+} from "./DepartmentDialogs";
+import { TeacherProvider } from "@/lib/contexts/TeacherContext";
 
 export function DepartmentInfoDialog({
   department,
-  onDepartmentDeleted,
-  onDepartmentEdited,
-}: DepartmentCardProps) {
+}: {
+  department: Department;
+}) {
   const [deptTeachers, setDeptTeachers] = useState<Teacher[]>([]);
-  console.log(deptTeachers);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
@@ -40,28 +42,13 @@ export function DepartmentInfoDialog({
     <AppDialog
       open={open}
       onOpenChange={setOpen}
-      trigger={
-        <DepartmentCard
-          onDepartmentDeleted={onDepartmentDeleted}
-          onDepartmentEdited={onDepartmentEdited}
-          department={department}
-        />
-      }
+      trigger={<DepartmentCard department={department} />}
       title={
         <div className="flex items-center gap-2">
           {department.name + " " + "Department"}
-          <DeleteDepartmentDialog
-            department={department}
-            onDepartmentDeleted={(id: string) => {
-              onDepartmentDeleted(id);
-              setOpen(false);
-            }}
-          />
+          <DeleteDepartmentDialog department={department} />
           <span>
-            <EditDepartmentDialog
-              department={department}
-              onDepartmentEdited={onDepartmentEdited}
-            />
+            <EditDepartmentDialog department={department} />
           </span>
         </div>
       }
@@ -74,7 +61,9 @@ export function DepartmentInfoDialog({
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <TeacherGrid teachers={deptTeachers} />
+            <TeacherProvider initialTeachers={deptTeachers}>
+              <TeacherGrid readOnly={true} />
+            </TeacherProvider>
           )}
         </>
       }

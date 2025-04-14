@@ -8,6 +8,4 @@ export interface DepartmentGridProps {
 
 export interface DepartmentCardProps {
   department: Department,
-  onDepartmentDeleted: (id: string) => void,
-  onDepartmentEdited: (department: Department) => void
 }

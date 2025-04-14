@@ -1,18 +1,15 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-import { DepartmentCardProps } from "@/lib/types/departmentProps";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Department } from "@/lib/types/api";
 
 export default function DepartmentCard({
   department,
   onClick,
-}: DepartmentCardProps & { onClick?: () => void }) {
+}: {
+  department: Department;
+  onClick?: () => void;
+}) {
   return (
     <Card
       className="gap-2 py-4 cursor-pointer hover:bg-muted/50"
