@@ -1,23 +1,15 @@
 "use client";
 
-import { ClassGridProps } from "@/lib/types/classProps";
 import ClassCard from "./ClassCard";
-import { Class } from "@/lib/types/api";
+import { useClassContext } from "@/lib/contexts/ClassContext";
 
-export default function ClassGrid({
-  classes,
+export default function ClassGrid({}) {
+  const { items: classes } = useClassContext();
 
-}: ClassGridProps) {
   return (
     <div className="mt-4 gap-3 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
       {classes.map((cls) => (
-        <ClassCard
-          key={cls.id}
-          cls={cls} onClassDeleted={function (id: string): void {
-            throw new Error("Function not implemented.");
-          } } onClassEdited={function (cls: Class): void {
-            throw new Error("Function not implemented.");
-          } }        />
+        <ClassCard key={cls.id} cls={cls} />
       ))}
     </div>
   );

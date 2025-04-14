@@ -1,17 +1,15 @@
-"use client"
+"use client";
 
 import GenericFormDialog from "@/components/GenericFormDialog";
 import { Button } from "@/components/ui/button";
 import { classFormSchema } from "@/lib/schemas/classes";
-import { Class } from "@/lib/types/api";
+
 import AddClassForm from "../forms/AddClassForm";
 import { addClass } from "@/lib/services/classes";
+import { useClassContext } from "@/lib/contexts/ClassContext";
 
-export function AddClassDialog({
-  onClassAdded,
-}: {
-  onClassAdded: (cls: Class) => void;
-}) {
+export function AddClassDialog() {
+  const { addItem } = useClassContext();
   return (
     <GenericFormDialog
       trigger={
@@ -21,11 +19,11 @@ export function AddClassDialog({
       }
       title="Add New Class"
       description="Enter class name"
-      defaultValues={{name: ""}}
+      defaultValues={{ name: "" }}
       schema={classFormSchema}
-      onSuccess={onClassAdded}
+      onSuccess={addItem}
       addAction={addClass}
-      formComponent={(form) => <AddClassForm form={form}/>}
+      formComponent={(form) => <AddClassForm form={form} />}
     />
   );
 }
