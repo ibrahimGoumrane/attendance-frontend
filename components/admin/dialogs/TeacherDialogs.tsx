@@ -5,7 +5,7 @@ import {
   teacherFormSchema,
   editTeacherFormSchema,
 } from "@/lib/schemas/teachers";
-import { Department, Teacher } from "@/lib/types/api";
+import { Teacher } from "@/lib/types/api";
 import EditTeacherForm from "../forms/EditTeacherForm";
 import {
   addTeacher,
@@ -18,14 +18,12 @@ import GenericDeleteDialog from "../../GenericDeleteDialog";
 import AddTeacherForm from "../forms/AddTeacherForm";
 
 import { Trash, Pencil } from "lucide-react";
+import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
+import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 
-export function AddTeacherDialog({
-  onTeacherAdded,
-  departments,
-}: {
-  onTeacherAdded: (arg: Teacher) => void;
-  departments: Department[];
-}) {
+export function AddTeacherDialog() {
+  const { items: departments } = useDepartmentContext();
+  const { addItem } = useTeacherContext();
   return (
     <GenericFormDialog
       trigger={
@@ -44,7 +42,7 @@ export function AddTeacherDialog({
         email: "",
       }}
       addAction={addTeacher}
-      onSuccess={onTeacherAdded}
+      onSuccess={addItem}
       schema={teacherFormSchema}
       formComponent={(form) => (
         <AddTeacherForm departments={departments} form={form} />
@@ -53,15 +51,9 @@ export function AddTeacherDialog({
   );
 }
 
-export function EditTeacherDialog({
-  teacher,
-  onTeacherEdited,
-  departments,
-}: {
-  teacher: Teacher;
-  departments: Department[];
-  onTeacherEdited: (teacher: Teacher) => void;
-}) {
+export function EditTeacherDialog({ teacher }: { teacher: Teacher }) {
+  const { items: departments } = useDepartmentContext();
+  const { editItem } = useTeacherContext();
   return (
     <GenericFormDialog
       trigger={
@@ -85,7 +77,7 @@ export function EditTeacherDialog({
       }}
       editAction={editTeacher}
       id={teacher.id}
-      onSuccess={onTeacherEdited}
+      onSuccess={editItem}
       schema={editTeacherFormSchema}
       formComponent={(form) => (
         <EditTeacherForm form={form} departments={departments} />
@@ -94,13 +86,8 @@ export function EditTeacherDialog({
   );
 }
 
-export function DeleteTeacherDialog({
-  teacher,
-  onTeacherDeleted,
-}: {
-  teacher: Teacher;
-  onTeacherDeleted: (id: string) => void;
-}) {
+export function DeleteTeacherDialog({ teacher }: { teacher: Teacher }) {
+  const { deleteItem } = useTeacherContext();
   return (
     <GenericDeleteDialog
       trigger={
@@ -117,7 +104,7 @@ export function DeleteTeacherDialog({
       }'s account?`}
       deleteAction={deleteTeacher}
       id={teacher.id}
-      onSuccess={onTeacherDeleted}
+      onSuccess={deleteItem}
     />
   );
 }

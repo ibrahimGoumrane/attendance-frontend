@@ -8,15 +8,17 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EditTeacherDialog, DeleteTeacherDialog } from "../dialogs/TeacherDialogs";
-import { TeacherCardProps } from "@/lib/types/teacherProps";
+import {
+  EditTeacherDialog,
+  DeleteTeacherDialog,
+} from "../dialogs/TeacherDialogs";
+import { Teacher } from "@/lib/types/api";
+import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
+import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 
-export default function TeacherCard({
-  teacher,
-  onTeacherDeleted,
-  onTeacherEdited,
-  departments,
-}: TeacherCardProps) {
+export default function TeacherCard({ teacher }: { teacher: Teacher }) {
+  const { items: departments } = useDepartmentContext();
+  const teacherContext = useTeacherContext();
   return (
     <Card className="gap-2 py-4" key={teacher.id}>
       <CardHeader className="pb-2 flex items-center gap-2">
@@ -49,18 +51,16 @@ export default function TeacherCard({
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        {onTeacherEdited && departments && (
-          <EditTeacherDialog
-            teacher={teacher}
-            onTeacherEdited={onTeacherEdited}
-            departments={departments}
-          />
-        )}
-        {onTeacherDeleted && (
-          <DeleteTeacherDialog
-            teacher={teacher}
-            onTeacherDeleted={onTeacherDeleted}
-          />
+        {/* If used inside the teacher grid */}
+        {teacherContext && (
+          <>
+            <EditTeacherDialog
+              teacher={teacher}
+            />
+            <DeleteTeacherDialog
+              teacher={teacher}
+            />
+          </>
         )}
       </CardFooter>
     </Card>
