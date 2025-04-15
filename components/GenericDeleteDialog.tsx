@@ -11,7 +11,7 @@ interface DeleteDialogProps {
   trigger: React.ReactNode;
   deleteAction: (id: string) => Promise<boolean>;
   id: string;
-  onSuccess: (id: string) => void;
+  onSuccess?: (id: string) => void;
 }
 
 export default function DeleteDialog({
@@ -29,7 +29,9 @@ export default function DeleteDialog({
     setPending(true);
     const success = await deleteAction(id);
     if (success) {
-      onSuccess(id);
+      if (onSuccess) {
+        onSuccess(id);
+      }
       setOpen(false);
     } else {
       // Graceful error handling could be added here

@@ -17,7 +17,7 @@ interface BaseFormDialogProps<T extends ZodType<any, any>> {
   description?: string;
   schema: T;
   defaultValues: z.infer<T>;
-  onSuccess: (data: any) => void;
+  onSuccess?: (data: any) => void;
   formComponent: (
     form: ReturnType<typeof useForm<z.infer<T>>>
   ) => React.ReactNode;
@@ -90,7 +90,9 @@ export default function GenericFormDialog<T extends ZodType<any, any>>({
       );
     }
     if (response.success) {
-      onSuccess(response.data);
+      if (onSuccess) {
+        onSuccess(response.data);
+      }
       setOpen(false);
     } else {
       setErrorsFromObject(response.errors || {});
