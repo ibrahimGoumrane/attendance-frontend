@@ -3,6 +3,7 @@ import {
   EditClassDialog,
 } from "@/components/admin/dialogs/ClassDialogs";
 import StudentGrid from "@/components/admin/display/StudentGrid";
+import { StudentProvider } from "@/lib/contexts/StudentContext";
 import { getClassById, getClassStudents } from "@/lib/services/classes";
 
 interface ClassPageProps {
@@ -20,7 +21,10 @@ export default async function ClassPage({ params }: ClassPageProps) {
       <h1 className="font-bold text-2xl flex items-center gap-2">
         {cls.name} <EditClassDialog cls={cls} /> <DeleteClassDialog cls={cls} />
       </h1>
-      <StudentGrid students={students} />
+      <h2 className="font-semibold text-xl text-neutral-700 mt-4 -mb-2">Students</h2>
+      <StudentProvider initialStudents={students}>
+        <StudentGrid/>
+      </StudentProvider>
     </>
   );
 }
