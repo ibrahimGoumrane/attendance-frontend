@@ -1,3 +1,7 @@
+import {
+  DeleteClassDialog,
+  EditClassDialog,
+} from "@/components/admin/dialogs/ClassDialogs";
 import StudentGrid from "@/components/admin/display/StudentGrid";
 import { getClassById, getClassStudents } from "@/lib/services/classes";
 
@@ -13,7 +17,9 @@ export default async function ClassPage({ params }: ClassPageProps) {
   console.log(students);
   return (
     <>
-      <h1 className="font-bold text-2xl flex items-center gap-2">{cls.name}</h1>
+      <h1 className="font-bold text-2xl flex items-center gap-2">
+        {cls.name} <EditClassDialog cls={cls} /> <DeleteClassDialog cls={cls} />
+      </h1>
       <StudentGrid students={students} />
     </>
   );

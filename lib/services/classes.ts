@@ -2,7 +2,13 @@
 
 import { z } from "zod";
 import { Class, Student } from "../types/api";
-import { addResource, getAllResource, getResourceById } from "./utils";
+import {
+  addResource,
+  deleteResource,
+  editResource,
+  getAllResource,
+  getResourceById,
+} from "./utils";
 import { ClassFormErrors, classFormSchema } from "../schemas/classes";
 
 export async function getAllClasses() {
@@ -12,7 +18,7 @@ export async function getAllClasses() {
 export async function getClassById(id: string) {
   // Weird work around with the id because the shape of the url is /api/classes/id/with-student-count
   // Fix later?
-  return getResourceById<Class>(`classes/${id}/with-student-count`, '');
+  return getResourceById<Class>(`classes/${id}/with-student-count`, "");
 }
 
 export async function getClassStudents(id: string) {
@@ -29,4 +35,20 @@ export async function addClass(formData: z.infer<typeof classFormSchema>) {
     formData,
     "Class creation failed."
   );
+}
+
+export async function editClass(
+  id: string,
+  formData: z.infer<typeof classFormSchema>
+) {
+  return editResource<typeof formData, Class, ClassFormErrors>(
+    "classes",
+    id,
+    formData,
+    "Class edition failed"
+  );
+}
+
+export async function deleteClass(id: string) {
+  return deleteResource("classes", id);
 }
