@@ -1,4 +1,3 @@
-
 # Project Name
 
 ## Table of Contents
@@ -59,13 +58,16 @@ The file structure for this project is organized as follows:
 ## Components
 
 ### `app/components`
+
 This folder contains all the UI components used in the project, categorized into various subfolders:
 
 1. **`admin`**: Contains components related to the admin interface, including dialogs and form handling for admin-related tasks.
+
    - `dialogs`: Displays dialog components related to admin tasks.
    - `forms`: Contains forms for different actions within the admin interface.
 
 2. **`auth`**: Contains components related to authentication.
+
    - `login`: Login form for user authentication.
    - `register`: Registration form for creating new accounts.
 
@@ -80,13 +82,14 @@ This folder contains all the UI components used in the project, categorized into
 ## Lib
 
 ### `lib`
+
 The `lib` folder contains utility functions, types, and actions that provide backend logic and frontend helpers for the app.
 
 1. **`actions`**: Contains functions that define interactions with external APIs or databases.
 2. **`contexts`**: Holds React contexts used to manage global states, such as user authentication state or other app-wide settings.
 3. **`schemas`**: Defines the structure of data using **Zod** schemas, which are used to validate inputs and API responses.
 4. **`types`**: Contains type definitions for API responses, component props, and more.
-5. **`services`**: Houses functions that interact with external services or APIs. 
+5. **`services`**: Houses functions that interact with external services or APIs.
 6. **`serverUtils.ts`**: Contains server-side utility functions that may be used for server-side logic or API interactions.
 7. **`utils.ts`**: General utility functions, such as reusable functions for handling data or interacting with APIs.
 
@@ -95,7 +98,9 @@ The `lib` folder contains utility functions, types, and actions that provide bac
 ## Services
 
 ### `services/utils.ts`
+
 This file contains reusable utility functions that can be used throughout the project, including but not limited to:
+
 - `getResource<T>`: A function to retrieve resources from the API.
 
 ---
@@ -109,23 +114,29 @@ The **UI** folder contains components based on the **ShadCN** UI library, offeri
 ## How to Run
 
 1. Clone the repository:
+
    ```bash
    git clone <repository-url>
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Run the development server:
+
    ```bash
    npm run dev
    ```
-4. Set up your environment variables in a .env file:
+
+4. Make sure to run the Django API – instructions are [here](https://github.com/ibrahimGoumrane/classroom_absence_management).
+
+5. Set up your environment variables in a .env file:
    ```env
    API_URL=http://localhost:8000/api
    ```
-5. Visit the app in your browser at `http://localhost:3000`.
+6. Visit the app in your browser at `http://localhost:3000`.
 
 ---
