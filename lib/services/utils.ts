@@ -7,7 +7,7 @@ import { serverFetch } from "../serverUtils";
  * @template T - The type of the data returned by the API.
  */
 export async function getAllResource<T>(endpoint: string): Promise<T> {
-  const response = await serverFetch(`${process.env.API_URL}/${endpoint}/`);
+  const response = await serverFetch(`${process.env.API_URL}/${endpoint}`);
   return response.json() as Promise<T>;
 }
 

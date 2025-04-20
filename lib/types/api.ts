@@ -19,3 +19,9 @@ export type Department = {
   description?: string,
   teacherCount?: number
 }
+
+export type StudentImage = {
+  id: string,
+  image: string,
+  is_encoded: boolean
+}
