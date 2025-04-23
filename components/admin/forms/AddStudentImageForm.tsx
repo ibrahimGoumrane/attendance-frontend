@@ -19,24 +19,26 @@ export default function AddStudentImageForm({
 }) {
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(() => {})} encType="multipart/form-data"></form>
-      <FormField
-        control={form.control}
-        name="images"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Upload Image</FormLabel>
-            <FormControl>
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={(e) => field.onChange(e.target.files)}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <form onSubmit={form.handleSubmit(() => {})}>
+        <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Upload Image</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => field.onChange(e.target.files)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
     </Form>
   );
 }

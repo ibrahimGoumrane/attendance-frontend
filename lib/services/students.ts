@@ -24,11 +24,17 @@ export async function addStudentImage(
   studentId: string,
   formData: z.infer<typeof studentImageFormSchema>
 ) {
-  formData.student_id = studentId;
-  console.log(formData);
-  return addResource<typeof formData, StudentImage, StudentImageFormErrors>(
+  console.log(formData.images);
+  const data = new FormData();
+  data.append('student_id', studentId);
+  for (const file of formData.images) {
+    data.append('images', file);
+  }
+  
+  console.log(data);
+  return addResource<FormData, StudentImage, StudentImageFormErrors>(
     "images",
-    formData,
+    data,
     "Image upload failed."
   );
 }

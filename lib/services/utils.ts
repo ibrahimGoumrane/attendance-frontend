@@ -45,13 +45,21 @@ export async function addResource<TFormData, TData, TError = { root: string }>(
 ): Promise<
   { success: true; data: TData } | { success: false; errors: TError }
 > {
-  const response = await serverFetch(`${process.env.API_URL}/${endpoint}/`, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  });
+  let response;
+  if (formData instanceof FormData) {
+    response = await serverFetch(`${process.env.API_URL}/${endpoint}/`, {
+      method: "POST",
+      body: formData,
+    });
+  } else {
+    response = await serverFetch(`${process.env.API_URL}/${endpoint}/`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+  }
 
   const jsonResponse = await response.json();
   console.log(jsonResponse);
