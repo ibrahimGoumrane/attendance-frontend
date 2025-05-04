@@ -5,7 +5,7 @@ import { studentSchema } from "../schemas/students";
 
 export type User = z.infer<typeof userSchema>;
 export type Teacher = z.infer<typeof teacherSchema>;
-export type Student = z.infer<typeof studentSchema>
+export type Student = z.infer<typeof studentSchema> & { latest_image? : StudentImage}
 
 export type Class = {
   id: string;
@@ -23,5 +23,5 @@ export type Department = {
 export type StudentImage = {
   id: string,
   image: string,
-  is_encoded: boolean
+  is_encoded: boolean,
 }

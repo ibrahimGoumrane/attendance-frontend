@@ -10,8 +10,10 @@ import { useStudentContext } from "@/lib/contexts/StudentContext";
 import GenericFormDialog from "@/components/GenericFormDialog";
 import AddStudentImageForm from "../forms/AddStudentImageForm";
 import { studentImageFormSchema } from "@/lib/schemas/students";
+import { useStudentImageContext } from "@/lib/contexts/StudentImageContext";
 
 export function AddStudentImageDialog( {student} : {student: Student}) {
+  const {addItem} = useStudentImageContext();
   return (
     <GenericFormDialog
       title={`Add new image for ${student.user.firstName}`}
@@ -25,7 +27,7 @@ export function AddStudentImageDialog( {student} : {student: Student}) {
       schema={studentImageFormSchema}
       editAction={addStudentImage}
       id={student.id}
-      onSuccess={(data) => console.log(data)}
+      onSuccess={(data) => {console.log(data)}}
       // Just to ignore typescript as you are not allowed to call FileList constructor
       defaultValues={{images: undefined}}
     />
