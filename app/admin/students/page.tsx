@@ -44,9 +44,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Student } from "@/lib/types/api";
 
 // Mock data for students
-const students = [
+const initialStudents = [
   {
     id: "1",
     firstName: "Alex",
@@ -138,41 +139,42 @@ const students = [
     department: "Biology",
   },
 ];
+// Transform students array to match the schema
+const students: Student[] = initialStudents.map((student) => ({
+  id: student.id,
+  section_promo: student.class, // Mapping class to section_promo
+  user: {
+    // Assuming userSchema contains these fields
+    firstName: student.firstName,
+    lastName: student.lastName,
+    email: student.email,
+    age: student.age,
+    department: student.department,
+    role: "student", // Assuming role is always "student"
+  },
+  // latest_image is optional so we can leave it undefined
+}));
 
 // Mock data for classes
 const classes = ["All Classes", "10A", "10B", "11A", "11B", "12A", "12B"];
 
-// Mock data for departments
-const departments = [
-  "All Departments",
-  "Computer Science",
-  "Mathematics",
-  "Physics",
-  "Chemistry",
-  "Biology",
-];
-
 export default function StudentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState("All Classes");
-  const [selectedDepartment, setSelectedDepartment] =
-    useState("All Departments");
-
   // Filter students based on search query, selected class, and selected department
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
-      student.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.email.toLowerCase().includes(searchQuery.toLowerCase());
+      student.user.firstName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      student.user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student.user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesClass =
-      selectedClass === "All Classes" || student.class === selectedClass;
+      selectedClass === "All Classes" ||
+      student.section_promo === selectedClass;
 
-    const matchesDepartment =
-      selectedDepartment === "All Departments" ||
-      student.department === selectedDepartment;
-
-    return matchesSearch && matchesClass && matchesDepartment;
+    return matchesSearch && matchesClass;
   });
 
   return (
@@ -225,27 +227,12 @@ export default function StudentsPage() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Select value={selectedClass} onValueChange={setSelectedClass}>
                 <SelectTrigger className="w-full sm:w-[150px]">
-                  <SelectValue placeholder="Select class" />
+                  <SelectValue placeholder="Select Promo section" />
                 </SelectTrigger>
                 <SelectContent>
                   {classes.map((cls) => (
                     <SelectItem key={cls} value={cls}>
                       {cls}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select
-                value={selectedDepartment}
-                onValueChange={setSelectedDepartment}
-              >
-                <SelectTrigger className="w-full sm:w-[200px]">
-                  <SelectValue placeholder="Select department" />
-                </SelectTrigger>
-                <SelectContent>
-                  {departments.map((dept) => (
-                    <SelectItem key={dept} value={dept}>
-                      {dept}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -258,10 +245,8 @@ export default function StudentsPage() {
               <TableHeader>
                 <TableRow className="bg-gray-50 dark:bg-gray-800">
                   <TableHead className="font-medium">Name</TableHead>
-                  <TableHead className="font-medium">Age</TableHead>
                   <TableHead className="font-medium">Email</TableHead>
                   <TableHead className="font-medium">Class</TableHead>
-                  <TableHead className="font-medium">Department</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -277,20 +262,14 @@ export default function StudentsPage() {
                           href={`/admin/students/${student.id}`}
                           className="hover:underline"
                         >
-                          {student.firstName} {student.lastName}
+                          {student.user.firstName} {student.user.lastName}
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {student.age}
+                        {student.user.email}
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {student.email}
-                      </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {student.class}
-                      </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {student.department}
+                        {student.section_promo}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>

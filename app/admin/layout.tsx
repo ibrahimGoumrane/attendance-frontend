@@ -2,23 +2,21 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
-  BarChart3,
   BookOpen,
   Building2,
   GraduationCap,
   LayoutDashboard,
   LogOut,
   Menu,
-  Settings,
   Users,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -68,18 +66,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: GraduationCap,
       href: "/admin/students",
       active: pathname.includes("/admin/students"),
-    },
-    {
-      label: "Reports",
-      icon: BarChart3,
-      href: "/admin/reports",
-      active: pathname.includes("/admin/reports"),
-    },
-    {
-      label: "Settings",
-      icon: Settings,
-      href: "/admin/settings",
-      active: pathname.includes("/admin/settings"),
     },
   ];
 

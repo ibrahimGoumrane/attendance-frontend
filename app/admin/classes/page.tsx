@@ -37,103 +37,61 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Class } from "@/lib/types/api";
 
 // Mock data for classes
-const classes = [
+const classes: Class[] = [
   {
     id: "1",
     name: "Introduction to Programming",
-    department: "Computer Science",
-    teacher: "John Smith",
-    students: 32,
+    studentCount: 32,
   },
   {
     id: "2",
     name: "Data Structures",
-    department: "Computer Science",
-    teacher: "John Smith",
-    students: 28,
+    studentCount: 28,
   },
   {
     id: "3",
     name: "Web Development",
-    department: "Computer Science",
-    teacher: "Michael Brown",
-    students: 24,
+    studentCount: 24,
   },
   {
     id: "4",
     name: "Calculus I",
-    department: "Mathematics",
-    teacher: "Sarah Johnson",
-    students: 35,
+    studentCount: 35,
   },
   {
     id: "5",
     name: "Linear Algebra",
-    department: "Mathematics",
-    teacher: "Sarah Johnson",
-    students: 30,
+    studentCount: 30,
   },
   {
     id: "6",
     name: "Mechanics",
-    department: "Physics",
-    teacher: "David Wilson",
-    students: 22,
+    studentCount: 22,
   },
   {
     id: "7",
     name: "Organic Chemistry",
-    department: "Chemistry",
-    teacher: "Emily Davis",
-    students: 26,
+    studentCount: 26,
   },
   {
     id: "8",
     name: "Cell Biology",
-    department: "Biology",
-    teacher: "Lisa Thomas",
-    students: 29,
+    studentCount: 29,
   },
-];
-
-// Mock data for departments
-const departments = [
-  "All Departments",
-  "Computer Science",
-  "Mathematics",
-  "Physics",
-  "Chemistry",
-  "Biology",
-  "English",
-  "History",
-  "Geography",
 ];
 
 export default function ClassesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] =
-    useState("All Departments");
 
   // Filter classes based on search query and selected department
   const filteredClasses = classes.filter((cls) => {
-    const matchesSearch =
-      cls.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cls.teacher.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesDepartment =
-      selectedDepartment === "All Departments" ||
-      cls.department === selectedDepartment;
-
-    return matchesSearch && matchesDepartment;
+    const matchesSearch = cls.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesSearch;
   });
 
   return (
@@ -181,21 +139,6 @@ export default function ClassesPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Select
-              value={selectedDepartment}
-              onValueChange={setSelectedDepartment}
-            >
-              <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="Select department" />
-              </SelectTrigger>
-              <SelectContent>
-                {departments.map((department) => (
-                  <SelectItem key={department} value={department}>
-                    {department}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
 
           <div className="rounded-md border dark:border-gray-800">
@@ -203,8 +146,6 @@ export default function ClassesPage() {
               <TableHeader>
                 <TableRow className="bg-gray-50 dark:bg-gray-800">
                   <TableHead className="font-medium">Class Name</TableHead>
-                  <TableHead className="font-medium">Department</TableHead>
-                  <TableHead className="font-medium">Teacher</TableHead>
                   <TableHead className="font-medium">Students</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
@@ -225,13 +166,7 @@ export default function ClassesPage() {
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {cls.department}
-                      </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {cls.teacher}
-                      </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {cls.students}
+                        {cls.studentCount}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>

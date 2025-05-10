@@ -29,66 +29,59 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Department } from "@/lib/types/api";
 
 // Mock data for departments
-const departments = [
+const departments: Department[] = [
   {
     id: "1",
     name: "Computer Science",
     description: "Study of computers and computational systems",
-    teachers: 8,
-    classes: 12,
+    teacherCount: 8,
   },
   {
     id: "2",
     name: "Mathematics",
     description: "Study of numbers, quantities, and shapes",
-    teachers: 10,
-    classes: 15,
+    teacherCount: 10,
   },
   {
     id: "3",
     name: "Physics",
     description: "Study of matter, energy, and the interaction between them",
-    teachers: 6,
-    classes: 8,
+    teacherCount: 6,
   },
   {
     id: "4",
     name: "Chemistry",
     description:
       "Study of the composition, structure, properties, and change of matter",
-    teachers: 7,
-    classes: 9,
+    teacherCount: 7,
   },
   {
     id: "5",
     name: "Biology",
     description: "Study of living organisms and their interactions",
-    teachers: 9,
-    classes: 11,
+    teacherCount: 9,
   },
   {
     id: "6",
     name: "English",
     description: "Study of language, literature, and writing",
-    teachers: 12,
-    classes: 18,
+    teacherCount: 12,
   },
   {
     id: "7",
     name: "History",
     description: "Study of past events",
-    teachers: 5,
-    classes: 7,
+    teacherCount: 5,
   },
   {
     id: "8",
     name: "Geography",
     description:
       "Study of places and the relationships between people and their environments",
-    teachers: 4,
-    classes: 6,
+    teacherCount: 4,
   },
 ];
 
@@ -96,10 +89,8 @@ export default function DepartmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Filter departments based on search query
-  const filteredDepartments = departments.filter(
-    (department) =>
-      department.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      department.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDepartments = departments.filter((department) =>
+    department.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -145,7 +136,6 @@ export default function DepartmentsPage() {
                   <TableHead className="font-medium">Name</TableHead>
                   <TableHead className="font-medium">Description</TableHead>
                   <TableHead className="font-medium">Teachers</TableHead>
-                  <TableHead className="font-medium">Classes</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -167,11 +157,9 @@ export default function DepartmentsPage() {
                       <TableCell className="dark:text-gray-300">
                         {department.description}
                       </TableCell>
+
                       <TableCell className="dark:text-gray-300">
-                        {department.teachers}
-                      </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {department.classes}
+                        {department.teacherCount}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
