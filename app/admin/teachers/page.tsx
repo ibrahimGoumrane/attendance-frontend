@@ -44,91 +44,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-// Mock data for teachers
-const teachers = [
-  {
-    id: "1",
-    firstName: "John",
-    lastName: "Smith",
-    email: "john.smith@facetrack.com",
-    department: "Computer Science",
-  },
-  {
-    id: "2",
-    firstName: "Sarah",
-    lastName: "Johnson",
-    email: "sarah.johnson@facetrack.com",
-    department: "Mathematics",
-  },
-  {
-    id: "3",
-    firstName: "Michael",
-    lastName: "Brown",
-    email: "michael.brown@facetrack.com",
-    department: "Physics",
-  },
-  {
-    id: "4",
-    firstName: "Emily",
-    lastName: "Davis",
-    email: "emily.davis@facetrack.com",
-    department: "Chemistry",
-  },
-  {
-    id: "5",
-    firstName: "David",
-    lastName: "Wilson",
-    email: "david.wilson@facetrack.com",
-    department: "Biology",
-  },
-  {
-    id: "6",
-    firstName: "Jennifer",
-    lastName: "Taylor",
-    email: "jennifer.taylor@facetrack.com",
-    department: "English",
-  },
-  {
-    id: "7",
-    firstName: "Robert",
-    lastName: "Anderson",
-    email: "robert.anderson@facetrack.com",
-    department: "History",
-  },
-  {
-    id: "8",
-    firstName: "Lisa",
-    lastName: "Thomas",
-    email: "lisa.thomas@facetrack.com",
-    department: "Geography",
-  },
-];
-
-// Mock data for departments
-const departments = [
-  "All Departments",
-  "Computer Science",
-  "Mathematics",
-  "Physics",
-  "Chemistry",
-  "Biology",
-  "English",
-  "History",
-  "Geography",
-];
+import { useTeacherContext } from "@/lib/contexts/TeacherContext";
+import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
 
 export default function TeachersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] =
     useState("All Departments");
+  const { items: teachers } = useTeacherContext();
+  const { items: departments } = useDepartmentContext();
 
   // Filter teachers based on search query and selected department
   const filteredTeachers = teachers.filter((teacher) => {
     const matchesSearch =
-      teacher.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.email.toLowerCase().includes(searchQuery.toLowerCase());
+      teacher.user.firstName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      teacher.user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      teacher.user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesDepartment =
       selectedDepartment === "All Departments" ||
@@ -190,9 +123,10 @@ export default function TeachersPage() {
                 <SelectValue placeholder="Select department" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="All Departments">All Departments</SelectItem>
                 {departments.map((department) => (
-                  <SelectItem key={department} value={department}>
-                    {department}
+                  <SelectItem key={department.id} value={department.name}>
+                    {department.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -221,11 +155,11 @@ export default function TeachersPage() {
                           href={`/admin/teachers/${teacher.id}`}
                           className="hover:underline"
                         >
-                          {teacher.firstName} {teacher.lastName}
+                          {teacher.user.firstName} {teacher.user.lastName}
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {teacher.email}
+                        {teacher.user.email}
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
                         {teacher.department}

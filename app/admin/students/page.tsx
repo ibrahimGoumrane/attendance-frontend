@@ -44,124 +44,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Student } from "@/lib/types/api";
-
-// Mock data for students
-const initialStudents = [
-  {
-    id: "1",
-    firstName: "Alex",
-    lastName: "Johnson",
-    age: 16,
-    email: "alex.johnson@student.edu",
-    class: "10A",
-    department: "Computer Science",
-  },
-  {
-    id: "2",
-    firstName: "Emma",
-    lastName: "Williams",
-    age: 16,
-    email: "emma.williams@student.edu",
-    class: "10A",
-    department: "Computer Science",
-  },
-  {
-    id: "3",
-    firstName: "Noah",
-    lastName: "Brown",
-    age: 17,
-    email: "noah.brown@student.edu",
-    class: "10B",
-    department: "Mathematics",
-  },
-  {
-    id: "4",
-    firstName: "Olivia",
-    lastName: "Jones",
-    age: 17,
-    email: "olivia.jones@student.edu",
-    class: "10B",
-    department: "Mathematics",
-  },
-  {
-    id: "5",
-    firstName: "William",
-    lastName: "Miller",
-    age: 18,
-    email: "william.miller@student.edu",
-    class: "11A",
-    department: "Physics",
-  },
-  {
-    id: "6",
-    firstName: "Sophia",
-    lastName: "Davis",
-    age: 18,
-    email: "sophia.davis@student.edu",
-    class: "11A",
-    department: "Physics",
-  },
-  {
-    id: "7",
-    firstName: "James",
-    lastName: "Garcia",
-    age: 18,
-    email: "james.garcia@student.edu",
-    class: "11B",
-    department: "Chemistry",
-  },
-  {
-    id: "8",
-    firstName: "Charlotte",
-    lastName: "Rodriguez",
-    age: 18,
-    email: "charlotte.rodriguez@student.edu",
-    class: "11B",
-    department: "Chemistry",
-  },
-  {
-    id: "9",
-    firstName: "Benjamin",
-    lastName: "Wilson",
-    age: 19,
-    email: "benjamin.wilson@student.edu",
-    class: "12A",
-    department: "Biology",
-  },
-  {
-    id: "10",
-    firstName: "Amelia",
-    lastName: "Martinez",
-    age: 19,
-    email: "amelia.martinez@student.edu",
-    class: "12A",
-    department: "Biology",
-  },
-];
-// Transform students array to match the schema
-const students: Student[] = initialStudents.map((student) => ({
-  id: student.id,
-  section_promo: student.class, // Mapping class to section_promo
-  user: {
-    // Assuming userSchema contains these fields
-    firstName: student.firstName,
-    lastName: student.lastName,
-    email: student.email,
-    age: student.age,
-    department: student.department,
-    role: "student", // Assuming role is always "student"
-  },
-  // latest_image is optional so we can leave it undefined
-}));
-
-// Mock data for classes
-const classes = ["All Classes", "10A", "10B", "11A", "11B", "12A", "12B"];
+import { useStudentContext } from "@/lib/contexts/StudentContext";
+import { useClassContext } from "@/lib/contexts/ClassContext";
 
 export default function StudentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState("All Classes");
   // Filter students based on search query, selected class, and selected department
+  const { items: students } = useStudentContext();
+  const { items: classes } = useClassContext();
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
       student.user.firstName
@@ -230,9 +121,10 @@ export default function StudentsPage() {
                   <SelectValue placeholder="Select Promo section" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="All Classes">All Classes</SelectItem>
                   {classes.map((cls) => (
-                    <SelectItem key={cls} value={cls}>
-                      {cls}
+                    <SelectItem key={cls.id} value={cls.name}>
+                      {cls.name}
                     </SelectItem>
                   ))}
                 </SelectContent>

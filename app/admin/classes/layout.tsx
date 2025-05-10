@@ -1,3 +1,4 @@
+
 import { ClassProvider } from "@/lib/contexts/ClassContext";
 import { getAllClassesWithStudentCount } from "@/lib/services/classes";
 
@@ -14,3 +15,4 @@ export default async function RootLayout({
     </div>
   );
 }
+

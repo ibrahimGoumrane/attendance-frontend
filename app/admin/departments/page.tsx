@@ -29,64 +29,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Department } from "@/lib/types/api";
-
-// Mock data for departments
-const departments: Department[] = [
-  {
-    id: "1",
-    name: "Computer Science",
-    description: "Study of computers and computational systems",
-    teacherCount: 8,
-  },
-  {
-    id: "2",
-    name: "Mathematics",
-    description: "Study of numbers, quantities, and shapes",
-    teacherCount: 10,
-  },
-  {
-    id: "3",
-    name: "Physics",
-    description: "Study of matter, energy, and the interaction between them",
-    teacherCount: 6,
-  },
-  {
-    id: "4",
-    name: "Chemistry",
-    description:
-      "Study of the composition, structure, properties, and change of matter",
-    teacherCount: 7,
-  },
-  {
-    id: "5",
-    name: "Biology",
-    description: "Study of living organisms and their interactions",
-    teacherCount: 9,
-  },
-  {
-    id: "6",
-    name: "English",
-    description: "Study of language, literature, and writing",
-    teacherCount: 12,
-  },
-  {
-    id: "7",
-    name: "History",
-    description: "Study of past events",
-    teacherCount: 5,
-  },
-  {
-    id: "8",
-    name: "Geography",
-    description:
-      "Study of places and the relationships between people and their environments",
-    teacherCount: 4,
-  },
-];
+import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
 
 export default function DepartmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const { items: departments } = useDepartmentContext();
 
   // Filter departments based on search query
   const filteredDepartments = departments.filter((department) =>

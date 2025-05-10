@@ -11,6 +11,9 @@ import {
   getAllResource,
   getResourceById,
 } from "./utils";
+export async function getAllStudents() {
+  return getAllResource<Student[]>("students");
+}
 
 export async function getStudentById(id: string): Promise<Student> {
   return getResourceById<Student>("students", id);
