@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Edit, Trash2, Users } from "lucide-react";
+import { ArrowLeft, Edit, Mail, Phone, Trash2, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,61 +24,24 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
-// Mock class data
-const classData = {
+// Mock teacher data
+const teacher = {
   id: "1",
-  name: "Introduction to Programming",
+  firstName: "John",
+  lastName: "Smith",
+  email: "john.smith@facetrack.com",
+  phone: "+1 (555) 123-4567",
   department: "Computer Science",
-  teacher: "John Smith",
-  teacherId: "1",
-  description:
-    "An introductory course to programming concepts and practices using Python.",
-  schedule: "Monday, Wednesday, Friday 10:00 AM - 11:30 AM",
-  room: "CS-101",
-  students: [
-    {
-      id: "1",
-      name: "Alex Johnson",
-      email: "alex.johnson@student.edu",
-      attendance: "95%",
-    },
-    {
-      id: "2",
-      name: "Emma Williams",
-      email: "emma.williams@student.edu",
-      attendance: "92%",
-    },
-    {
-      id: "3",
-      name: "Noah Brown",
-      email: "noah.brown@student.edu",
-      attendance: "88%",
-    },
-    {
-      id: "4",
-      name: "Olivia Jones",
-      email: "olivia.jones@student.edu",
-      attendance: "97%",
-    },
-    {
-      id: "5",
-      name: "William Miller",
-      email: "william.miller@student.edu",
-      attendance: "85%",
-    },
+  joinDate: "2021-09-01",
+  classes: [
+    { id: "1", name: "Introduction to Programming", students: 32 },
+    { id: "2", name: "Data Structures", students: 28 },
+    { id: "3", name: "Web Development", students: 24 },
   ],
 };
 
-export default function ClassDetailsPage({
+export default function TeacherDetailsPage({
   params,
 }: {
   params: { id: string };
@@ -90,23 +53,23 @@ export default function ClassDetailsPage({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link href="/admin/classes">
+            <Link href="/admin/teachers">
               <ArrowLeft className="h-4 w-4" />
               <span className="sr-only">Back</span>
             </Link>
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight dark:text-white">
-              {classData.name}
+              {teacher.firstName} {teacher.lastName}
             </h1>
             <p className="text-muted-foreground dark:text-gray-400">
-              {classData.department}
+              {teacher.department}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/admin/classes/${params.id}/edit`}>
+            <Link href={`/admin/teachers/${params.id}/edit`}>
               <Edit className="h-4 w-4 mr-2" />
               Edit
             </Link>
@@ -126,7 +89,7 @@ export default function ClassDetailsPage({
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete the
-                  class and remove all associated data from our servers.
+                  teacher account and remove their data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -143,56 +106,53 @@ export default function ClassDetailsPage({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-1">
           <CardHeader>
-            <CardTitle>Class Information</CardTitle>
-            <CardDescription>Details about this class</CardDescription>
+            <CardTitle>Teacher Information</CardTitle>
+            <CardDescription>Personal and contact details</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-                <Users className="h-8 w-8 text-primary-600 dark:text-primary-400" />
+              <div className="w-24 h-24 rounded-full bg-primary-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+                <User className="h-12 w-12 text-primary-600 dark:text-primary-400" />
               </div>
               <h3 className="text-xl font-semibold dark:text-white">
-                {classData.name}
+                {teacher.firstName} {teacher.lastName}
               </h3>
               <p className="text-sm text-muted-foreground">
-                {classData.department}
+                {teacher.department}
               </p>
             </div>
 
             <div className="space-y-4">
-              <div>
-                <p className="text-sm font-medium dark:text-gray-300">
-                  Teacher
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <Link
-                    href={`/admin/teachers/${classData.teacherId}`}
-                    className="hover:underline"
-                  >
-                    {classData.teacher}
-                  </Link>
-                </p>
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <div>
+                  <p className="text-sm font-medium dark:text-gray-300">
+                    Email
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {teacher.email}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium dark:text-gray-300">
-                  Schedule
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {classData.schedule}
-                </p>
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 text-muted-foreground" />
+                <div>
+                  <p className="text-sm font-medium dark:text-gray-300">
+                    Phone
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {teacher.phone}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium dark:text-gray-300">Room</p>
+              <div className="pt-4 border-t dark:border-gray-800">
+                <p className="text-sm font-medium dark:text-gray-300">Joined</p>
                 <p className="text-sm text-muted-foreground">
-                  {classData.room}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium dark:text-gray-300">
-                  Description
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {classData.description}
+                  {new Date(teacher.joinDate).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </p>
               </div>
             </div>
@@ -200,61 +160,63 @@ export default function ClassDetailsPage({
         </Card>
 
         <div className="md:col-span-2">
-          <Tabs defaultValue="students">
+          <Tabs defaultValue="classes">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="students">Students</TabsTrigger>
+              <TabsTrigger value="classes">Classes</TabsTrigger>
               <TabsTrigger value="attendance">Attendance</TabsTrigger>
             </TabsList>
-            <TabsContent value="students" className="mt-4">
+            <TabsContent value="classes" className="mt-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Enrolled Students</CardTitle>
-                  <CardDescription>Students taking this class</CardDescription>
+                  <CardTitle>Assigned Classes</CardTitle>
+                  <CardDescription>
+                    Classes taught by this teacher
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="rounded-md border dark:border-gray-800">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="bg-gray-50 dark:bg-gray-800">
-                          <TableHead className="font-medium">Name</TableHead>
-                          <TableHead className="font-medium">Email</TableHead>
-                          <TableHead className="font-medium">
-                            Attendance
-                          </TableHead>
-                          <TableHead className="w-[100px]">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {classData.students.map((student) => (
-                          <TableRow
-                            key={student.id}
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-gray-50 dark:bg-gray-800">
+                          <th className="py-3 px-4 text-left text-sm font-medium">
+                            Class Name
+                          </th>
+                          <th className="py-3 px-4 text-left text-sm font-medium">
+                            Students
+                          </th>
+                          <th className="py-3 px-4 text-left text-sm font-medium w-[100px]">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y dark:divide-gray-800">
+                        {teacher.classes.map((cls) => (
+                          <tr
+                            key={cls.id}
                             className="hover:bg-gray-50 dark:hover:bg-gray-900"
                           >
-                            <TableCell className="font-medium dark:text-white">
+                            <td className="py-3 px-4 text-sm font-medium dark:text-white">
                               <Link
-                                href={`/admin/students/${student.id}`}
+                                href={`/admin/classes/${cls.id}`}
                                 className="hover:underline"
                               >
-                                {student.name}
+                                {cls.name}
                               </Link>
-                            </TableCell>
-                            <TableCell className="dark:text-gray-300">
-                              {student.email}
-                            </TableCell>
-                            <TableCell className="dark:text-gray-300">
-                              {student.attendance}
-                            </TableCell>
-                            <TableCell>
+                            </td>
+                            <td className="py-3 px-4 text-sm dark:text-gray-300">
+                              {cls.students}
+                            </td>
+                            <td className="py-3 px-4 text-sm">
                               <Button variant="ghost" size="sm" asChild>
-                                <Link href={`/admin/students/${student.id}`}>
+                                <Link href={`/admin/classes/${cls.id}`}>
                                   View
                                 </Link>
                               </Button>
-                            </TableCell>
-                          </TableRow>
+                            </td>
+                          </tr>
                         ))}
-                      </TableBody>
-                    </Table>
+                      </tbody>
+                    </table>
                   </div>
                 </CardContent>
               </Card>
@@ -263,7 +225,9 @@ export default function ClassDetailsPage({
               <Card>
                 <CardHeader>
                   <CardTitle>Attendance Records</CardTitle>
-                  <CardDescription>Class attendance history</CardDescription>
+                  <CardDescription>
+                    Teacher's attendance history
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="h-[300px] flex items-center justify-center">
                   <div className="text-center">
