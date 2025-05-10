@@ -37,54 +37,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Class } from "@/lib/types/api";
-
-// Mock data for classes
-const classes: Class[] = [
-  {
-    id: "1",
-    name: "Introduction to Programming",
-    studentCount: 32,
-  },
-  {
-    id: "2",
-    name: "Data Structures",
-    studentCount: 28,
-  },
-  {
-    id: "3",
-    name: "Web Development",
-    studentCount: 24,
-  },
-  {
-    id: "4",
-    name: "Calculus I",
-    studentCount: 35,
-  },
-  {
-    id: "5",
-    name: "Linear Algebra",
-    studentCount: 30,
-  },
-  {
-    id: "6",
-    name: "Mechanics",
-    studentCount: 22,
-  },
-  {
-    id: "7",
-    name: "Organic Chemistry",
-    studentCount: 26,
-  },
-  {
-    id: "8",
-    name: "Cell Biology",
-    studentCount: 29,
-  },
-];
-
+import { useClassContext } from "@/lib/contexts/ClassContext";
 export default function ClassesPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const { items: classes } = useClassContext();
 
   // Filter classes based on search query and selected department
   const filteredClasses = classes.filter((cls) => {
