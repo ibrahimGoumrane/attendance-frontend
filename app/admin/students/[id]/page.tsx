@@ -37,6 +37,7 @@ const student = {
   id: "1",
   firstName: "Alex",
   lastName: "Johnson",
+  age: 16,
   email: "alex.johnson@student.edu",
   phone: "+1 (555) 987-6543",
   class: "10A",
@@ -45,6 +46,10 @@ const student = {
   departmentId: "1",
   enrollmentDate: "2022-09-01",
   attendance: "95%",
+  address: "123 Student Lane, Education City",
+  parentName: "Michael Johnson",
+  parentEmail: "michael.johnson@example.com",
+  parentPhone: "+1 (555) 123-4567",
   courses: [
     {
       id: "1",
@@ -139,6 +144,12 @@ export default function StudentDetailsPage({
             </div>
 
             <div className="space-y-4">
+              <div>
+                <p className="text-sm font-medium dark:text-gray-300">Age</p>
+                <p className="text-sm text-muted-foreground">
+                  {student.age} years
+                </p>
+              </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-muted-foreground" />
                 <div>
@@ -160,6 +171,14 @@ export default function StudentDetailsPage({
                     {student.phone}
                   </p>
                 </div>
+              </div>
+              <div>
+                <p className="text-sm font-medium dark:text-gray-300">
+                  Address
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {student.address}
+                </p>
               </div>
               <div className="pt-4 border-t dark:border-gray-800">
                 <p className="text-sm font-medium dark:text-gray-300">
@@ -195,6 +214,20 @@ export default function StudentDetailsPage({
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {student.attendance}
+                </p>
+              </div>
+              <div className="pt-4 border-t dark:border-gray-800">
+                <p className="text-sm font-medium dark:text-gray-300">
+                  Parent/Guardian
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {student.parentName}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {student.parentEmail}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {student.parentPhone}
                 </p>
               </div>
             </div>
@@ -274,7 +307,7 @@ export default function StudentDetailsPage({
                 <CardHeader>
                   <CardTitle>Attendance Records</CardTitle>
                   <CardDescription>
-                    Student's attendance history
+                    Student&apos;s attendance history
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-[300px] flex items-center justify-center">

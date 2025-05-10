@@ -1,19 +1,31 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { ArrowLeft, Save } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft, Save } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 // Mock teacher data
 const teacher = {
@@ -25,7 +37,7 @@ const teacher = {
   department: "Computer Science",
   bio: "Experienced computer science teacher with 10+ years of experience in teaching programming and data structures.",
   joinDate: "2021-09-01",
-}
+};
 
 // Mock departments
 const departments = [
@@ -37,11 +49,14 @@ const departments = [
   "English",
   "History",
   "Geography",
-]
+];
 
-export default function EditTeacherPage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const { toast } = useToast()
+export default function EditTeacherPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     firstName: teacher.firstName,
@@ -50,33 +65,32 @@ export default function EditTeacherPage({ params }: { params: { id: string } }) 
     phone: teacher.phone,
     department: teacher.department,
     bio: teacher.bio,
-  })
+  });
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleDepartmentChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, department: value }))
-  }
+    setFormData((prev) => ({ ...prev, department: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     // Simulate API call
     setTimeout(() => {
-      toast({
-        title: "Teacher updated",
-        description: "Teacher information has been updated successfully.",
-      })
-      setIsSubmitting(false)
-      router.push(`/admin/teachers/${params.id}`)
-    }, 1000)
-  }
+      toast.success("Teacher updated successfully");
+      setIsSubmitting(false);
+      router.push(`/admin/teachers/${params.id}`);
+    }, 1000);
+  };
 
   return (
     <div className="space-y-6">
@@ -88,8 +102,12 @@ export default function EditTeacherPage({ params }: { params: { id: string } }) 
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:text-white">Edit Teacher</h1>
-          <p className="text-muted-foreground dark:text-gray-400">Update teacher information</p>
+          <h1 className="text-3xl font-bold tracking-tight dark:text-white">
+            Edit Teacher
+          </h1>
+          <p className="text-muted-foreground dark:text-gray-400">
+            Update teacher information
+          </p>
         </div>
       </div>
 
@@ -97,29 +115,58 @@ export default function EditTeacherPage({ params }: { params: { id: string } }) 
         <Card>
           <CardHeader>
             <CardTitle>Teacher Information</CardTitle>
-            <CardDescription>Update the teacher's personal and contact details</CardDescription>
+            <CardDescription>
+              Update the teacher&apos;s personal and contact details
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
-                <Input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required />
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>
-                <Input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} />
+                <Input
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="department">Department</Label>
-                <Select value={formData.department} onValueChange={handleDepartmentChange}>
+                <Select
+                  value={formData.department}
+                  onValueChange={handleDepartmentChange}
+                >
                   <SelectTrigger id="department">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
@@ -135,7 +182,13 @@ export default function EditTeacherPage({ params }: { params: { id: string } }) 
             </div>
             <div className="space-y-2">
               <Label htmlFor="bio">Bio</Label>
-              <Textarea id="bio" name="bio" value={formData.bio} onChange={handleChange} rows={4} />
+              <Textarea
+                id="bio"
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                rows={4}
+              />
             </div>
             <div className="flex justify-end gap-3">
               <Button variant="outline" asChild>
@@ -156,5 +209,5 @@ export default function EditTeacherPage({ params }: { params: { id: string } }) 
         </Card>
       </form>
     </div>
-  )
+  );
 }

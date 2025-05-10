@@ -226,7 +226,7 @@ export default function TeacherDetailsPage({
                 <CardHeader>
                   <CardTitle>Attendance Records</CardTitle>
                   <CardDescription>
-                    Teacher's attendance history
+                    Teacher&apos;s attendance history
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-[300px] flex items-center justify-center">

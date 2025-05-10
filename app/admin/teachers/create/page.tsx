@@ -25,8 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-
+import { toast } from "sonner";
 // Mock departments
 const departments = [
   "Computer Science",
@@ -41,7 +40,6 @@ const departments = [
 
 export default function CreateTeacherPage() {
   const router = useRouter();
-  const { toast } = useToast();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -71,10 +69,7 @@ export default function CreateTeacherPage() {
 
     // Simulate API call
     setTimeout(() => {
-      toast({
-        title: "Teacher created",
-        description: "New teacher has been added successfully.",
-      });
+      toast.success("Teacher created successfully");
       setIsSubmitting(false);
       router.push("/admin/teachers");
     }, 1000);
@@ -104,7 +99,7 @@ export default function CreateTeacherPage() {
           <CardHeader>
             <CardTitle>Teacher Information</CardTitle>
             <CardDescription>
-              Enter the teacher's personal and contact details
+              Enter the teacher&apos;s personal and contact details
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
