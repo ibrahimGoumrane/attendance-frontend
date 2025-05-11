@@ -1,19 +1,7 @@
 "use client";
-import { ArrowLeft, Edit, Mail, Trash2, User } from "lucide-react";
+import { ArrowLeft, Edit, Mail, User } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,8 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
+import { useTeacherContext } from "@/lib/contexts/TeacherContext";
+import Delete from "./delete";
+import UpdateForm from "./edit";
 interface MainProps {
   id: string;
 }
@@ -34,7 +24,6 @@ const Main = ({ id }: MainProps) => {
   const { items: departments } = useDepartmentContext();
   const department = departments.find((d) => +d.id === +id);
   const teacher = teachers.find((t) => +t.id === +id);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   if (!teacher) {
     return <div>Teacher not found</div>;
@@ -60,38 +49,13 @@ const Main = ({ id }: MainProps) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/admin/teachers/${id}/edit`}>
+          <UpdateForm teacher={teacher}>
+            <Button variant="outline" size="sm">
               <Edit className="h-4 w-4 mr-2" />
               Edit
-            </Link>
-          </Button>
-          <AlertDialog
-            open={isDeleteDialogOpen}
-            onOpenChange={setIsDeleteDialogOpen}
-          >
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  teacher account and remove their data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-red-600 hover:bg-red-700">
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+            </Button>
+          </UpdateForm>
+          <Delete id={teacher.id} />
         </div>
       </div>
 

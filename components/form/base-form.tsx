@@ -17,8 +17,11 @@ interface BaseFormProps {
   action: (prevState: State, formData: FormData) => Promise<State>;
   schema: ZodSchema;
   fields: FieldConfig[];
-  submitText?: string;
-  loadingText?: string;
+  submitText?: string | React.ReactNode;
+  loadingText?: string | React.ReactNode;
+  cancelText?: string | React.ReactNode;
+  handleCancel?: () => void;
+  actionType?: "create" | "update" | "delete";
   defaultValues?: Record<string, string>;
   onSuccess?: (data: unknown) => void;
   children?: React.ReactNode;
@@ -32,6 +35,9 @@ function BaseForm({
   fields,
   submitText = "Submit",
   loadingText = "Submitting...",
+  actionType = "create",
+  cancelText,
+  handleCancel,
   defaultValues = {},
   onSuccess,
   className,
@@ -113,23 +119,78 @@ function BaseForm({
         {children}
 
         {/* Submit button */}
-        <SubmitButton submitText={submitText} loadingText={loadingText} />
+        <SubmitButton
+          cancelText={cancelText}
+          submitText={submitText}
+          loadingText={loadingText}
+          handleCancel={() => {
+            if (typeof cancelText === "string") {
+              form.reset();
+            }
+            if (handleCancel) {
+              handleCancel();
+            }
+          }}
+          actionType={actionType}
+        />
       </form>
     </Form>
   );
 }
 interface SubmitButtonProps {
-  submitText: string;
-  loadingText: string;
+  submitText: string | React.ReactNode;
+  loadingText: string | React.ReactNode;
+  cancelText?: string | React.ReactNode;
+  actionType: "create" | "update" | "delete";
+  handleCancel?: () => void;
 }
 
-function SubmitButton({ submitText, loadingText }: SubmitButtonProps) {
+function SubmitButton({
+  submitText,
+  loadingText,
+  cancelText,
+  handleCancel,
+  actionType,
+}: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
+  // Determine what content to display
+  const content = pending ? loadingText : submitText;
+
+  // Check if content is a string to apply different rendering
+  const isStringContent = typeof content === "string";
+
+  // check if the cancelText is a string
+  const isCancelTextString = cancelText && typeof cancelText === "string";
+
   return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? loadingText : submitText}
-    </Button>
+    <div className="flex  gap-2">
+      {cancelText && isCancelTextString ? (
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={handleCancel}
+        >
+          {cancelText}
+        </Button>
+      ) : (
+        cancelText
+      )}
+      {isStringContent ? (
+        <Button
+          type="submit"
+          variant={actionType === "delete" ? "destructive" : "default"}
+          className={`${actionType === "delete" ? "" : "w-full"}`}
+          disabled={pending}
+        >
+          <span>{content}</span>
+        </Button>
+      ) : (
+        // If ReactNode, render directly
+        content
+      )}
+    </div>
   );
 }
 

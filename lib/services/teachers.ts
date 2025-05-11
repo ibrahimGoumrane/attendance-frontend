@@ -12,4 +12,3 @@ export const addTeacher = (data: CreateTeacher) =>
   teacherApiResource.create(data);
 export const editTeacher = (id: string, data: UpdateTeacher) =>
   teacherApiResource.update(id, data);
-export const deleteTeacher = (id: string) => teacherApiResource.delete(id);

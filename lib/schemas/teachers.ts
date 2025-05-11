@@ -14,6 +14,9 @@ export const UpdateTeacherSchema = z.object({
   lastName: z.string().nonempty("Last name is required"),
   department: z.string().nonempty("Department is required"),
 });
+export const DeleteTeacherSchema = z.object({
+  id: z.string().nonempty("ID is required"),
+});
 
 // Define the form Field
 export const teachercreateRenderFields = [
@@ -86,5 +89,13 @@ export const teacherUpdateRenderFields = [
     type: "text",
     placeholder: "Enter your department",
     required: true,
+  },
+];
+
+export const teacherDeleteRenderFields = [
+  {
+    name: "id",
+    label: "id",
+    type: "hidden",
   },
 ];

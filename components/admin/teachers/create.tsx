@@ -1,3 +1,4 @@
+"use client";
 import BaseForm from "@/components/form/base-form";
 import PasswordField from "@/components/form/password-field";
 import { addTeacher } from "@/lib/actions/teacher";
@@ -23,7 +24,7 @@ interface FormProps {
   children: React.ReactNode;
 }
 
-const Form = ({ children }: FormProps) => {
+const CreateForm = ({ children }: FormProps) => {
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { items: departments } = useDepartmentContext();
@@ -67,9 +68,9 @@ const Form = ({ children }: FormProps) => {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Create Teacher</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+            Fill in the details to create a new teacher account.
           </DialogDescription>
         </DialogHeader>
         <BaseForm
@@ -90,4 +91,4 @@ const Form = ({ children }: FormProps) => {
   );
 };
 
-export default Form;
+export default CreateForm;
