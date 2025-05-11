@@ -1,7 +1,18 @@
-import { serverFetch } from "../serverUtils";
+import { fetchData } from "./main";
+import { User } from "../types/user";
 
-export async function getLoggedInUser() {
-  const user = await serverFetch(`${process.env.API_URL}/user`);
-  const userJson = await user.json();
-  return userJson;
-}
+export const getLoggedInUser = async () => {
+  try {
+    return (await fetchData<User>("/user/")) as User;
+  } catch {
+    return null;
+  }
+};
+
+// Logout
+export const logout = async (): Promise<boolean> => {
+  await fetchData("/logout/", {
+    method: "POST",
+  });
+  return true;
+};

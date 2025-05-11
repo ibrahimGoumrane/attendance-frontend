@@ -1,8 +1,8 @@
 "use client";
-import { StudentImage } from "../types/api";
 import { createResourceContext, ResourceProvider } from "./ResourceContext";
-
-export const [StudentImageContext, useStudentImageContext] = createResourceContext<StudentImage>();
+import { StudentImage } from "../types/user";
+export const [StudentImageContext, useStudentImageContext] =
+  createResourceContext<StudentImage>();
 
 export const StudentImageProvider = ({
   initialStudentImages,

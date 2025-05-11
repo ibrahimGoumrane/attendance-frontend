@@ -1,5 +1,5 @@
 "use client";
-import { Class } from "../types/api";
+import { Class } from "../types/class";
 import { createResourceContext, ResourceProvider } from "./ResourceContext";
 
 export const [ClassContext, useClassContext] = createResourceContext<Class>();

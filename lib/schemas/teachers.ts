@@ -1,47 +1,90 @@
-import {z} from "zod";
-import { ErrorWithRoot } from "../types/errors";
-import { userSchema } from "./user";
+import { z } from "zod";
 
-export const teacherSchema = z.object({
-  id: z.string(),
-  department: z.string(),
-  user: userSchema,
-});
-
-export const teacherFormSchema = z
-  .object({
-    email: z.string().nonempty("Email is required").email(),
-    firstName: z.string().nonempty("First name is required."),
-    lastName: z.string().nonempty("Last name is required"),
-    department: z.string().nonempty("Department is required"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
-
-export const editTeacherFormSchema = z.object({
+export const CreateTeacherSchema = z.object({
   email: z.string().nonempty("Email is required").email(),
   firstName: z.string().nonempty("First name is required."),
   lastName: z.string().nonempty("Last name is required"),
   department: z.string().nonempty("Department is required"),
-})
+  password: z.string().min(8, "Password must be at least 8 characters long"),
+});
 
-export type TeacherFormErrors = ErrorWithRoot<z.infer<typeof teacherFormSchema>>
-export type EditTeacherFormErrors = ErrorWithRoot<z.infer<typeof editTeacherFormSchema>>
+export const UpdateTeacherSchema = z.object({
+  email: z.string().nonempty("Email is required").email(),
+  firstName: z.string().nonempty("First name is required."),
+  lastName: z.string().nonempty("Last name is required"),
+  department: z.string().nonempty("Department is required"),
+});
 
-export const teacherEndpointRequestSchema = teacherFormSchema.transform(
-  ({ email, firstName, lastName, password, department }) => ({
-    user: { email, firstName, lastName, password },
-    department,
-  })
-);
-
-export const editTeacherEndpointRequestSchema = editTeacherFormSchema.transform(
-  ({ email, firstName, lastName, department }) => ({
-    user: { email, firstName, lastName },
-    department,
-  })
-);
+// Define the form Field
+export const teachercreateRenderFields = [
+  {
+    name: "firstName",
+    label: "First Name",
+    type: "text",
+    placeholder: "Enter your first name",
+    required: true,
+  },
+  {
+    name: "lastName",
+    label: "Last Name",
+    type: "text",
+    placeholder: "Enter your last name",
+    required: true,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter your password",
+    required: true,
+  },
+  {
+    name: "department",
+    label: "Department",
+    type: "text",
+    placeholder: "Enter your department",
+    required: true,
+  },
+];
+export const teacherUpdateRenderFields = [
+  {
+    name: "id",
+    label: "id",
+    type: "hidden",
+  },
+  {
+    name: "firstName",
+    label: "First Name",
+    type: "text",
+    placeholder: "Enter your first name",
+    required: true,
+  },
+  {
+    name: "lastName",
+    label: "Last Name",
+    type: "text",
+    placeholder: "Enter your last name",
+    required: true,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "department",
+    label: "Department",
+    type: "text",
+    placeholder: "Enter your department",
+    required: true,
+  },
+];

@@ -1,7 +1,6 @@
 "use client";
-import { Department } from "../types/api";
 import { createResourceContext, ResourceProvider } from "./ResourceContext";
-
+import { Department } from "../types/department";
 export const [DepartmentContext, useDepartmentContext] =
   createResourceContext<Department>();
 
@@ -18,7 +17,9 @@ export const DepartmentProvider = ({
       initialItems={initialDepartments}
       getId={(department) => department.id}
       onAddItem={(department) => (department.teacherCount = 0)}
-      onEditItem={(department) => department.teacherCount = department.teacherCount}
+      onEditItem={(department) =>
+        (department.teacherCount = department.teacherCount)
+      }
     >
       {children}
     </ResourceProvider>

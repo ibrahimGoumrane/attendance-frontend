@@ -1,9 +1,8 @@
 "use client";
-import { Student } from "../types/api";
 import { createResourceContext, ResourceProvider } from "./ResourceContext";
-
+import { Student } from "../types/student";
 export const [StudentContext, useStudentContext] =
-  createResourceContext<Partial<Student>>();
+  createResourceContext<Student>();
 
 export const StudentProvider = ({
   initialStudents,

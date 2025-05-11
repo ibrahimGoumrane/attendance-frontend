@@ -27,7 +27,7 @@ import {
 import { toast } from "sonner";
 import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
 import { useTeacherContext } from "@/lib/contexts/TeacherContext";
-
+import { addTeacher as addTeacherApi } from "@/lib/services/teachers";
 export function CreateTeacherModal({
   children,
 }: {
@@ -67,7 +67,13 @@ export function CreateTeacherModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+    const sendedFormData = new FormData();
+    sendedFormData.append("id", crypto.randomUUID());
+    sendedFormData.append("department", formData.department);
+    sendedFormData.append("user[firstName]", formData.firstName);
+    sendedFormData.append("user[lastName]", formData.lastName);
+    sendedFormData.append("user[email]", formData.email);
+    const { success, data, errors } = await addTeacherApi(sendedFormData);
     await addTeacher({
       user: {
         firstName: formData.firstName,

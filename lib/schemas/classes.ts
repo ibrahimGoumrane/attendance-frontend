@@ -1,8 +1,33 @@
 import { z } from "zod";
-import { ErrorWithRoot } from "../types/errors";
 
-export const classFormSchema = z.object({
-  name: z.string().nonempty('Name is required'),
+export const createClassSchema = z.object({
+  name: z.string().nonempty("Name is required"),
+});
+export const updateClassSchema = z.object({
+  id: z.string(),
+  name: z.string().nonempty("Name is required"),
 });
 
-export type ClassFormErrors = ErrorWithRoot<z.infer<typeof classFormSchema>>;
+export const classCreateRenderFields = [
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    placeholder: "Enter the class name",
+    required: true,
+  },
+];
+export const classUpdateRenderFields = [
+  {
+    name: "id",
+    label: "id",
+    type: "hidden",
+  },
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    placeholder: "Enter the class name",
+    required: true,
+  },
+];

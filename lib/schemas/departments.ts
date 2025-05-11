@@ -1,9 +1,49 @@
 import { z } from "zod";
-import { ErrorWithRoot } from "../types/errors";
 
-export const departmentFormSchema = z.object({
-  name: z.string().nonempty('Name is required'),
+export const createDepartmentSchema = z.object({
+  name: z.string().nonempty("Name is required"),
   description: z.string().optional(),
-})
+});
+export const updateDepartmentSchema = z.object({
+  id: z.string(),
+  name: z.string().nonempty("Name is required"),
+  description: z.string().optional(),
+});
 
-export type DeparmentFormErrors = ErrorWithRoot<z.infer<typeof departmentFormSchema>>
+export const departmentCreateRenderFields = [
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    placeholder: "Enter the department name",
+    required: true,
+  },
+  {
+    name: "description",
+    label: "Description",
+    type: "text",
+    placeholder: "Enter the department description",
+    required: false,
+  },
+];
+export const departmentUpdateRenderFields = [
+  {
+    name: "id",
+    label: "id",
+    type: "hidden",
+  },
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    placeholder: "Enter the department name",
+    required: true,
+  },
+  {
+    name: "description",
+    label: "Description",
+    type: "text",
+    placeholder: "Enter the department description",
+    required: false,
+  },
+];

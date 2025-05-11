@@ -1,11 +1,13 @@
 import { z } from "zod";
 
-export const loginFormSchema = z.object({
-  email: z.string().nonempty("Email is required").email("Invalid email"),
-  password: z.string(),
+export const LoginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
 });
 
-export const registerFormSchema = z
+export const SignupSchema = z
   .object({
     email: z.string().nonempty("Email is required").email(),
     firstName: z.string().nonempty("First name is required."),
@@ -19,10 +21,63 @@ export const registerFormSchema = z
     path: ["confirmPassword"],
   });
 
+export const loginRenderFields = [
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter your password",
+    required: true,
+  },
+];
 
-export const registerEndpointRequestSchema = registerFormSchema.transform(
-  ({ email, firstName, lastName, password, section_promo }) => ({
-    user: { email, firstName, lastName, password },
-    section_promo,
-  })
-);
+export const signupRenderFields = [
+  {
+    name: "firstName",
+    label: "First Name",
+    type: "text",
+    placeholder: "Enter your first name",
+    required: true,
+  },
+  {
+    name: "lastName",
+    label: "Last Name",
+    type: "text",
+    placeholder: "Enter your last name",
+    required: true,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter your password",
+    required: true,
+  },
+  {
+    name: "confirmPassword",
+    label: "Confirm Password",
+    type: "password",
+    placeholder: "Confirm your password",
+    required: true,
+  },
+  {
+    name: "section_promo",
+    label: "Section Promo",
+    type: "select",
+    required: true,
+  },
+];

@@ -23,21 +23,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { loginFormSchema } from "@/lib/schemas/auth"; // assuming you have a login schema
+import { LoginSchema } from "@/lib/schemas/auth"; // assuming you have a login schema
 import { login } from "@/lib/actions/auth";
 import Link from "next/link";
 
 const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("");
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     const error = await login(values);
     setError(error);
   };

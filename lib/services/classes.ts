@@ -1,54 +1,15 @@
-"use server";
+import { createApiResource } from "./base";
+import { Class } from "../types/class";
 
-import { z } from "zod";
-import { Class, Student } from "../types/api";
-import {
-  addResource,
-  deleteResource,
-  editResource,
-  getAllResource,
-  getResourceById,
-} from "./utils";
-import { ClassFormErrors, classFormSchema } from "../schemas/classes";
-
-export async function getAllClasses() {
-  return getAllResource<Class[]>("classes");
-}
-
-export async function getClassById(id: string) {
-  // Weird work around with the id because the shape of the url is /api/classes/id/with-student-count
-  // Fix later?
-  return getResourceById<Class>(`classes/${id}/with-student-count`, "");
-}
-
-export async function getClassStudents(id: string) {
-  return getAllResource<Student[]>(`classes/${id}/students`);
-}
-
-export async function getAllClassesWithStudentCount() {
-  return getAllResource<Class[]>("classes/with-student-count");
-}
-
-export async function addClass(formData: z.infer<typeof classFormSchema>) {
-  return addResource<typeof formData, Class, ClassFormErrors>(
-    "classes",
-    formData,
-    "Class creation failed."
-  );
-}
-
-export async function editClass(
-  id: string,
-  formData: z.infer<typeof classFormSchema>
-) {
-  return editResource<typeof formData, Class, ClassFormErrors>(
-    "classes",
-    id,
-    formData,
-    "Class edition failed"
-  );
-}
-
-export async function deleteClass(id: string) {
-  return deleteResource("classes", id);
-}
+export const classApiResource = createApiResource<Class>("classes");
+export const getAllClasses = classApiResource.list;
+export const getClass = classApiResource.get;
+export const addClass = classApiResource.create;
+export const editClass = classApiResource.update;
+export const deleteClass = classApiResource.delete;
+export const getClassStudents = async (id: string) => {
+  return classApiResource.getAllResource(`/${id}/students/`);
+};
+export const getAllClassesWithStudentCount = async () => {
+  return classApiResource.getAllResource<Class[]>(`/with-student-count`);
+};

@@ -1,51 +1,26 @@
-"use server";
-
-import { z } from "zod";
+import { createApiResource } from "./base";
 import {
-  DeparmentFormErrors,
-  departmentFormSchema,
-} from "../schemas/departments";
-import { Department, Teacher } from "../types/api";
-import {
-  addResource,
-  deleteResource,
-  editResource,
-  getAllResource,
-} from "./utils";
+  CreateDepartment,
+  Department,
+  UpdateDepartment,
+} from "../types/department";
+import { Teacher } from "../types/teacher";
 
-export async function getAllDepartments() {
-  return getAllResource<Department[]>("departments");
-}
-
-export async function getDepartmentTeachers(id: string) {
-  return getAllResource<Teacher[]>(`departments/${id}/teachers`);
-}
-
-export async function getAllDepartmentsWithTeacherCount() {
-  return getAllResource<Department[]>("departments/with-teacher-count");
-}
-
-export async function addDepartment(
-  formData: z.infer<typeof departmentFormSchema>
-) {
-  return addResource<
-    z.infer<typeof departmentFormSchema>,
-    Department,
-    DeparmentFormErrors
-  >("departments", formData, "Department creation failed");
-}
-
-export async function editDepartment(
-  id: string,
-  formData: z.infer<typeof departmentFormSchema>
-) {
-  return editResource<
-    z.infer<typeof departmentFormSchema>,
-    Department,
-    DeparmentFormErrors
-  >("departments", id, formData, "Department update failed");
-}
-
-export async function deleteDepartment(id: string): Promise<boolean> {
-  return deleteResource("departments", id);
-}
+export const departmentApiResource = createApiResource<
+  Department,
+  CreateDepartment,
+  UpdateDepartment
+>("departments");
+export const getAllDepartments = departmentApiResource.list;
+export const getDepartment = departmentApiResource.get;
+export const addDepartment = departmentApiResource.create;
+export const editDepartment = departmentApiResource.update;
+export const deleteDepartment = departmentApiResource.delete;
+export const getDepartmentTeachers = async (id: string) => {
+  return departmentApiResource.getAllResource<Teacher[]>(`/${id}/teachers`);
+};
+export const getAllDepartmentsWithTeacherCount = async () => {
+  return departmentApiResource.getAllResource<Department[]>(
+    `/with-teacher-count`
+  );
+};
