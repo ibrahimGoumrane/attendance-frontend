@@ -11,19 +11,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 import Delete from "./delete";
 import UpdateForm from "./edit";
+import { Teacher } from "@/lib/types/teacher";
+import { Department } from "@/lib/types/department";
 interface MainProps {
   id: string;
+  teacher: Teacher;
+  department: Department;
 }
 
-const Main = ({ id }: MainProps) => {
-  const { items: teachers } = useTeacherContext();
-  const { items: departments } = useDepartmentContext();
-  const department = departments.find((d) => +d.id === +id);
-  const teacher = teachers.find((t) => +t.id === +id);
+const Main = ({ teacher, department }: MainProps) => {
+  // const department = departments.find((d) => +d.id === +id);
+  // const teacher = teachers.find((t) => +t.id === +id);
 
   if (!teacher) {
     return <div>Teacher not found</div>;

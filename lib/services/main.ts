@@ -71,9 +71,10 @@ export async function fetchData<T>(input: RequestInfo, init?: RequestInit) {
 
   try {
     const response = await fetch(serverAddress + input, init);
-
     // Log the response for debugging
     console.log(
+      "ADDRESS:",
+      serverAddress + input,
       "Response:",
       await response.clone().json(),
       "Status:",

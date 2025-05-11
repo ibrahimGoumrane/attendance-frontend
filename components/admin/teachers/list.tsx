@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import {
   Download,
   Edit,
@@ -11,7 +9,10 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
+import CreateTeacherModal from "@/components/admin/teachers/create";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +29,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -37,25 +45,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
-import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
-import CreateTeacherModal from "@/components/admin/teachers/create";
-import UpdateForm from "./edit";
+import { Department } from "@/lib/types/department";
+import { Teacher } from "@/lib/types/teacher";
 import Delete from "./delete";
+import UpdateForm from "./edit";
 
-const ListTeachers = () => {
+interface ListTeachersProps {
+  teachers: Teacher[];
+  departments: Department[];
+}
+
+const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] =
     useState("All Departments");
-  const { items: teachers } = useTeacherContext();
-  const { items: departments } = useDepartmentContext();
 
   // Filter teachers based on search query and selected department
   const filteredTeachers = teachers.filter((teacher) => {
@@ -94,7 +97,7 @@ const ListTeachers = () => {
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <CreateTeacherModal>
+          <CreateTeacherModal departments={departments}>
             <Button size="sm" className="h-9">
               <Plus className="h-4 w-4 mr-2" />
               Add Teacher
@@ -151,9 +154,9 @@ const ListTeachers = () => {
               </TableHeader>
               <TableBody>
                 {filteredTeachers.length > 0 ? (
-                  filteredTeachers.map((teacher) => (
+                  filteredTeachers.map((teacher, i) => (
                     <TableRow
-                      key={teacher.id}
+                      key={i}
                       className="hover:bg-gray-50 dark:hover:bg-gray-900"
                     >
                       <TableCell className="font-medium dark:text-white">

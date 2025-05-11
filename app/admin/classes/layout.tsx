@@ -8,7 +8,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const classes = await getAllClassesWithStudentCount();
-  console.log(classes);
   return (
     <div>
       <ClassProvider initialClasses={classes}>{children}</ClassProvider>

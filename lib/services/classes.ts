@@ -12,5 +12,5 @@ export const getClassStudents = async (id: string) => {
   return classApiResource.getAllResource(`/${id}/students/`);
 };
 export const getAllClassesWithStudentCount = async () => {
-  return classApiResource.getAllResource<Class[]>(`/with-student-count`);
+  return classApiResource.getAllResource<Class>(`/with-student-count`);
 };

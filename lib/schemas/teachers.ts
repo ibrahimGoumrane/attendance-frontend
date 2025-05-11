@@ -1,17 +1,13 @@
 import { z } from "zod";
+import { updateUserSchema, userSchema } from "./user";
 
 export const CreateTeacherSchema = z.object({
-  email: z.string().nonempty("Email is required").email(),
-  firstName: z.string().nonempty("First name is required."),
-  lastName: z.string().nonempty("Last name is required"),
+  user: userSchema,
   department: z.string().nonempty("Department is required"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
 export const UpdateTeacherSchema = z.object({
-  email: z.string().nonempty("Email is required").email(),
-  firstName: z.string().nonempty("First name is required."),
-  lastName: z.string().nonempty("Last name is required"),
+  user: updateUserSchema,
   department: z.string().nonempty("Department is required"),
 });
 export const DeleteTeacherSchema = z.object({

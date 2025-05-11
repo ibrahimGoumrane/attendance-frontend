@@ -1,28 +1,20 @@
 import { z } from "zod";
+import { updateUserSchema, userSchema } from "./user";
 
 export const studentSchema = z.object({
   id: z.string(),
   section_promo: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
+  user: userSchema,
 });
 
 export const createStudentSchema = z.object({
   section_promo: z.string(),
-  firstName: z.string().nonempty("First name is required"),
-  lastName: z.string().nonempty("Last name is required"),
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }),
+  user: userSchema,
 });
 export const updateStudentSchema = z.object({
   id: z.string(),
   section_promo: z.string(),
-  firstName: z.string().nonempty("First name is required"),
-  lastName: z.string().nonempty("Last name is required"),
-  email: z.string().email({ message: "Invalid email address" }),
+  user: updateUserSchema,
 });
 
 export const studentCreateRenderFields = [

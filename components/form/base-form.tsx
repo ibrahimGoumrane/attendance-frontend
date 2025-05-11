@@ -57,7 +57,7 @@ function BaseForm({
   // React to successful form submission
   useEffect(() => {
     if (state.success && onSuccess) {
-      onSuccess(state);
+      onSuccess(state.data);
     }
   }, [state, onSuccess]);
 

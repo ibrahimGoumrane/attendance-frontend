@@ -8,17 +8,42 @@ import {
 import { teacherApiResource } from "../services/teachers";
 
 export const addTeacher = async (prevState: State, newTeacher: FormData) => {
+  const data = {
+    user: {
+      firstName: newTeacher.get("firstName") as string,
+      lastName: newTeacher.get("lastName") as string,
+      email: newTeacher.get("email") as string,
+      password: newTeacher.get("password") as string,
+    },
+    department: newTeacher.get("department") as string,
+  };
+
   return teacherApiResource.createAction(
     prevState,
-    newTeacher,
-    CreateTeacherSchema
+    data,
+    CreateTeacherSchema,
+    false
   );
 };
-export const editTeacher = async (prevState: State, formData: FormData) => {
+export const editTeacher = async (
+  prevState: State,
+  updatedTeacher: FormData
+) => {
+  const data = {
+    id: updatedTeacher.get("id") as string,
+    user: {
+      firstName: updatedTeacher.get("firstName") as string,
+      lastName: updatedTeacher.get("lastName") as string,
+      email: updatedTeacher.get("email") as string,
+    },
+    department: updatedTeacher.get("department") as string,
+  };
+
   return teacherApiResource.updateAction(
     prevState,
-    formData,
-    UpdateTeacherSchema
+    data,
+    UpdateTeacherSchema,
+    false
   );
 };
 export const deleteTeacher = async (prevState: State, formData: FormData) => {

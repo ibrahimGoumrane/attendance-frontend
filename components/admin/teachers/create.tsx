@@ -2,14 +2,11 @@
 import BaseForm from "@/components/form/base-form";
 import PasswordField from "@/components/form/password-field";
 import { addTeacher } from "@/lib/actions/teacher";
-import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 import { FieldConfig, State } from "@/lib/schemas/base";
 import {
   CreateTeacherSchema,
   teachercreateRenderFields,
 } from "@/lib/schemas/teachers";
-import { Teacher } from "@/lib/types/teacher";
 import {
   Dialog,
   DialogContent,
@@ -20,15 +17,17 @@ import {
 } from "@/components/ui/dialog";
 import React, { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Department } from "@/lib/types/department";
 interface FormProps {
   children: React.ReactNode;
+  departments: Department[];
 }
 
-const CreateForm = ({ children }: FormProps) => {
+const CreateForm = ({ children, departments }: FormProps) => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { items: departments } = useDepartmentContext();
-  const { addItem } = useTeacherContext();
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const updatedTeacherFields: FieldConfig[] = teachercreateRenderFields.map(
     (field) => {
@@ -80,9 +79,9 @@ const CreateForm = ({ children }: FormProps) => {
           fields={updatedTeacherFields}
           submitText="Create Teacher"
           loadingText="Creating Teacher..."
-          onSuccess={(data) => {
-            addItem(data as Teacher);
-            setOpen(false);
+          onSuccess={() => {
+            setOpen(false); 
+            router.push("/admin/teachers");
           }}
         />
       </DialogContent>

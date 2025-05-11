@@ -87,7 +87,7 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
    * Server Action wrapper for fetching resources
    */
   private async handleAction(
-    data: CreateDTO | UpdateDTO | { id: string },
+    data: CreateDTO | UpdateDTO | { id: string } | FormData,
     schema: ZodSchema,
     action: () => Promise<T | boolean>
   ): Promise<State> {
@@ -121,11 +121,15 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
    */
   createAction = async (
     prevState: State,
-    formData: FormData,
-    schema: ZodSchema
+    formData: FormData | CreateDTO,
+    schema: ZodSchema,
+    applyTransform: boolean = true
   ): Promise<State> => {
-    const data = this.formDataToObject(formData) as CreateDTO;
-    return await this.handleAction(data, schema, () =>
+    const data = applyTransform
+      ? this.formDataToObject(formData as FormData)
+      : formData;
+
+    return await this.handleAction(data as CreateDTO, schema, () =>
       this.create(data as CreateDTO)
     );
   };
@@ -135,10 +139,11 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
    */
   updateAction = async (
     prevState: State,
-    formData: FormData,
-    schema: ZodSchema
+    formData: FormData | (UpdateDTO & { id: string }),
+    schema: ZodSchema,
+    applyTransform: boolean = true
   ): Promise<State> => {
-    const id = formData.get("id");
+    const id = formData instanceof FormData ? formData.get("id") : formData.id;
     if (!id) {
       return {
         success: false,
@@ -146,8 +151,10 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
       };
     }
 
-    const data = this.formDataToObject(formData) as UpdateDTO;
-    return await this.handleAction(data, schema, () =>
+    const data = applyTransform
+      ? this.formDataToObject(formData as FormData)
+      : formData;
+    return await this.handleAction(data as UpdateDTO, schema, () =>
       this.update(id.toString(), data as UpdateDTO)
     );
   };
@@ -214,6 +221,5 @@ export function createApiResource<T, C = T, U = Partial<T>>(
   resourcePath: string,
   haveFiles: boolean = false
 ) {
-  console.log("Creating API resource:", resourcePath);
   return new ApiResource<T, C, U>(resourcePath, haveFiles);
 }
