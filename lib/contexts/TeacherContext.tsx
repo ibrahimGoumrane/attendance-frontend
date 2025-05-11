@@ -2,7 +2,7 @@
 import { Teacher } from "../types/api";
 import { createResourceContext, ResourceProvider } from "./ResourceContext";
 
-export const [TeacherContext, useTeacherContext] = createResourceContext<Teacher>();
+export const [TeacherContext, useTeacherContext] = createResourceContext<Partial<Teacher>>();
 
 export const TeacherProvider = ({
   initialTeachers,
@@ -15,7 +15,7 @@ export const TeacherProvider = ({
     <ResourceProvider
       context={TeacherContext}
       initialItems={initialTeachers}
-      getId={(teacher) => teacher.id}
+      getId={(teacher) => teacher.id!}
     >
       {children}
     </ResourceProvider>

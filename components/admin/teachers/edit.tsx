@@ -37,7 +37,7 @@ export default function EditPage({ id }: EditPageProps) {
   const router = useRouter();
   const { items: teachers, editItem: editTeacher } = useTeacherContext();
   const { items: departments } = useDepartmentContext();
-  const teacher = teachers.find((t) => +t.id === +id);
+  const teacher = teachers.find((t) => +t.id! === +id);
 
   // Find the department ID based on the teacher's department name
   const departmentId =
@@ -45,9 +45,9 @@ export default function EditPage({ id }: EditPageProps) {
     "";
 
   const [formData, setFormData] = useState({
-    firstName: teacher?.user.firstName || "",
-    lastName: teacher?.user.lastName || "",
-    email: teacher?.user.email || "",
+    firstName: teacher?.user!.firstName || "",
+    lastName: teacher?.user!.lastName || "",
+    email: teacher?.user!.email || "",
     department: departmentId, // Store the ID instead of the name
   });
 

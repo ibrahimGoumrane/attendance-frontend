@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/select";
 import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
+import { CreateTeacherModal } from "@/components/admin/teachers/create";
 
 export default function TeachersPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -57,15 +58,17 @@ export default function TeachersPage() {
   // Filter teachers based on search query and selected department
   const filteredTeachers = teachers.filter((teacher) => {
     const matchesSearch =
-      teacher.user.firstName
-        .toLowerCase()
+      teacher
+        .user!.firstName.toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
-      teacher.user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.user.email.toLowerCase().includes(searchQuery.toLowerCase());
+      teacher
+        .user!.lastName.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      teacher.user!.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesDepartment =
       selectedDepartment === "All Departments" ||
-      +teacher.department === +selectedDepartment;
+      +teacher.department! === +selectedDepartment;
 
     return matchesSearch && matchesDepartment;
   });
@@ -90,10 +93,12 @@ export default function TeachersPage() {
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button size="sm" className="h-9">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Teacher
-          </Button>
+          <CreateTeacherModal>
+            <Button size="sm" className="h-9">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Teacher
+            </Button>
+          </CreateTeacherModal>
         </div>
       </div>
 
@@ -155,11 +160,11 @@ export default function TeachersPage() {
                           href={`/admin/teachers/${teacher.id}`}
                           className="hover:underline"
                         >
-                          {teacher.user.firstName} {teacher.user.lastName}
+                          {teacher.user!.firstName} {teacher.user!.lastName}
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {teacher.user.email}
+                        {teacher.user!.email}
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
                         {departments.find(

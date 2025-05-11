@@ -18,16 +18,16 @@ interface ResourceProviderProps<T> {
   /** React children */
   children: ReactNode;
   /** Initial items to populate the context */
-  initialItems: T[];
+  initialItems: Partial<T>[];
   /** Function to extract the unique ID from an item */
-  getId: (item: T) => string;
+  getId: (item: Partial<T>) => string;
   /** The context object returned from createResourceContext */
-  context: React.Context<ResourceContextType<T> | undefined>;
+  context: React.Context<ResourceContextType<Partial<T>> | undefined>;
 
   /** Optional callback invoked after an item is added */
-  onAddItem?: (item: T) => void;
+  onAddItem?: (item: Partial<T>) => void;
   /** Optional callback invoked after an item is edited */
-  onEditItem?: (item: T) => void;
+  onEditItem?: (item: Partial<T>) => void;
   /** Optional callback invoked after an item is deleted */
   onDeleteItem?: (id: string) => void;
 }
@@ -45,14 +45,16 @@ export function ResourceProvider<T>({
   onEditItem,
   onDeleteItem,
 }: ResourceProviderProps<T>) {
-  const [items, setItems] = useState<T[]>(initialItems);
+  const [items, setItems] = useState<Partial<T>[]>(initialItems);
 
   /**
    * Adds an item to the list and optionally calls `onAddItem`.
    */
-  const addItem = (item: T) => {
-    setItems((prev) => [...prev, item]);
-    onAddItem?.(item);
+  const addItem = (item: Partial<T>) => {
+    if (item) {
+      setItems((prev) => [...prev, item]);
+      onAddItem?.(item);
+    }
   };
 
   /**
@@ -66,7 +68,7 @@ export function ResourceProvider<T>({
   /**
    * Replaces an item with the same ID and optionally calls `onEditItem`.
    */
-  const editItem = (updatedItem: T) => {
+  const editItem = (updatedItem: Partial<T>) => {
     setItems((prev) =>
       prev.map((item) =>
         getId(item) === getId(updatedItem) ? updatedItem : item

@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/select";
 import { useStudentContext } from "@/lib/contexts/StudentContext";
 import { useClassContext } from "@/lib/contexts/ClassContext";
+import { Class } from "@/lib/types/api";
 
 export default function StudentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,11 +56,13 @@ export default function StudentsPage() {
   const { items: classes } = useClassContext();
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
-      student.user.firstName
-        .toLowerCase()
+      student
+        .user!.firstName.toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
-      student.user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.user.email.toLowerCase().includes(searchQuery.toLowerCase());
+      student
+        .user!.lastName.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      student.user!.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesClass =
       selectedClass === "All Classes" ||
@@ -122,12 +125,13 @@ export default function StudentsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="All Classes">All Classes</SelectItem>
-                  {classes.map((cls) => (
+                  {classes.map((cls: Class) => (
                     <SelectItem key={cls.id} value={cls.name}>
                       {cls.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
+                !
               </Select>
             </div>
           </div>
@@ -154,11 +158,11 @@ export default function StudentsPage() {
                           href={`/admin/students/${student.id}`}
                           className="hover:underline"
                         >
-                          {student.user.firstName} {student.user.lastName}
+                          {student.user!.firstName} {student.user!.lastName}
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {student.user.email}
+                        {student.user!.email}
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
                         {student.section_promo}
