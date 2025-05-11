@@ -57,9 +57,9 @@ const UpdateForm = ({ teacher, children }: FormProps) => {
           <DialogTitle>Edit Teacher</DialogTitle>
           <DialogDescription>
             Update the teacher&apos;s information and save changes.
-            <p className="text-muted-foreground dark:text-gray-400">
+            <span className="text-muted-foreground dark:text-gray-400">
               Please ensure that all fields are filled out correctly.
-            </p>
+            </span>
           </DialogDescription>
         </DialogHeader>
         <BaseForm

@@ -52,9 +52,8 @@ const CreateForm = ({ children }: FormProps) => {
           ...field,
           type: "select",
           options: [
-            { value: "none", label: "Choose a department" },
             ...departments.map((dept) => ({
-              value: dept.id,
+              value: String(dept.id),
               label: dept.name,
             })),
           ],
