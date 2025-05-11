@@ -73,16 +73,16 @@ export function CreateTeacherModal({
     sendedFormData.append("user[firstName]", formData.firstName);
     sendedFormData.append("user[lastName]", formData.lastName);
     sendedFormData.append("user[email]", formData.email);
-    const { success, data, errors } = await addTeacherApi(sendedFormData);
-    await addTeacher({
-      user: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        role: "teacher",
-      },
-      department: formData.department,
-    });
+    // const { success, data, errors } = await addTeacherApi(sendedFormData);
+    // await addTeacher({
+    //   user: {
+    //     firstName: formData.firstName,
+    //     lastName: formData.lastName,
+    //     email: formData.email,
+    //     role: "teacher",
+    //   },
+    //   department: formData.department,
+    // });
     toast.success("Teacher created successfully");
     setIsSubmitting(false);
     setOpen(false);

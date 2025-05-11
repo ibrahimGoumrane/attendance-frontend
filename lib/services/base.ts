@@ -212,5 +212,6 @@ export function createApiResource<T, C = T, U = Partial<T>>(
   resourcePath: string,
   haveFiles: boolean = false
 ) {
+  console.log("Creating API resource:", resourcePath);
   return new ApiResource<T, C, U>(resourcePath, haveFiles);
 }

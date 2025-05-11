@@ -2,11 +2,12 @@ import { createApiResource } from "./base";
 import { Class } from "../types/class";
 
 export const classApiResource = createApiResource<Class>("classes");
-export const getAllClasses = classApiResource.list;
-export const getClass = classApiResource.get;
-export const addClass = classApiResource.create;
-export const editClass = classApiResource.update;
-export const deleteClass = classApiResource.delete;
+export const getAllClasses = () => classApiResource.list();
+export const getClass = (id: string) => classApiResource.get(id);
+export const addClass = (data: Class) => classApiResource.create(data);
+export const editClass = (id: string, data: Partial<Class>) =>
+  classApiResource.update(id, data);
+export const deleteClass = (id: string) => classApiResource.delete(id);
 export const getClassStudents = async (id: string) => {
   return classApiResource.getAllResource(`/${id}/students/`);
 };

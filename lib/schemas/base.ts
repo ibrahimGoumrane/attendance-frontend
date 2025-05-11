@@ -9,6 +9,7 @@ export interface FieldConfig {
   required?: boolean;
   className?: string;
   helpText?: React.ReactNode;
+  options?: { value: string; label: string }[];
   customRender?: (form: UseFormReturn, state: State) => React.ReactElement;
 }
 export interface State {
