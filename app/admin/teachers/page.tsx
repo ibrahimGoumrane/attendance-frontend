@@ -65,7 +65,7 @@ export default function TeachersPage() {
 
     const matchesDepartment =
       selectedDepartment === "All Departments" ||
-      teacher.department === selectedDepartment;
+      +teacher.department === +selectedDepartment;
 
     return matchesSearch && matchesDepartment;
   });
@@ -125,7 +125,7 @@ export default function TeachersPage() {
               <SelectContent>
                 <SelectItem value="All Departments">All Departments</SelectItem>
                 {departments.map((department) => (
-                  <SelectItem key={department.id} value={department.name}>
+                  <SelectItem key={department.id} value={String(department.id)}>
                     {department.name}
                   </SelectItem>
                 ))}
@@ -162,7 +162,9 @@ export default function TeachersPage() {
                         {teacher.user.email}
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {teacher.department}
+                        {departments.find(
+                          (dept) => dept.id === teacher.department
+                        )?.name || "N/A"}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
