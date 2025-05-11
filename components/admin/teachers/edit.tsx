@@ -51,7 +51,12 @@ const UpdateForm = ({ teacher, children }: FormProps) => {
   );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger
+        onClick={(e) => e.stopPropagation()}
+        className="w-full flex justify-start"
+      >
+        {children}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Edit Teacher</DialogTitle>

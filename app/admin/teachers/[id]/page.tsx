@@ -1,4 +1,4 @@
-import Main from "@/components/admin/teachers/main";
+import Main from "@/components/admin/teachers/get";
 
 export default async function TeacherDetailsPage({
   params,
