@@ -55,7 +55,8 @@ export function SelectField({
         <FormControl>
           <Select
             onValueChange={field.onChange}
-            defaultValue={field.value}
+            defaultValue={String(field.value)}
+            name={field.name}
             disabled={disabled}
             required={required}
             {...props}
@@ -70,7 +71,7 @@ export function SelectField({
             </SelectTrigger>
             <SelectContent>
               {options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem key={option.value} value={String(option.value)}>
                   {option.label}
                 </SelectItem>
               ))}
