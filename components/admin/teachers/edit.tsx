@@ -9,24 +9,24 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { editTeacher } from "@/lib/actions/teacher";
-import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 import { FieldConfig } from "@/lib/schemas/base";
 import {
   teacherUpdateRenderFields,
   UpdateTeacherSchema,
 } from "@/lib/schemas/teachers";
+import { Department } from "@/lib/types/department";
 import { Teacher } from "@/lib/types/teacher";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 interface FormProps {
   teacher: Teacher;
   children: React.ReactNode;
+  departments: Department[];
 }
 
-const UpdateForm = ({ teacher, children }: FormProps) => {
+const UpdateForm = ({ teacher, children, departments }: FormProps) => {
   const [open, setOpen] = useState(false);
-  const { items: departments } = useDepartmentContext();
-  const { editItem } = useTeacherContext();
+  const router = useRouter();
   const initialValues = {
     id: teacher.id,
     firstName: teacher.user.firstName,
@@ -53,7 +53,7 @@ const UpdateForm = ({ teacher, children }: FormProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         onClick={(e) => e.stopPropagation()}
-        className="w-full flex justify-start"
+        className="w-full flex justify-start items-center"
       >
         {children}
       </DialogTrigger>
@@ -75,9 +75,9 @@ const UpdateForm = ({ teacher, children }: FormProps) => {
           fields={updatedTeacherFields}
           submitText="Update Teacher"
           loadingText="Updating Teacher..."
-          onSuccess={(data) => {
-            editItem(data as Teacher);
+          onSuccess={() => {
             setOpen(false);
+            router.push(`/admin/teachers/${teacher.id}`);
           }}
           defaultValues={initialValues}
         />

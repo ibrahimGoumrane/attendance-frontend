@@ -1,5 +1,5 @@
 import Main from "@/components/admin/teachers/get";
-import { getDepartment } from "@/lib/services/departments";
+import { getAllDepartments, getDepartment } from "@/lib/services/departments";
 import { getTeacher } from "@/lib/services/teachers";
 
 export default async function TeacherDetailsPage({
@@ -16,5 +16,6 @@ export default async function TeacherDetailsPage({
   if (!department) {
     return <div>Department not found</div>;
   }
-  return <Main id={id} teacher={teacher} department={department} />;
+  const departments = await getAllDepartments();
+  return <Main id={id} teacher={teacher} department={department} departments={departments} />;
 }

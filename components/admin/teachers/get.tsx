@@ -19,12 +19,10 @@ interface MainProps {
   id: string;
   teacher: Teacher;
   department: Department;
+  departments: Department[];
 }
 
-const Main = ({ teacher, department }: MainProps) => {
-  // const department = departments.find((d) => +d.id === +id);
-  // const teacher = teachers.find((t) => +t.id === +id);
-
+const Main = ({ teacher, department, departments }: MainProps) => {
   if (!teacher) {
     return <div>Teacher not found</div>;
   }
@@ -49,7 +47,7 @@ const Main = ({ teacher, department }: MainProps) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <UpdateForm teacher={teacher}>
+          <UpdateForm teacher={teacher} departments={departments}>
             <Button variant="outline" size="sm">
               <Edit className="h-4 w-4 mr-2" />
               Edit

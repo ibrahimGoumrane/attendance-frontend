@@ -17,11 +17,11 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
 import { deleteTeacher } from "@/lib/actions/teacher";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 import {
   DeleteTeacherSchema,
   teacherDeleteRenderFields,
 } from "@/lib/schemas/teachers";
+import { useRouter } from "next/navigation";
 
 interface DeleteProps {
   id: string;
@@ -30,8 +30,7 @@ interface DeleteProps {
 
 const Delete = ({ id, children }: DeleteProps) => {
   const [open, setOpen] = useState(false);
-  const { deleteItem } = useTeacherContext();
-
+  const router = useRouter();
   const triggerButton = children ? (
     cloneElement(children, {
       onClick: (e) => {
@@ -94,8 +93,8 @@ const Delete = ({ id, children }: DeleteProps) => {
             }
             handleCancel={() => setOpen(false)}
             onSuccess={() => {
-              deleteItem(id);
               setOpen(false);
+              router.push("/admin/teachers");
             }}
           />
         </AlertDialogFooter>
