@@ -48,7 +48,7 @@ export const teachercreateRenderFields = [
   {
     name: "department",
     label: "Department",
-    type: "text",
+    type: "select",
     placeholder: "Enter your department",
     required: true,
   },

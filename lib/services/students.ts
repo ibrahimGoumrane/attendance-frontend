@@ -7,13 +7,13 @@ const studentApiResource = createApiResource<
   CreateStudent,
   UpdateStudent
 >("students");
-export const getAllStudents = studentApiResource.list;
-export const getStudent = studentApiResource.get;
-export const addStudent = studentApiResource.create;
-export const editStudent = studentApiResource.update;
-export const deleteStudent = studentApiResource.delete;
+export const getAllStudents = () => studentApiResource.list();
+export const getStudent = (id: string) => studentApiResource.get(id);
+export const addStudent = (data: CreateStudent) => studentApiResource.create(data);
+export const editStudent = (id: string, data: UpdateStudent) => studentApiResource.update(id, data);
+export const deleteStudent = (id: string) => studentApiResource.delete(id);
 
-// Resource for student images
+// Source for student images
 const studentImageApiResource = createApiResource<StudentImage>("images");
-export const getStudentImages = studentImageApiResource.get;
-export const addStudentImage = studentImageApiResource.create;
+export const getStudentImages = (id: string) => studentImageApiResource.get(id);
+export const addStudentImage = (data: StudentImage) => studentImageApiResource.create(data);

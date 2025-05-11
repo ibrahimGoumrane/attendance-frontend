@@ -1,3 +1,4 @@
+"use server";
 import { DepartmentProvider } from "@/lib/contexts/DepartmentContext";
 import { TeacherProvider } from "@/lib/contexts/TeacherContext";
 import { getAllDepartments } from "@/lib/services/departments";

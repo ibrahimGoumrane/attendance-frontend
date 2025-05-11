@@ -46,8 +46,7 @@ import {
 } from "@/components/ui/select";
 import { useTeacherContext } from "@/lib/contexts/TeacherContext";
 import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
-import { CreateTeacherModal } from "@/components/admin/teachers/create";
-
+import CreateTeacherModal from "@/components/admin/teachers/create";
 export default function TeachersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] =

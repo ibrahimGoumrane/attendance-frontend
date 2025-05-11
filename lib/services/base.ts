@@ -101,15 +101,17 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
           errors: fieldErrors as Record<string, string[]>,
         };
       }
-      await action();
+      const returnedData = await action();
       return {
         success: true,
         errors: {},
+        data: returnedData,
       };
     } catch (error) {
       return {
         success: false,
         errors: { general: [(error as Error).message] },
+        data: null,
       };
     }
   }

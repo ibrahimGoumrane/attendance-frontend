@@ -1,185 +1,93 @@
-"use client";
-
-import type React from "react";
-
-import { useState } from "react";
-import { Save } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import BaseForm from "@/components/form/base-form";
+import PasswordField from "@/components/form/password-field";
+import { addTeacher } from "@/lib/actions/teacher";
+import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
+import { useTeacherContext } from "@/lib/contexts/TeacherContext";
+import { FieldConfig, State } from "@/lib/schemas/base";
+import {
+  CreateTeacherSchema,
+  teachercreateRenderFields,
+} from "@/lib/schemas/teachers";
+import { Teacher } from "@/lib/types/teacher";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
-import { useTeacherContext } from "@/lib/contexts/TeacherContext";
-import { addTeacher as addTeacherApi } from "@/lib/services/teachers";
-export function CreateTeacherModal({
-  children,
-}: {
+import React, { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+interface FormProps {
   children: React.ReactNode;
-}) {
+}
+
+const Form = ({ children }: FormProps) => {
   const [open, setOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { items: departments } = useDepartmentContext();
-  const { addItem: addTeacher } = useTeacherContext();
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    department: "",
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleDepartmentChange = (value: string) => {
-    const selectedDept = departments.find((dept) => dept.id === value);
-    if (selectedDept) {
-      setFormData((prev) => ({
-        ...prev,
-        department: selectedDept.name,
-        departmentId: value,
-      }));
+  const { addItem } = useTeacherContext();
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+  const updatedTeacherFields: FieldConfig[] = teachercreateRenderFields.map(
+    (field) => {
+      if (field.name === "password") {
+        return {
+          ...field,
+          type: showPassword ? "text" : "password",
+          customRender: (form: UseFormReturn, state: State) => (
+            <PasswordField
+              form={form}
+              state={state}
+              showPassword={showPassword}
+              fieldConfig={field}
+              handlePasswordVisibility={togglePasswordVisibility}
+            />
+          ),
+        };
+      }
+      if (field.name === "department") {
+        return {
+          ...field,
+          type: "select",
+          options: [
+            { value: "none", label: "Choose a department" },
+            ...departments.map((dept) => ({
+              value: dept.id,
+              label: dept.name,
+            })),
+          ],
+        };
+      }
+      return field;
     }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    const sendedFormData = new FormData();
-    sendedFormData.append("id", crypto.randomUUID());
-    sendedFormData.append("department", formData.department);
-    sendedFormData.append("user[firstName]", formData.firstName);
-    sendedFormData.append("user[lastName]", formData.lastName);
-    sendedFormData.append("user[email]", formData.email);
-    // const { success, data, errors } = await addTeacherApi(sendedFormData);
-    // await addTeacher({
-    //   user: {
-    //     firstName: formData.firstName,
-    //     lastName: formData.lastName,
-    //     email: formData.email,
-    //     role: "teacher",
-    //   },
-    //   department: formData.department,
-    // });
-    toast.success("Teacher created successfully");
-    setIsSubmitting(false);
-    setOpen(false);
-    // Reset form
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      department: "",
-    });
-  };
-
+  );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Create New Teacher</DialogTitle>
-            <DialogDescription>
-              Add a new teacher to the system. Click save when you&apos;re done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="department">Department</Label>
-                <Select
-                  value={formData.department}
-                  onValueChange={handleDepartmentChange}
-                >
-                  <SelectTrigger id="department" className="w-full">
-                    <SelectValue placeholder="Select department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {departments.map((dept) => (
-                      <SelectItem key={dept.id} value={dept.id}>
-                        {dept.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                "Creating..."
-              ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                  Create Teacher
-                </>
-              )}
-            </Button>
-          </DialogFooter>
-        </form>
+        <DialogHeader>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you&apos;re done.
+          </DialogDescription>
+        </DialogHeader>
+        <BaseForm
+          initialState={{ success: false, errors: {} }}
+          className=" "
+          action={addTeacher}
+          schema={CreateTeacherSchema}
+          fields={updatedTeacherFields}
+          submitText="Create Teacher"
+          loadingText="Creating Teacher..."
+          onSuccess={(data) => {
+            addItem(data as Teacher);
+            setOpen(false);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default Form;

@@ -6,7 +6,10 @@ export const teacherApiResource = createApiResource<
   CreateTeacher,
   UpdateTeacher
 >("teachers");
-export const getAllTeachers = teacherApiResource.list;
-export const addTeacher = teacherApiResource.create;
-export const editTeacher = teacherApiResource.update;
-export const deleteTeacher = teacherApiResource.delete;
+export const getAllTeachers = () => teacherApiResource.list();
+export const getTeacher = (id: string) => teacherApiResource.get(id);
+export const addTeacher = (data: CreateTeacher) =>
+  teacherApiResource.create(data);
+export const editTeacher = (id: string, data: UpdateTeacher) =>
+  teacherApiResource.update(id, data);
+export const deleteTeacher = (id: string) => teacherApiResource.delete(id);

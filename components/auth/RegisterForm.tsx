@@ -18,7 +18,7 @@ const RegisterForm = ({ classes }: RegisterFormProps) => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
-  const updatedSignupSchema: FieldConfig[] = signupRenderFields.map((field) => {
+  const updatedSignupFields: FieldConfig[] = signupRenderFields.map((field) => {
     if (field.name === "password" || field.name === "confirmPassword") {
       return {
         ...field,
@@ -53,11 +53,11 @@ const RegisterForm = ({ classes }: RegisterFormProps) => {
       initialState={{ success: false, errors: {} }}
       action={register}
       schema={SignupSchema}
-      fields={updatedSignupSchema}
+      fields={updatedSignupFields}
       submitText="Sign Up"
       loadingText="Signing up..."
       onSuccess={() => {
-        router.push("/dashboard");
+        router.push("/");
       }}
     />
   );

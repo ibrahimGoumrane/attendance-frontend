@@ -11,11 +11,18 @@ export const departmentApiResource = createApiResource<
   CreateDepartment,
   UpdateDepartment
 >("departments");
-export const getAllDepartments = departmentApiResource.list;
-export const getDepartment = departmentApiResource.get;
-export const addDepartment = departmentApiResource.create;
-export const editDepartment = departmentApiResource.update;
-export const deleteDepartment = departmentApiResource.delete;
+
+// Change direct method references to arrow functions
+export const getAllDepartments = () => departmentApiResource.list();
+export const getDepartment = (id: string) => departmentApiResource.get(id);
+export const addDepartment = (data: CreateDepartment) =>
+  departmentApiResource.create(data);
+export const editDepartment = (id: string, data: UpdateDepartment) =>
+  departmentApiResource.update(id, data);
+export const deleteDepartment = (id: string) =>
+  departmentApiResource.delete(id);
+
+// These are already using arrow functions, so they're fine
 export const getDepartmentTeachers = async (id: string) => {
   return departmentApiResource.getAllResource<Teacher[]>(`/${id}/teachers`);
 };

@@ -22,6 +22,7 @@ interface BaseFormProps {
   defaultValues?: Record<string, string>;
   onSuccess?: (data: unknown) => void;
   children?: React.ReactNode;
+  className?: string;
 }
 
 function BaseForm({
@@ -33,6 +34,7 @@ function BaseForm({
   loadingText = "Submitting...",
   defaultValues = {},
   onSuccess,
+  className,
   children,
 }: BaseFormProps) {
   // Form state with server action
@@ -56,7 +58,7 @@ function BaseForm({
   // Render errors at the top if there are general errors
   return (
     <Form {...form}>
-      <form action={formAction} className="space-y-6">
+      <form action={formAction} className="space-y-4">
         {/* General error message */}
         {state.errors &&
           "general" in state.errors &&
@@ -65,48 +67,48 @@ function BaseForm({
               {state.errors.general[0]}
             </div>
           )}
-
-        {/* Form fields */}
-        {fields.map((fieldConfig) =>
-          fieldConfig.customRender ? (
-            cloneElement(fieldConfig.customRender(form, state), {
-              key: fieldConfig.name,
-            })
-          ) : (
-            <FormField
-              key={fieldConfig.name}
-              name={fieldConfig.name}
-              control={form.control}
-              render={({ field }) =>
-                fieldConfig.type === "select" ? (
-                  <SelectField
-                    label={fieldConfig.label}
-                    field={field}
-                    state={state}
-                    options={fieldConfig.options!}
-                    placeholder={fieldConfig.placeholder}
-                    required={fieldConfig.required}
-                    helpText={fieldConfig.helpText}
-                    className={fieldConfig.className}
-                  />
-                ) : (
-                  <TextField
-                    label={fieldConfig.label}
-                    type={fieldConfig.type}
-                    field={field}
-                    state={state}
-                    placeholder={fieldConfig.placeholder}
-                    autoComplete={fieldConfig.autoComplete}
-                    required={fieldConfig.required}
-                    helpText={fieldConfig.helpText}
-                    className={fieldConfig.className}
-                  />
-                )
-              }
-            />
-          )
-        )}
-
+        <div className={className + " space-y-4"}>
+          {/* Form fields */}
+          {fields.map((fieldConfig) =>
+            fieldConfig.customRender ? (
+              cloneElement(fieldConfig.customRender(form, state), {
+                key: fieldConfig.name,
+              })
+            ) : (
+              <FormField
+                key={fieldConfig.name}
+                name={fieldConfig.name}
+                control={form.control}
+                render={({ field }) =>
+                  fieldConfig.type === "select" ? (
+                    <SelectField
+                      label={fieldConfig.label}
+                      field={field}
+                      state={state}
+                      options={fieldConfig.options!}
+                      placeholder={fieldConfig.placeholder}
+                      required={fieldConfig.required}
+                      helpText={fieldConfig.helpText}
+                      className={fieldConfig.className}
+                    />
+                  ) : (
+                    <TextField
+                      label={fieldConfig.label}
+                      type={fieldConfig.type}
+                      field={field}
+                      state={state}
+                      placeholder={fieldConfig.placeholder}
+                      autoComplete={fieldConfig.autoComplete}
+                      required={fieldConfig.required}
+                      helpText={fieldConfig.helpText}
+                      className={fieldConfig.className}
+                    />
+                  )
+                }
+              />
+            )
+          )}
+        </div>
         {/* Additional custom content */}
         {children}
 

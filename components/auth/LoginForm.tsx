@@ -13,7 +13,7 @@ const LoginForm = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
-  const updatedLoginSchema: FieldConfig[] = loginRenderFields.map((field) => {
+  const updatedLoginFields: FieldConfig[] = loginRenderFields.map((field) => {
     if (field.name === "password") {
       return {
         ...field,
@@ -37,11 +37,11 @@ const LoginForm = () => {
       initialState={{ success: false, errors: {} }}
       action={login}
       schema={LoginSchema}
-      fields={updatedLoginSchema}
+      fields={updatedLoginFields}
       submitText="Sign In"
       loadingText="Signing in..."
       onSuccess={() => {
-        router.push("/dashboard");
+        router.push("/");
       }}
     />
   );
