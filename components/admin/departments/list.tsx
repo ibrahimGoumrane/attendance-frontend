@@ -20,12 +20,12 @@ import {
 import { Department } from "@/lib/types/department";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@radix-ui/react-dropdown-menu";
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Plus,
   Search,
@@ -152,7 +152,7 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
                         {dept.teacherCount}
                       </TableCell>
                       <TableCell>
-                      <DropdownMenu>
+                        <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
@@ -166,35 +166,23 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>
-                              <Link
-                                href={`/admin/classes/${dept.id}`}
-                                className="flex w-full"
-                              >
-                                View details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-9"
+                              <button
+                                className="flex items-center justify-start"
                                 onClick={() => handleEditClick(dept)}
                               >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
-                              </Button>
+                              </button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <Button
-                                variant="destructive"
-                                size="sm"
+                              <button
                                 onClick={() => handleDeleteClick(dept)}
-                                className=""
+                                className="flex items-center justify-start"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
-                              </Button>
+                              </button>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

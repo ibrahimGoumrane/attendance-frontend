@@ -203,32 +203,24 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                              {/* <UpdateForm
-                                teacher={teacher}
-                                departments={departments}
-                              > */}
                               <button
-                                className="flex justify-start items-center "
+                                className="flex items-center justify-start"
                                 onClick={() => handleEditClick(teacher)}
                               >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
                               </button>
-                              {/* </UpdateForm> */}
                             </DropdownMenuItem>
-
-                            <DropdownMenuItem className="">
-                              {/* <Delete id={teacher.id}> */}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-red-600 dark:text-red-400">
                               <button
-                                className="flex justify-start items-center text-red-600 dark:text-red-400"
                                 onClick={() => handleDeleteClick(teacher)}
+                                className="flex items-center justify-start"
                               >
-                                <Trash2 className="h-4 w-4 mr-2" color="red" />
+                                <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
                               </button>
-                              {/* </Delete> */}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

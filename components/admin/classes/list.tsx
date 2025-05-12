@@ -159,35 +159,23 @@ export default function List({ classes }: ClassesPageProps) {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>
-                              <Link
-                                href={`/admin/classes/${cls.id}`}
-                                className="flex w-full"
-                              >
-                                View details
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-9"
+                              <button
+                                className="flex items-center justify-start"
                                 onClick={() => handleEditClick(cls)}
                               >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
-                              </Button>
+                              </button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <Button
-                                variant="destructive"
-                                size="sm"
+                              <button
                                 onClick={() => handleDeleteClick(cls)}
-                                className=""
+                                className="flex items-center justify-start"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
-                              </Button>
+                              </button>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
