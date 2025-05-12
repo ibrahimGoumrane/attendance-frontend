@@ -52,12 +52,11 @@ export const editTeacher = async (
   );
 };
 export const deleteTeacher = async (prevState: State, formData: FormData) => {
-  const state = teacherApiResource.deleteAction(
+  await teacherApiResource.deleteAction(
     prevState,
     formData,
     DeleteTeacherSchema,
     ["/admin/teachers"]
   );
-  console.log("deleteTeacher", state);
   redirect("/admin/teachers");
 };
