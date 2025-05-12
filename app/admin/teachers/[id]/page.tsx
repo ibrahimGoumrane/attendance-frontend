@@ -1,22 +1,29 @@
+"use server";
+
 import Main from "@/components/admin/teachers/get";
-import { getAllDepartments, getDepartment } from "@/lib/services/departments";
+import { getAllDepartments } from "@/lib/services/departments";
 import { getTeacher } from "@/lib/services/teachers";
 
 export default async function TeacherDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const teacher = await getTeacher(id);
+
+  const [teacher, departments] = await Promise.all([
+    getTeacher(id),
+    getAllDepartments(),
+  ]);
   if (!teacher) {
     return <div>Teacher not found</div>;
   }
-  const department = await getDepartment(teacher.department);
+  const department = departments.find(
+    (department) => +department.id === +teacher.department
+  );
   if (!department) {
     return <div>Department not found</div>;
   }
-  const departments = await getAllDepartments();
   return (
     <Main
       id={id}

@@ -39,6 +39,8 @@ import {
 } from "@/components/ui/table";
 import { Class } from "@/lib/types/class";
 import CreateClassModal from "@/components/admin/classes/create";
+import UpdateForm from "./edit";
+import Delete from "./delete";
 interface ClassesPageProps {
   classes: Class[];
 }
@@ -165,18 +167,27 @@ export default function List({ classes }: ClassesPageProps) {
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <Link
-                                href={`/admin/classes/${cls.id}/edit`}
-                                className="flex w-full"
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-9"
+                                onClick={() => handleEditClick(cls)}
                               >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
-                              </Link>
+                              </Button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => handleDeleteClick(cls)}
+                                className=""
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </Button>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -211,6 +222,20 @@ export default function List({ classes }: ClassesPageProps) {
           </div>
         </CardContent>
       </Card>
+      {selectedClass && (
+        <>
+          <UpdateForm
+            classData={selectedClass}
+            open={editModalOpen}
+            setIsOpen={setEditModalOpen}
+          />
+          <Delete
+            id={selectedClass.id}
+            open={deleteModalOpen}
+            setIsOpen={setDeleteModalOpen}
+          />
+        </>
+      )}
     </div>
   );
 }

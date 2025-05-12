@@ -33,3 +33,10 @@ export const classUpdateRenderFields = [
     required: true,
   },
 ];
+export const classDeleteRenderFields = [
+  {
+    name: "id",
+    label: "ID",
+    type: "hidden",
+  },
+];
