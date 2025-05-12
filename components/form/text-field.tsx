@@ -34,11 +34,9 @@ export function TextField({
   state,
   placeholder,
   type = "text",
-  autoComplete,
   className,
   required,
   disabled,
-  readOnly,
   icon,
   helpText,
   children,
@@ -62,9 +60,7 @@ export function TextField({
             <Input
               placeholder={placeholder}
               type={type}
-              autoComplete={autoComplete}
               disabled={disabled}
-              readOnly={readOnly}
               required={required}
               className={icon ? "pl-10" : ""}
               {...field}

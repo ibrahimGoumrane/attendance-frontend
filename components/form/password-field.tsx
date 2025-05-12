@@ -1,23 +1,23 @@
+"use client";
 import { Eye, EyeOff } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "../ui/button";
 import { FormField } from "../ui/form";
 import { TextField } from "./text-field";
 import { FieldConfig, State } from "@/lib/schemas/base";
+import { useState } from "react";
 interface PasswordFieldProps {
   form: UseFormReturn;
   state: State;
-  showPassword: boolean;
-  handlePasswordVisibility: () => void;
   fieldConfig?: FieldConfig;
 }
 const PasswordField = ({
   form,
   state,
-  showPassword,
-  handlePasswordVisibility,
   fieldConfig,
 }: PasswordFieldProps) => {
+    const [showPassword, setShowPassword] = useState(false);
+    const handlePasswordVisibility = () => setShowPassword((prev) => !prev);
   return (
     <FormField
       name={fieldConfig?.name || "password"}
@@ -28,7 +28,6 @@ const PasswordField = ({
           field={field}
           state={state}
           placeholder={fieldConfig?.placeholder || "••••••••"}
-          autoComplete={fieldConfig?.autoComplete || "new-password"}
           type={showPassword ? "text" : "password"}
           required={fieldConfig?.required}
           className={fieldConfig?.className}

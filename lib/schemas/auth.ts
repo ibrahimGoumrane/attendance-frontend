@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { userSignUpSchema } from "./user";
 
 export const LoginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -7,19 +8,10 @@ export const LoginSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters long" }),
 });
 
-export const SignupSchema = z
-  .object({
-    email: z.string().nonempty("Email is required").email(),
-    firstName: z.string().nonempty("First name is required."),
-    lastName: z.string().nonempty("Last name is required"),
-    section_promo: z.string(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
+export const SignupSchema = z.object({
+  user: userSignUpSchema,
+  section_promo: z.number(),
+});
 
 export const loginRenderFields = [
   {

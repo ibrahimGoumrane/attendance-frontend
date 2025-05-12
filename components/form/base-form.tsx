@@ -104,7 +104,6 @@ function BaseForm({
                       field={field}
                       state={state}
                       placeholder={fieldConfig.placeholder}
-                      autoComplete={fieldConfig.autoComplete}
                       required={fieldConfig.required}
                       helpText={fieldConfig.helpText}
                       className={fieldConfig.className}

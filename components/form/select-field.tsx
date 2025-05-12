@@ -56,10 +56,10 @@ export function SelectField({
           <Select
             onValueChange={field.onChange}
             defaultValue={String(field.value)}
-            name={field.name}
             disabled={disabled}
             required={required}
             {...props}
+            {...field}
           >
             <SelectTrigger className={"w-full " + (icon ? "pl-10" : "")}>
               {icon && (

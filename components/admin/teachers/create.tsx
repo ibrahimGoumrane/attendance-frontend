@@ -27,22 +27,13 @@ interface FormProps {
 const CreateForm = ({ children, departments }: FormProps) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const updatedTeacherFields: FieldConfig[] = teachercreateRenderFields.map(
     (field) => {
       if (field.name === "password") {
         return {
           ...field,
-          type: showPassword ? "text" : "password",
           customRender: (form: UseFormReturn, state: State) => (
-            <PasswordField
-              form={form}
-              state={state}
-              showPassword={showPassword}
-              fieldConfig={field}
-              handlePasswordVisibility={togglePasswordVisibility}
-            />
+            <PasswordField form={form} state={state} fieldConfig={field} />
           ),
         };
       }
@@ -80,7 +71,7 @@ const CreateForm = ({ children, departments }: FormProps) => {
           submitText="Create Teacher"
           loadingText="Creating Teacher..."
           onSuccess={() => {
-            setOpen(false); 
+            setOpen(false);
             router.push("/admin/teachers");
           }}
         />

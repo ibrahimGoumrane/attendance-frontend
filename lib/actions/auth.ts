@@ -38,11 +38,14 @@ export const register = async (
   formData: FormData
 ): Promise<State> => {
   const raw = {
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
+    user: {
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("confirmPassword"),
+    },
+    section_promo: Number(formData.get("section_promo")),
   };
   const parsed = SignupSchema.safeParse(raw);
   if (!parsed.success) {
@@ -51,7 +54,7 @@ export const register = async (
   }
   const userData = parsed.data;
   try {
-    await fetchData<User>("/register/", {
+    await fetchData<User>("/signup/", {
       method: "POST",
       body: JSON.stringify(userData),
     });
@@ -63,5 +66,3 @@ export const register = async (
     };
   }
 };
-
-
