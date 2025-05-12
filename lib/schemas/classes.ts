@@ -1,13 +1,15 @@
 import { z } from "zod";
 
-export const createClassSchema = z.object({
+export const CreateClassSchema = z.object({
   name: z.string().nonempty("Name is required"),
 });
-export const updateClassSchema = z.object({
+export const UpdateClassSchema = z.object({
   id: z.string(),
   name: z.string().nonempty("Name is required"),
 });
-
+export const DeleteClassSchema = z.object({
+  id: z.string().nonempty("ID is required"),
+});
 export const classCreateRenderFields = [
   {
     name: "name",

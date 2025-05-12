@@ -1,7 +1,11 @@
 import { createApiResource } from "./base";
-import { Class } from "../types/class";
+import { Class, CreateClass, UpdateClass } from "../types/class";
 
-export const classApiResource = createApiResource<Class>("classes");
+export const classApiResource = createApiResource<
+  Class,
+  CreateClass,
+  UpdateClass
+>("classes");
 export const getAllClasses = () => classApiResource.list();
 export const getClass = (id: string) => classApiResource.get(id);
 export const addClass = (data: Class) => classApiResource.create(data);

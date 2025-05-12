@@ -62,6 +62,17 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+  const handleEditClick = (teacher: Teacher) => {
+    setDeleteModalOpen(false);
+    setEditModalOpen(true);
+    setSelectedTeacher(teacher);
+  };
+  const handleDeleteClick = (teacher: Teacher) => {
+    setEditModalOpen(false);
+    setDeleteModalOpen(true);
+    setSelectedTeacher(teacher);
+  };
+
   // Filter teachers based on search query and selected department
   const filteredTeachers = teachers.filter((teacher) => {
     const matchesSearch =
@@ -79,16 +90,6 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
 
     return matchesSearch && matchesDepartment;
   });
-  const handleEditClick = (teacher: Teacher) => {
-    setDeleteModalOpen(false);
-    setEditModalOpen(true);
-    setSelectedTeacher(teacher);
-  };
-  const handleDeleteClick = (teacher: Teacher) => {
-    setEditModalOpen(false);
-    setDeleteModalOpen(true);
-    setSelectedTeacher(teacher);
-  };
 
   return (
     <div className="space-y-6">
