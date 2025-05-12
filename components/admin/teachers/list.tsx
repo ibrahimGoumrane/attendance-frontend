@@ -191,7 +191,7 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                              <UpdateForm teacher={teacher}>
+                              <UpdateForm teacher={teacher} departments={departments}>
                                 <button className="flex justify-start items-center ">
                                   <Edit className="h-4 w-4 mr-2" />
                                   Edit

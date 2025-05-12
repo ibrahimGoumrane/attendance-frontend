@@ -1,17 +1,9 @@
-
-import { ClassProvider } from "@/lib/contexts/ClassContext";
-import { getAllClassesWithStudentCount } from "@/lib/services/classes";
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const classes = await getAllClassesWithStudentCount();
-  return (
-    <div>
-      <ClassProvider initialClasses={classes}>{children}</ClassProvider>
-    </div>
-  );
-}
+    // const classes = await getAllClassesWithStudentCount();
 
+  return <div>{children}</div>;
+}
