@@ -13,15 +13,11 @@ import {
  * Add a new department
  */
 export const addDepartment = async (prevState: State, newDepartment: FormData) => {
-  const data = {
-    name: newDepartment.get("name") as string,
-  };
-
   return departmentApiResource.createAction(
     prevState,
-    data,
+    newDepartment,
     createDepartmentSchema,
-    false,
+    true,
     ["/admin/departments"] // Path to revalidate
   );
 };

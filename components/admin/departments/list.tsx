@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useDepartmentContext } from "@/lib/contexts/DepartmentContext";
+import { Department } from "@/lib/types/department";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -24,17 +26,47 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@radix-ui/react-dropdown-menu";
-import { Plus, Search, Link, MoreHorizontal, Edit, Trash2 } from "lucide-react";
+import {
+  Plus,
+  Search,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+  Download,
+  Upload,
+} from "lucide-react";
 import { useState } from "react";
+import DeleteDepartment from "./delete";
+import UpdateDepartmentForm from "./edit";
+import CreateDepartmentForm from "./create";
+import Link from "next/link";
 
-export default function DepartmentList({}) {
+interface DepartmentListProps {
+  departments: Department[];
+}
+
+export default function DepartmentList({ departments }: DepartmentListProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const { items: departments } = useDepartmentContext();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] =
+    useState<Department | null>(null);
 
-  // Filter departments based on search query
-  const filteredDepartments = departments.filter((department) =>
-    department.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDepartments = departments.filter((d) =>
+    d.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleEditClick = (dept: Department) => {
+    setDeleteModalOpen(false);
+    setEditModalOpen(true);
+    setSelectedDepartment(dept);
+  };
+
+  const handleDeleteClick = (dept: Department) => {
+    setEditModalOpen(false);
+    setDeleteModalOpen(true);
+    setSelectedDepartment(dept);
+  };
 
   return (
     <div className="space-y-6">
@@ -47,10 +79,22 @@ export default function DepartmentList({}) {
             Manage academic departments.
           </p>
         </div>
-        <Button size="sm" className="h-9 w-fit">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Department
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="h-9">
+            <Upload className="h-4 w-4 mr-2" />
+            Import
+          </Button>
+          <Button variant="outline" size="sm" className="h-9">
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+          <CreateDepartmentForm>
+            <Button size="sm" className="h-9">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Department
+            </Button>
+          </CreateDepartmentForm>
+        </div>
       </div>
 
       <Card>
@@ -78,34 +122,37 @@ export default function DepartmentList({}) {
                 <TableRow className="bg-gray-50 dark:bg-gray-800">
                   <TableHead className="font-medium">Name</TableHead>
                   <TableHead className="font-medium">Description</TableHead>
-                  <TableHead className="font-medium">Teachers</TableHead>
+                  <TableHead className="font-medium">Classes</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredDepartments.length > 0 ? (
-                  filteredDepartments.map((department) => (
+                  filteredDepartments.map((dept) => (
                     <TableRow
-                      key={department.id}
+                      key={dept.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-900"
                     >
                       <TableCell className="font-medium dark:text-white">
                         <Link
-                          href={`/admin/departments/${department.id}`}
+                          href={`/admin/departments/${dept.id}`}
                           className="hover:underline"
                         >
-                          {department.name}
+                          {dept.name}
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {department.description}
+                        {dept.description || (
+                          <span className="italic text-muted-foreground">
+                            No description
+                          </span>
+                        )}
                       </TableCell>
-
                       <TableCell className="dark:text-gray-300">
-                        {department.teacherCount}
+                        {dept.teacherCount}
                       </TableCell>
                       <TableCell>
-                        <DropdownMenu>
+                      <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
@@ -120,25 +167,34 @@ export default function DepartmentList({}) {
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>
                               <Link
-                                href={`/admin/departments/${department.id}`}
+                                href={`/admin/classes/${dept.id}`}
                                 className="flex w-full"
                               >
                                 View details
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                              <Link
-                                href={`/admin/departments/${department.id}/edit`}
-                                className="flex w-full"
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-9"
+                                onClick={() => handleEditClick(dept)}
                               >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
-                              </Link>
+                              </Button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => handleDeleteClick(dept)}
+                                className=""
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </Button>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -147,7 +203,7 @@ export default function DepartmentList({}) {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="h-24 text-center">
+                    <TableCell colSpan={4} className="h-24 text-center">
                       No departments found.
                     </TableCell>
                   </TableRow>
@@ -155,8 +211,39 @@ export default function DepartmentList({}) {
               </TableBody>
             </Table>
           </div>
+
+          <div className="flex items-center justify-between mt-4">
+            <div className="text-sm text-muted-foreground">
+              Showing <strong>1</strong> to{" "}
+              <strong>{filteredDepartments.length}</strong> of{" "}
+              <strong>{filteredDepartments.length}</strong> departments
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm" disabled>
+                Previous
+              </Button>
+              <Button variant="outline" size="sm" disabled>
+                Next
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
+
+      {selectedDepartment && (
+        <>
+          <UpdateDepartmentForm
+            departmentData={selectedDepartment}
+            open={editModalOpen}
+            setIsOpen={setEditModalOpen}
+          />
+          <DeleteDepartment
+            id={selectedDepartment.id}
+            open={deleteModalOpen}
+            setIsOpen={setDeleteModalOpen}
+          />
+        </>
+      )}
     </div>
   );
 }

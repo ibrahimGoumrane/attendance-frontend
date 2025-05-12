@@ -27,7 +27,7 @@ export const getDepartmentTeachers = async (id: string) => {
   return departmentApiResource.getAllResource<Teacher[]>(`/${id}/teachers`);
 };
 export const getAllDepartmentsWithTeacherCount = async () => {
-  return departmentApiResource.getAllResource<Department[]>(
+  return departmentApiResource.getAllResource<Department>(
     `/with-teacher-count`
   );
 };
