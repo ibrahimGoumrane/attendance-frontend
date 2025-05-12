@@ -1,20 +1,16 @@
 "use client";
 
-import { useState, cloneElement, ReactElement, ComponentProps } from "react";
 import BaseForm from "@/components/form/base-form";
 import {
   AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogAction,
   AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
 
 import { deleteTeacher } from "@/lib/actions/teacher";
 import {
@@ -25,39 +21,15 @@ import { useRouter } from "next/navigation";
 
 interface DeleteProps {
   id: string;
-  children?: ReactElement<ComponentProps<typeof Button>>;
+  open: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
-const Delete = ({ id, children }: DeleteProps) => {
-  const [open, setOpen] = useState(false);
+const Delete = ({ id, open, setIsOpen }: DeleteProps) => {
   const router = useRouter();
-  const triggerButton = children ? (
-    cloneElement(children, {
-      onClick: (e) => {
-        setOpen(true);
-        if (children.props.onClick) {
-          children.props.onClick(e);
-        }
-      },
-    })
-  ) : (
-    <Button
-      variant="destructive"
-      size="sm"
-      onClick={() => setOpen(true)}
-      className="w-full"
-    >
-      <Trash2 className="h-4 w-4 mr-2" />
-      Delete
-    </Button>
-  );
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild onClick={(e) => e.stopPropagation()}>
-        {triggerButton}
-      </AlertDialogTrigger>
-
+    <AlertDialog open={open} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -77,12 +49,18 @@ const Delete = ({ id, children }: DeleteProps) => {
             defaultValues={{ id }}
             actionType="delete"
             submitText={
-              <AlertDialogAction className="bg-red-600 hover:bg-red-700">
+              <AlertDialogAction
+                className="bg-red-600 hover:bg-red-700"
+                type="submit"
+              >
                 Delete
               </AlertDialogAction>
             }
             loadingText={
-              <AlertDialogAction className="bg-red-600 hover:bg-red-700">
+              <AlertDialogAction
+                className="bg-red-600 hover:bg-red-700"
+                disabled
+              >
                 Deleting...
               </AlertDialogAction>
             }
@@ -91,9 +69,9 @@ const Delete = ({ id, children }: DeleteProps) => {
                 Cancel
               </AlertDialogCancel>
             }
-            handleCancel={() => setOpen(false)}
+            handleCancel={() => setIsOpen(false)}
             onSuccess={() => {
-              setOpen(false);
+              setIsOpen(false);
               router.push("/admin/teachers");
             }}
           />

@@ -59,7 +59,9 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] =
     useState("All Departments");
-
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
   // Filter teachers based on search query and selected department
   const filteredTeachers = teachers.filter((teacher) => {
     const matchesSearch =
@@ -77,6 +79,17 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
 
     return matchesSearch && matchesDepartment;
   });
+  const handleEditClick = (teacher: Teacher) => {
+    setDeleteModalOpen(false);
+    setEditModalOpen(true);
+    setSelectedTeacher(teacher);
+  };
+  const handleDeleteClick = (teacher: Teacher) => {
+    setEditModalOpen(false);
+    setDeleteModalOpen(true);
+    setSelectedTeacher(teacher);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -191,24 +204,30 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                              <UpdateForm teacher={teacher} departments={departments}>
-                                <button className="flex justify-start items-center ">
-                                  <Edit className="h-4 w-4 mr-2" />
-                                  Edit
-                                </button>
-                              </UpdateForm>
+                              {/* <UpdateForm
+                                teacher={teacher}
+                                departments={departments}
+                              > */}
+                              <button
+                                className="flex justify-start items-center "
+                                onClick={() => handleEditClick(teacher)}
+                              >
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit
+                              </button>
+                              {/* </UpdateForm> */}
                             </DropdownMenuItem>
 
                             <DropdownMenuItem className="">
-                              <Delete id={teacher.id}>
-                                <button className="flex justify-start items-center text-red-600 dark:text-red-400">
-                                  <Trash2
-                                    className="h-4 w-4 mr-2"
-                                    color="red"
-                                  />
-                                  Delete
-                                </button>
-                              </Delete>
+                              {/* <Delete id={teacher.id}> */}
+                              <button
+                                className="flex justify-start items-center text-red-600 dark:text-red-400"
+                                onClick={() => handleDeleteClick(teacher)}
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" color="red" />
+                                Delete
+                              </button>
+                              {/* </Delete> */}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -243,6 +262,23 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
           </div>
         </CardContent>
       </Card>
+
+      {/* This Part will be didicated for models */}
+      {selectedTeacher && (
+        <>
+          <UpdateForm
+            teacher={selectedTeacher}
+            departments={departments}
+            open={editModalOpen}
+            setIsOpen={setEditModalOpen}
+          />
+          <Delete
+            id={selectedTeacher.id}
+            open={deleteModalOpen}
+            setIsOpen={setDeleteModalOpen}
+          />
+        </>
+      )}
     </div>
   );
 };

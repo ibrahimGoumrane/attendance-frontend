@@ -46,8 +46,7 @@ import {
 } from "@/components/ui/select";
 import { useStudentContext } from "@/lib/contexts/StudentContext";
 import { useClassContext } from "@/lib/contexts/ClassContext";
-import { Class } from "@/lib/types/api";
-
+import { Class } from "@/lib/types/class";
 export default function StudentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState("All Classes");

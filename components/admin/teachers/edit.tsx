@@ -6,7 +6,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { editTeacher } from "@/lib/actions/teacher";
 import { FieldConfig } from "@/lib/schemas/base";
@@ -17,15 +16,14 @@ import {
 import { Department } from "@/lib/types/department";
 import { Teacher } from "@/lib/types/teacher";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
 interface FormProps {
   teacher: Teacher;
-  children: React.ReactNode;
+  open?: boolean;
+  setIsOpen?: (open: boolean) => void;
   departments: Department[];
 }
 
-const UpdateForm = ({ teacher, children, departments }: FormProps) => {
-  const [open, setOpen] = useState(false);
+const UpdateForm = ({ teacher, open, setIsOpen, departments }: FormProps) => {
   const router = useRouter();
   const initialValues = {
     id: teacher.id,
@@ -50,13 +48,7 @@ const UpdateForm = ({ teacher, children, departments }: FormProps) => {
     }
   );
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        onClick={(e) => e.stopPropagation()}
-        className="w-full flex justify-start items-center"
-      >
-        {children}
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Edit Teacher</DialogTitle>
@@ -76,7 +68,9 @@ const UpdateForm = ({ teacher, children, departments }: FormProps) => {
           submitText="Update Teacher"
           loadingText="Updating Teacher..."
           onSuccess={() => {
-            setOpen(false);
+            if (setIsOpen) {
+              setIsOpen(false);
+            }
             router.push(`/admin/teachers/${teacher.id}`);
           }}
           defaultValues={initialValues}

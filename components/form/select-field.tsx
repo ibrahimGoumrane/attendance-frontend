@@ -46,6 +46,7 @@ export function SelectField({
   disabled,
   icon,
   helpText,
+  placeholder = "Choose a value",
   ...props
 }: SelectFieldsProps) {
   return (
@@ -54,20 +55,22 @@ export function SelectField({
       <div className="relative">
         <FormControl>
           <Select
-            onValueChange={field.onChange}
-            defaultValue={String(field.value)}
+            defaultValue={field.value ? String(field.value) : undefined}
             disabled={disabled}
             required={required}
+            name={field.name}
             {...props}
-            {...field}
           >
-            <SelectTrigger className={"w-full " + (icon ? "pl-10" : "")}>
+            <SelectTrigger
+              className={"w-full " + (icon ? "pl-10" : "")}
+              onClick={(e) => e.stopPropagation()}
+            >
               {icon && (
                 <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                   {icon}
                 </div>
               )}
-              <SelectValue placeholder={"choose a value"} />
+              <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
               {options.map((option) => (

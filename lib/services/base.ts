@@ -1,5 +1,6 @@
 import { fetchData } from "./main";
 import { State } from "@/lib/schemas/base";
+import { revalidatePath } from "next/cache";
 import { ZodSchema } from "zod";
 /**
  * Generic CRUD API client that can be extended for specific resources
@@ -89,7 +90,8 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
   private async handleAction(
     data: CreateDTO | UpdateDTO | { id: string } | FormData,
     schema: ZodSchema,
-    action: () => Promise<T | boolean>
+    action: () => Promise<T | boolean>,
+    revalidatePaths?: string | string[] // New parameter
   ): Promise<State> {
     try {
       // Validate the data using the provided schema
@@ -102,6 +104,16 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
         };
       }
       const returnedData = await action();
+
+      // Revalidate paths if provided and action was successful
+      if (revalidatePaths) {
+        if (Array.isArray(revalidatePaths)) {
+          revalidatePaths.forEach((path) => revalidatePath(path));
+        } else {
+          revalidatePath(revalidatePaths);
+        }
+      }
+
       return {
         success: true,
         errors: {},
@@ -123,14 +135,18 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
     prevState: State,
     formData: FormData | CreateDTO,
     schema: ZodSchema,
-    applyTransform: boolean = true
+    applyTransform: boolean = true,
+    revalidatePaths?: string | string[] // New parameter
   ): Promise<State> => {
     const data = applyTransform
       ? this.formDataToObject(formData as FormData)
       : formData;
 
-    return await this.handleAction(data as CreateDTO, schema, () =>
-      this.create(data as CreateDTO)
+    return await this.handleAction(
+      data as CreateDTO,
+      schema,
+      () => this.create(data as CreateDTO),
+      revalidatePaths
     );
   };
 
@@ -141,7 +157,8 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
     prevState: State,
     formData: FormData | (UpdateDTO & { id: string }),
     schema: ZodSchema,
-    applyTransform: boolean = true
+    applyTransform: boolean = true,
+    revalidatePaths?: string | string[] // New parameter
   ): Promise<State> => {
     const id = formData instanceof FormData ? formData.get("id") : formData.id;
     if (!id) {
@@ -154,8 +171,11 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
     const data = applyTransform
       ? this.formDataToObject(formData as FormData)
       : formData;
-    return await this.handleAction(data as UpdateDTO, schema, () =>
-      this.update(id.toString(), data as UpdateDTO)
+    return await this.handleAction(
+      data as UpdateDTO,
+      schema,
+      () => this.update(id.toString(), data as UpdateDTO),
+      revalidatePaths
     );
   };
 
@@ -165,7 +185,8 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
   deleteAction = async (
     prevState: State,
     formData: FormData,
-    schema: ZodSchema
+    schema: ZodSchema,
+    revalidatePaths?: string | string[] // New parameter
   ): Promise<State> => {
     const id = formData.get("id");
     if (!id) {
@@ -176,14 +197,12 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
     }
 
     return await this.handleAction(
-      {
-        id,
-      } as { id: string },
+      { id } as { id: string },
       schema,
-      () => this.delete(id.toString())
+      () => this.delete(id.toString()),
+      revalidatePaths
     );
   };
-
   /**
    * Helper to convert FormData to a plain object
    */

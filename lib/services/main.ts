@@ -72,14 +72,6 @@ export async function fetchData<T>(input: RequestInfo, init?: RequestInit) {
   try {
     const response = await fetch(serverAddress + input, init);
     // Log the response for debugging
-    console.log(
-      "ADDRESS:",
-      serverAddress + input,
-      "Response:",
-      await response.clone().json(),
-      "Status:",
-      response.status
-    );
 
     const setCookies = response.headers.getSetCookie();
 
@@ -88,6 +80,15 @@ export async function fetchData<T>(input: RequestInfo, init?: RequestInit) {
 
     if (response.status === 204 && init.method === "DELETE") {
       return true;
+    } else {
+      console.log(
+        "ADDRESS:",
+        serverAddress + input,
+        "Response:",
+        await response.clone().json(),
+        "Status:",
+        response.status
+      );
     }
 
     if (response.ok) {

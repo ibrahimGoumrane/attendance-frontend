@@ -22,15 +22,17 @@ export const addTeacher = async (prevState: State, newTeacher: FormData) => {
     prevState,
     data,
     CreateTeacherSchema,
-    false
+    false,
+    ["/admin/teachers"] // Path to revalidate
   );
 };
 export const editTeacher = async (
   prevState: State,
   updatedTeacher: FormData
 ) => {
+  const id = updatedTeacher.get("id") as string;
   const data = {
-    id: updatedTeacher.get("id") as string,
+    id,
     user: {
       firstName: updatedTeacher.get("firstName") as string,
       lastName: updatedTeacher.get("lastName") as string,
@@ -43,13 +45,15 @@ export const editTeacher = async (
     prevState,
     data,
     UpdateTeacherSchema,
-    false
+    false,
+    ["/admin/teachers", `/admin/teachers/${id}`] // Multiple paths to revalidate
   );
 };
 export const deleteTeacher = async (prevState: State, formData: FormData) => {
   return teacherApiResource.deleteAction(
     prevState,
     formData,
-    DeleteTeacherSchema
+    DeleteTeacherSchema,
+    ["/admin/teachers"]
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { ArrowLeft, Edit, Mail, User } from "lucide-react";
+import { ArrowLeft, Edit, Mail, Trash2, User } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import Delete from "./delete";
 import UpdateForm from "./edit";
 import { Teacher } from "@/lib/types/teacher";
 import { Department } from "@/lib/types/department";
+import { useState } from "react";
 interface MainProps {
   id: string;
   teacher: Teacher;
@@ -23,6 +24,20 @@ interface MainProps {
 }
 
 const Main = ({ teacher, department, departments }: MainProps) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+  const handleEditClick = (teacher: Teacher) => {
+    setDeleteModalOpen(false);
+    setEditModalOpen(true);
+    setSelectedTeacher(teacher);
+  };
+  const handleDeleteClick = (teacher: Teacher) => {
+    setEditModalOpen(false);
+    setDeleteModalOpen(true);
+    setSelectedTeacher(teacher);
+  };
   if (!teacher) {
     return <div>Teacher not found</div>;
   }
@@ -47,13 +62,24 @@ const Main = ({ teacher, department, departments }: MainProps) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <UpdateForm teacher={teacher} departments={departments}>
-            <Button variant="outline" size="sm">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-          </UpdateForm>
-          <Delete id={teacher.id} />
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9"
+            onClick={() => handleEditClick(teacher)}
+          >
+            <Edit className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => handleDeleteClick(teacher)}
+            className=""
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete
+          </Button>
         </div>
       </div>
 
@@ -177,6 +203,21 @@ const Main = ({ teacher, department, departments }: MainProps) => {
           </Tabs>
         </div>
       </div>
+      {selectedTeacher && (
+        <>
+          <UpdateForm
+            teacher={selectedTeacher}
+            departments={departments}
+            open={editModalOpen}
+            setIsOpen={setEditModalOpen}
+          />
+          <Delete
+            id={selectedTeacher.id}
+            open={deleteModalOpen}
+            setIsOpen={setDeleteModalOpen}
+          />
+        </>
+      )}
     </div>
   );
 };
