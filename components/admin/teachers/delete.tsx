@@ -17,7 +17,6 @@ import {
   DeleteTeacherSchema,
   teacherDeleteRenderFields,
 } from "@/lib/schemas/teachers";
-import { useRouter } from "next/navigation";
 
 interface DeleteProps {
   id: string;
@@ -26,8 +25,6 @@ interface DeleteProps {
 }
 
 const Delete = ({ id, open, setIsOpen }: DeleteProps) => {
-  const router = useRouter();
-
   return (
     <AlertDialog open={open} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -70,10 +67,6 @@ const Delete = ({ id, open, setIsOpen }: DeleteProps) => {
               </AlertDialogCancel>
             }
             handleCancel={() => setIsOpen(false)}
-            onSuccess={() => {
-              setIsOpen(false);
-              router.push("/admin/teachers");
-            }}
           />
         </AlertDialogFooter>
       </AlertDialogContent>

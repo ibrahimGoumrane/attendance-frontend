@@ -5,6 +5,8 @@ import {
   DeleteTeacherSchema,
   UpdateTeacherSchema,
 } from "../schemas/teachers";
+import { redirect } from "next/navigation";
+
 import { teacherApiResource } from "../services/teachers";
 
 export const addTeacher = async (prevState: State, newTeacher: FormData) => {
@@ -50,10 +52,12 @@ export const editTeacher = async (
   );
 };
 export const deleteTeacher = async (prevState: State, formData: FormData) => {
-  return teacherApiResource.deleteAction(
+  const state = teacherApiResource.deleteAction(
     prevState,
     formData,
     DeleteTeacherSchema,
     ["/admin/teachers"]
   );
+  console.log("deleteTeacher", state);
+  redirect("/admin/teachers");
 };

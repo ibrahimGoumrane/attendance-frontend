@@ -7,7 +7,7 @@ export default async function TeacherDetailsPage({
 }: {
   params: { id: string };
 }) {
-  const { id } = params;
+  const { id } = await params;
   const teacher = await getTeacher(id);
   if (!teacher) {
     return <div>Teacher not found</div>;
@@ -17,5 +17,12 @@ export default async function TeacherDetailsPage({
     return <div>Department not found</div>;
   }
   const departments = await getAllDepartments();
-  return <Main id={id} teacher={teacher} department={department} departments={departments} />;
+  return (
+    <Main
+      id={id}
+      teacher={teacher}
+      department={department}
+      departments={departments}
+    />
+  );
 }
