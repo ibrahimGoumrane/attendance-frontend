@@ -47,6 +47,8 @@ import {
 import { Student } from "@/lib/types/student";
 import { Class } from "@/lib/types/class";
 import CreateStudentForm from "./create";
+import UpdateStudentForm from "./edit";
+import DeleteStudent from "./delete";
 
 interface StudentListProps {
   students: Student[],
@@ -184,7 +186,7 @@ export default function StudentList({students, classes} : StudentListProps) {
                         {classes.find((cls) => cls.id == student.section_promo)?.name}
                       </TableCell>
                       <TableCell>
-                        <DropdownMenu>
+                      <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
@@ -199,8 +201,8 @@ export default function StudentList({students, classes} : StudentListProps) {
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>
                               <button
+                                className="flex items-center justify-start"
                                 onClick={() => handleEditClick(student)}
-                                className="flex items-center"
                               >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
@@ -210,7 +212,7 @@ export default function StudentList({students, classes} : StudentListProps) {
                             <DropdownMenuItem className="text-red-600 dark:text-red-400">
                               <button
                                 onClick={() => handleDeleteClick(student)}
-                                className="flex items-center"
+                                className="flex items-center justify-start"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
@@ -253,16 +255,17 @@ export default function StudentList({students, classes} : StudentListProps) {
       {/* Replace with actual modals if needed */}
       {selectedStudent && (
         <>
-          {/* <UpdateStudentForm
+          <UpdateStudentForm
             studentData={selectedStudent}
             open={editModalOpen}
+            classes={classes}
             setIsOpen={setEditModalOpen}
-          /> */}
-          {/* <DeleteStudent
+          />
+          <DeleteStudent
             id={selectedStudent.id}
             open={deleteModalOpen}
             setIsOpen={setDeleteModalOpen}
-          /> */}
+          />
         </>
       )}
     </div>

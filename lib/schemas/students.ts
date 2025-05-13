@@ -17,6 +17,10 @@ export const updateStudentSchema = z.object({
   user: updateUserSchema,
 });
 
+export const deleteStudentSchema = z.object({
+  id: z.string().nonempty("ID is required"),
+});
+
 export const studentCreateRenderFields = [
   {
     name: "firstName",
@@ -86,5 +90,13 @@ export const studentUpdateRenderFields = [
     label: "Section Promo",
     type: "select",
     required: true,
+  },
+];
+
+export const studentDeleteRenderFields = [
+  {
+    name: "id",
+    label: "ID",
+    type: "hidden",
   },
 ];
