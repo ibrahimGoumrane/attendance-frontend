@@ -116,41 +116,42 @@ export default function Main({
             </div>
 
             <div className="space-y-4">
-              {/* <div>
-                <p className="text-sm font-medium dark:text-gray-300">
-                  Teacher
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <Link
-                    href={`/admin/teachers/${classData.teacherId}`}
-                    className="hover:underline"
-                  >
-                    {classData.teacher}
-                  </Link>
-                </p>
+              <div className="rounded-md border dark:border-gray-800">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-gray-50 dark:bg-gray-800">
+                      <TableHead className="font-medium">
+                        Subject Name
+                      </TableHead>
+                      <TableHead className="font-medium">Teacher</TableHead>
+                      <TableHead className="font-medium">Promo</TableHead>
+                      <TableHead className="font-medium">Students</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {subjects.map((subject) => (
+                      <TableRow
+                        key={subject.id}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-900"
+                      >
+                        <TableCell className="font-medium dark:text-white">
+                          {subject.name}
+                        </TableCell>
+                        <TableCell className="dark:text-gray-300">
+                          {subject.teacher.user.firstName}{" "}
+                          {subject.teacher.user.lastName}
+                        </TableCell>
+                        <TableCell className="dark:text-gray-300">
+                          {subject.section_promo.name}
+                        </TableCell>
+                        <TableCell className="dark:text-gray-300">
+                          {subject.section_promo.studentCount || "Not Assigned"}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
-              <div>
-                <p className="text-sm font-medium dark:text-gray-300">
-                  Schedule
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {classData.schedule}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium dark:text-gray-300">Room</p>
-                <p className="text-sm text-muted-foreground">
-                  {classData.room}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-medium dark:text-gray-300">
-                  Description
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {classData.description}
-                </p>
-              </div> */}
             </div>
           </CardContent>
         </Card>
@@ -212,7 +213,7 @@ export default function Main({
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="attendance" > 
+            <TabsContent value="attendance">
               <AttendanceHistory
                 attendances={attendances}
                 subjects={subjects}
