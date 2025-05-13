@@ -56,7 +56,7 @@ const Main = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 flex-1 flex flex-col">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" asChild>
@@ -96,7 +96,7 @@ const Main = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1">
         <Card className="md:col-span-1">
           <CardHeader>
             <CardTitle>Teacher Information</CardTitle>
@@ -131,14 +131,14 @@ const Main = ({
           </CardContent>
         </Card>
 
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 flex flex-col">
           <Tabs defaultValue="classes">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="classes">Classes</TabsTrigger>
               <TabsTrigger value="attendance">Attendance</TabsTrigger>
             </TabsList>
-            <TabsContent value="classes" className="mt-4">
-              <Card>
+            <TabsContent value="classes" className="flex flex-col">
+              <Card className="flex-1">
                 <CardHeader>
                   <CardTitle>Assigned Classes</CardTitle>
                   <CardDescription>
@@ -146,8 +146,8 @@ const Main = ({
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="rounded-md border dark:border-gray-800">
-                    <table className="w-full">
+                  <div className="rounded-md border dark:border-gray-800 ">
+                    <table className="w-full ">
                       <thead>
                         <tr className="bg-gray-50 dark:bg-gray-800">
                           <th className="py-3 px-4 text-left text-sm font-medium">
@@ -164,7 +164,7 @@ const Main = ({
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y dark:divide-gray-800">
+                      <tbody className="divide-y dark:divide-gray-800 ">
                         {subjects.map((subject) => (
                           <tr
                             key={subject.id}
@@ -194,7 +194,7 @@ const Main = ({
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="attendance" className="mt-4">
+            <TabsContent value="attendance">
               <AttendanceHistory
                 attendances={attendances}
                 subjects={subjects}

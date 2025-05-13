@@ -209,7 +209,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main content */}
       <div
         className={cn(
-          "min-h-screen bg-gray-50 dark:bg-gray-950 transition-all duration-300",
+          "min-h-screen bg-gray-50 dark:bg-gray-950 transition-all duration-300 flex flex-col",
           isSidebarOpen ? "md:pl-64" : "md:pl-0"
         )}
       >
@@ -251,7 +251,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page content */}
-        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="p-4 sm:p-6 lg:p-8 flex-1 flex flex-col">
+          {children}
+        </main>
       </div>
     </div>
   );

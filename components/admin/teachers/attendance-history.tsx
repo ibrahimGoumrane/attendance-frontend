@@ -29,6 +29,14 @@ import {
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Attendance } from "@/lib/types/attendance";
 import { Subject } from "@/lib/types/subject";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface AttendanceHistoryProps {
   attendances: Attendance[];
@@ -91,6 +99,7 @@ export function AttendanceHistory({
 
   return (
     <div className="space-y-6">
+      {/* Stat cards - already responsive with grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
@@ -137,9 +146,11 @@ export function AttendanceHistory({
           <CardDescription>
             View and filter attendance records by subject, date, and status
           </CardDescription>
-          <div className="flex flex-col sm:flex-row gap-2 mt-4">
+
+          {/* Filter controls - improved responsive layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-4 place-items-center">
             <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-              <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Filter by subject" />
               </SelectTrigger>
               <SelectContent>
@@ -153,10 +164,10 @@ export function AttendanceHistory({
             </Select>
 
             <Popover>
-              <PopoverTrigger asChild>
+              <PopoverTrigger asChild className="w-full">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-[240px] justify-start text-left font-normal"
+                  className="w-full justify-start text-left font-normal"
                 >
                   <Calendar className="mr-2 h-4 w-4" />
                   {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
@@ -173,7 +184,7 @@ export function AttendanceHistory({
             </Popover>
 
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
@@ -185,7 +196,7 @@ export function AttendanceHistory({
 
             <Button
               variant="outline"
-              className="sm:ml-auto"
+              className="w-full"
               onClick={() => {
                 setSelectedSubject("all");
                 setSelectedDate(undefined);
@@ -196,41 +207,35 @@ export function AttendanceHistory({
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
+
+        <CardContent className="p-0 sm:p-6">
           {paginatedAttendances.length > 0 ? (
             <>
-              <div className="rounded-md border">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-muted/50">
-                      <th className="py-3 px-4 text-left text-sm font-medium">
-                        Date
-                      </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium">
-                        Subject
-                      </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium">
-                        Student
-                      </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium">
-                        Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
+              {/* Table with horizontal scrolling for small screens */}
+              <div className="overflow-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Subject</TableHead>
+                      <TableHead>Student</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {paginatedAttendances.map((attendance) => (
-                      <tr key={attendance.id} className="hover:bg-muted/50">
-                        <td className="py-3 px-4 text-sm">
-                          {format(new Date(attendance.date), "PPP")}
-                        </td>
-                        <td className="py-3 px-4 text-sm font-medium">
+                      <TableRow key={attendance.id}>
+                        <TableCell className="whitespace-nowrap">
+                          {format(new Date(attendance.date), "PP")}
+                        </TableCell>
+                        <TableCell className="font-medium">
                           {attendance.subject.name}
-                        </td>
-                        <td className="py-3 px-4 text-sm">
+                        </TableCell>
+                        <TableCell>
                           {attendance.student.user.firstName}{" "}
                           {attendance.student.user.lastName}
-                        </td>
-                        <td className="py-3 px-4 text-sm">
+                        </TableCell>
+                        <TableCell>
                           <Badge
                             variant={
                               attendance.status === "present"
@@ -247,17 +252,17 @@ export function AttendanceHistory({
                               ? "Present"
                               : "Absent"}
                           </Badge>
-                        </td>
-                      </tr>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </tbody>
-                </table>
+                  </TableBody>
+                </Table>
               </div>
 
-              {/* Pagination */}
+              {/* Responsive pagination */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4">
-                  <div className="text-sm text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
+                  <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
                     Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
                     {Math.min(
                       currentPage * itemsPerPage,
@@ -265,7 +270,7 @@ export function AttendanceHistory({
                     )}{" "}
                     of {filteredAttendances.length} records
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
                     <Button
                       variant="outline"
                       size="sm"
