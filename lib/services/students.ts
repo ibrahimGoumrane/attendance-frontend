@@ -2,7 +2,7 @@ import { createApiResource } from "./base";
 import { CreateStudent, Student, UpdateStudent } from "../types/student";
 import { StudentImage } from "../types/user";
 
-const studentApiResource = createApiResource<
+export const studentApiResource = createApiResource<
   Student,
   CreateStudent,
   UpdateStudent

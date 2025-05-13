@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/select";
 import { Student } from "@/lib/types/student";
 import { Class } from "@/lib/types/class";
+import CreateStudentForm from "./create";
 
 interface StudentListProps {
   students: Student[],
@@ -104,12 +105,12 @@ export default function StudentList({students, classes} : StudentListProps) {
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button size="sm" className="h-9" asChild>
-            <Link href="/admin/students/create">
+          <CreateStudentForm classes={classes}>
+            <Button size="sm" className="h-9">
               <Plus className="h-4 w-4 mr-2" />
               Add Student
-            </Link>
-          </Button>
+            </Button>
+          </CreateStudentForm>
         </div>
       </div>
 
