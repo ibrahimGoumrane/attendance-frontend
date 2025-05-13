@@ -1,5 +1,8 @@
 import { createApiResource } from "./base";
 import { Class, CreateClass, UpdateClass } from "../types/class";
+import { Student } from "../types/student";
+import { Attendance } from "../types/attendance";
+import { Subject } from "../types/subject";
 
 export const classApiResource = createApiResource<
   Class,
@@ -13,8 +16,14 @@ export const editClass = (id: string, data: Partial<Class>) =>
   classApiResource.update(id, data);
 export const deleteClass = (id: string) => classApiResource.delete(id);
 export const getClassStudents = async (id: string) => {
-  return classApiResource.getAllResource(`/${id}/students/`);
+  return classApiResource.getAllResource<Student>(`/${id}/students/`);
 };
 export const getAllClassesWithStudentCount = async () => {
   return classApiResource.getAllResource<Class>(`/with-student-count`);
+};
+export const getClassAttendance = async (id: string) => {
+  return classApiResource.getAllResource<Attendance>(`/${id}/attendance/`);
+};
+export const getClassSubjects = async (id: string) => {
+  return classApiResource.getAllResource<Subject>(`/${id}/subjects/`);
 };
