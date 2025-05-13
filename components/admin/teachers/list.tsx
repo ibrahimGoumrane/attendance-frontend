@@ -203,21 +203,20 @@ const ListTeachers = ({ teachers, departments }: ListTeachersProps) => {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                              <button
-                                className="flex items-center justify-start"
-                                onClick={() => handleEditClick(teacher)}
-                              >
+                            <DropdownMenuItem
+                              onClick={() => handleEditClick(teacher)}
+                            >
+                              <button className="flex items-center justify-start ">
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
                               </button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <button
-                                onClick={() => handleDeleteClick(teacher)}
-                                className="flex items-center justify-start"
-                              >
+                            <DropdownMenuItem
+                              className="text-red-600 dark:text-red-400"
+                              onClick={() => handleDeleteClick(teacher)}
+                            >
+                              <button className="flex items-center justify-start">
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
                               </button>

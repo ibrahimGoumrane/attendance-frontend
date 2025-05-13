@@ -165,21 +165,20 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                              <button
-                                className="flex items-center justify-start"
-                                onClick={() => handleEditClick(dept)}
-                              >
+                            <DropdownMenuItem
+                              onClick={() => handleEditClick(dept)}
+                            >
+                              <button className="flex items-center justify-start ">
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
                               </button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <button
-                                onClick={() => handleDeleteClick(dept)}
-                                className="flex items-center justify-start"
-                              >
+                            <DropdownMenuItem
+                              className="text-red-600 dark:text-red-400"
+                              onClick={() => handleDeleteClick(dept)}
+                            >
+                              <button className="flex items-center justify-start">
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
                               </button>

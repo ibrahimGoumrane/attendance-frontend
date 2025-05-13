@@ -158,21 +158,20 @@ export default function List({ classes }: ClassesPageProps) {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                              <button
-                                className="flex items-center justify-start"
-                                onClick={() => handleEditClick(cls)}
-                              >
+                            <DropdownMenuItem
+                              onClick={() => handleEditClick(cls)}
+                            >
+                              <button className="flex items-center justify-start ">
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
                               </button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <button
-                                onClick={() => handleDeleteClick(cls)}
-                                className="flex items-center justify-start"
-                              >
+                            <DropdownMenuItem
+                              className="text-red-600 dark:text-red-400"
+                              onClick={() => handleDeleteClick(cls)}
+                            >
+                              <button className="flex items-center justify-start">
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
                               </button>

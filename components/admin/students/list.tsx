@@ -51,11 +51,11 @@ import UpdateStudentForm from "./edit";
 import DeleteStudent from "./delete";
 
 interface StudentListProps {
-  students: Student[],
-  classes: Class[],
+  students: Student[];
+  classes: Class[];
 }
 
-export default function StudentList({students, classes} : StudentListProps) {
+export default function StudentList({ students, classes }: StudentListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState("All Classes");
 
@@ -65,12 +65,17 @@ export default function StudentList({students, classes} : StudentListProps) {
 
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
-      student.user!.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.user!.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student
+        .user!.firstName.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      student
+        .user!.lastName.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       student.user!.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesClass =
-      selectedClass === "All Classes" || student.section_promo === selectedClass;
+      selectedClass === "All Classes" ||
+      student.section_promo === selectedClass;
 
     return matchesSearch && matchesClass;
   });
@@ -124,34 +129,32 @@ export default function StudentList({students, classes} : StudentListProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative w-full md:w-1/2">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search students..."
+                placeholder="Search Students..."
                 className="pl-8"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="w-full md:w-1/2">
-              <Select
-                value={selectedClass}
-                onValueChange={(val) => setSelectedClass(val)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Filter by class" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All Classes">All Classes</SelectItem>
-                  {classes.map((cls) => (
-                    <SelectItem key={cls.id} value={cls.id}>
-                      {cls.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select
+              value={selectedClass}
+              onValueChange={(val) => setSelectedClass(val)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by class" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All Classes">All Classes</SelectItem>
+                {classes.map((cls) => (
+                  <SelectItem key={cls.id} value={cls.id}>
+                    {cls.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="rounded-md border dark:border-gray-800">
@@ -183,10 +186,13 @@ export default function StudentList({students, classes} : StudentListProps) {
                         {student.user!.email}
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {classes.find((cls) => cls.id == student.section_promo)?.name}
+                        {
+                          classes.find((cls) => cls.id == student.section_promo)
+                            ?.name
+                        }
                       </TableCell>
                       <TableCell>
-                      <DropdownMenu>
+                        <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
@@ -199,21 +205,20 @@ export default function StudentList({students, classes} : StudentListProps) {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                              <button
-                                className="flex items-center justify-start"
-                                onClick={() => handleEditClick(student)}
-                              >
+                            <DropdownMenuItem
+                              onClick={() => handleEditClick(student)}
+                            >
+                              <button className="flex items-center justify-start ">
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
                               </button>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <button
-                                onClick={() => handleDeleteClick(student)}
-                                className="flex items-center justify-start"
-                              >
+                            <DropdownMenuItem
+                              className="text-red-600 dark:text-red-400"
+                              onClick={() => handleDeleteClick(student)}
+                            >
+                              <button className="flex items-center justify-start">
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
                               </button>

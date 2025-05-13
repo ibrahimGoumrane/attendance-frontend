@@ -18,9 +18,7 @@ export const deleteClass = (id: string) => classApiResource.delete(id);
 export const getClassStudents = async (id: string) => {
   return classApiResource.getAllResource<Student>(`/${id}/students/`);
 };
-export const getAllClassesWithStudentCount = async () => {
-  return classApiResource.getAllResource<Class>(`/with-student-count`);
-};
+
 export const getClassAttendance = async (id: string) => {
   return classApiResource.getAllResource<Attendance>(`/${id}/attendance/`);
 };

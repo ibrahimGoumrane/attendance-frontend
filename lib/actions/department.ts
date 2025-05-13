@@ -6,13 +6,16 @@ import { departmentApiResource } from "../services/departments";
 import {
   createDepartmentSchema,
   updateDepartmentSchema,
-  deleteDepartmentSchema
+  deleteDepartmentSchema,
 } from "../schemas/department";
 
 /**
  * Add a new department
  */
-export const addDepartment = async (prevState: State, newDepartment: FormData) => {
+export const addDepartment = async (
+  prevState: State,
+  newDepartment: FormData
+) => {
   return departmentApiResource.createAction(
     prevState,
     newDepartment,
@@ -25,18 +28,17 @@ export const addDepartment = async (prevState: State, newDepartment: FormData) =
 /**
  * Edit an existing department
  */
-export const editDepartment = async (prevState: State, updatedDepartment: FormData) => {
+export const editDepartment = async (
+  prevState: State,
+  updatedDepartment: FormData
+) => {
   const id = updatedDepartment.get("id") as string;
-  const data = {
-    id,
-    name: updatedDepartment.get("name") as string,
-  };
 
   return departmentApiResource.updateAction(
     prevState,
-    data,
+    updatedDepartment,
     updateDepartmentSchema,
-    false,
+    true,
     ["/admin/departments", `/admin/departments/${id}`]
   );
 };
@@ -44,7 +46,10 @@ export const editDepartment = async (prevState: State, updatedDepartment: FormDa
 /**
  * Delete a department
  */
-export const deleteDepartment = async (prevState: State, formData: FormData) => {
+export const deleteDepartment = async (
+  prevState: State,
+  formData: FormData
+) => {
   await departmentApiResource.deleteAction(
     prevState,
     formData,

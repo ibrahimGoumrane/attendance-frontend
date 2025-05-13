@@ -1,8 +1,8 @@
 "use server";
 
 import StudentMain from "@/components/admin/students/get";
-import { getAllClasses } from "@/lib/services/classes";
-import { getStudent } from "@/lib/services/students";
+import { getAllClasses, getClass } from "@/lib/services/classes";
+import { getStudent, getStudentAttendances } from "@/lib/services/students";
 
 export default async function StudentDetailsPage({
   params,
@@ -10,12 +10,28 @@ export default async function StudentDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const studentData = await getStudent(id);
-  const classes = await getAllClasses();
+  const [studentData, classes, attendances] = await Promise.all([
+    getStudent(id),
+    getAllClasses(),
+    getStudentAttendances(id),
+  ]);
 
   if (!studentData) {
-    return <div>Student not found</div>;
+    return <div>Student not found </div>;
   }
 
-  return <StudentMain classes={classes} student={studentData} />;
+  const classData = await getClass(studentData?.section_promo);
+
+  if (!classData) {
+    return <div>Class not found </div>;
+  }
+
+  return (
+    <StudentMain
+      classes={classes}
+      student={studentData}
+      classData={classData}
+      attendances={attendances}
+    />
+  );
 }

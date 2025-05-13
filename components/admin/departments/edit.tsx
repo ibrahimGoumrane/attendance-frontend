@@ -21,11 +21,16 @@ interface FormProps {
   setIsOpen?: (open: boolean) => void;
 }
 
-const UpdateDepartmentForm = ({ departmentData, open, setIsOpen }: FormProps) => {
+const UpdateDepartmentForm = ({
+  departmentData,
+  open,
+  setIsOpen,
+}: FormProps) => {
   const router = useRouter();
   const initialValues = {
     id: departmentData.id,
     name: departmentData.name,
+    description: departmentData.description || "",
   };
 
   return (
@@ -52,7 +57,7 @@ const UpdateDepartmentForm = ({ departmentData, open, setIsOpen }: FormProps) =>
             if (setIsOpen) {
               setIsOpen(false);
             }
-            router.push(`/admin/departments/`);
+            router.push(`/admin/departments/${departmentData.id}`);
           }}
           defaultValues={initialValues}
         />
