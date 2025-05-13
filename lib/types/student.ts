@@ -1,10 +1,9 @@
-import { Class } from "./class";
 import { CreateUser, UpdateUser, User } from "./user";
 
 export interface Student {
   id: string;
   user: User;
-  section_promo: Class;
+  section_promo: string;
 }
 export interface CreateStudent {
   user: CreateUser;
