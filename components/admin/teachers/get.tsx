@@ -13,17 +13,30 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Delete from "./delete";
 import UpdateForm from "./edit";
-import { Teacher } from "@/lib/types/teacher";
-import { Department } from "@/lib/types/department";
+
 import { useState } from "react";
+import { Attendance } from "@/lib/types/attendance";
+import { Department } from "@/lib/types/department";
+import { Subject } from "@/lib/types/subject";
+import { Teacher } from "@/lib/types/teacher";
+import { AttendanceHistory } from "./attendance-history";
+
 interface MainProps {
   id: string;
   teacher: Teacher;
   department: Department;
   departments: Department[];
+  subjects: Subject[];
+  attendances: Attendance[];
 }
 
-const Main = ({ teacher, department, departments }: MainProps) => {
+const Main = ({
+  teacher,
+  department,
+  departments,
+  subjects,
+  attendances,
+}: MainProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -135,13 +148,16 @@ const Main = ({ teacher, department, departments }: MainProps) => {
                 <CardContent>
                   <div className="rounded-md border dark:border-gray-800">
                     <table className="w-full">
-                      {/* <thead>
+                      <thead>
                         <tr className="bg-gray-50 dark:bg-gray-800">
+                          <th className="py-3 px-4 text-left text-sm font-medium">
+                            Subject Name
+                          </th>
                           <th className="py-3 px-4 text-left text-sm font-medium">
                             Class Name
                           </th>
                           <th className="py-3 px-4 text-left text-sm font-medium">
-                            Students
+                            Students Count
                           </th>
                           <th className="py-3 px-4 text-left text-sm font-medium w-[100px]">
                             Actions
@@ -149,56 +165,40 @@ const Main = ({ teacher, department, departments }: MainProps) => {
                         </tr>
                       </thead>
                       <tbody className="divide-y dark:divide-gray-800">
-                        {teacher.classes.map((cls) => (
+                        {subjects.map((subject) => (
                           <tr
-                            key={cls.id}
+                            key={subject.id}
                             className="hover:bg-gray-50 dark:hover:bg-gray-900"
                           >
                             <td className="py-3 px-4 text-sm font-medium dark:text-white">
-                              <Link
-                                href={`/admin/classes/${cls.id}`}
-                                className="hover:underline"
-                              >
-                                {cls.name}
-                              </Link>
+                              {subject.name}
                             </td>
                             <td className="py-3 px-4 text-sm dark:text-gray-300">
-                              {cls.students}
+                              {subject.section_promo.name}
+                            </td>
+                            <td className="py-3 px-4 text-sm dark:text-gray-300">
+                              {subject.section_promo.studentCount}
                             </td>
                             <td className="py-3 px-4 text-sm">
                               <Button variant="ghost" size="sm" asChild>
-                                <Link href={`/admin/classes/${cls.id}`}>
+                                <Link href={`/admin/subjects/${subject.id}`}>
                                   View
                                 </Link>
                               </Button>
                             </td>
                           </tr>
                         ))}
-                      </tbody> */}
+                      </tbody>
                     </table>
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
             <TabsContent value="attendance" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Attendance Records</CardTitle>
-                  <CardDescription>
-                    Teacher&apos;s attendance history
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="h-[300px] flex items-center justify-center">
-                  <div className="text-center">
-                    <p className="text-muted-foreground mb-2">
-                      Attendance data visualization
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Detailed attendance records will be displayed here
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+              <AttendanceHistory
+                attendances={attendances}
+                subjects={subjects}
+              />
             </TabsContent>
           </Tabs>
         </div>

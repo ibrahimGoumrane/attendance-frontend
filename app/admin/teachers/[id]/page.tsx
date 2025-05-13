@@ -2,7 +2,11 @@
 
 import Main from "@/components/admin/teachers/get";
 import { getAllDepartments } from "@/lib/services/departments";
-import { getTeacher } from "@/lib/services/teachers";
+import {
+  getTeacher,
+  getTeacherAttendance,
+  getTeacherSubjects,
+} from "@/lib/services/teachers";
 
 export default async function TeacherDetailsPage({
   params,
@@ -11,9 +15,11 @@ export default async function TeacherDetailsPage({
 }) {
   const { id } = await params;
 
-  const [teacher, departments] = await Promise.all([
+  const [teacher, departments, attendances, subjects] = await Promise.all([
     getTeacher(id),
     getAllDepartments(),
+    getTeacherAttendance(id),
+    getTeacherSubjects(id),
   ]);
   if (!teacher) {
     return <div>Teacher not found</div>;
@@ -30,6 +36,8 @@ export default async function TeacherDetailsPage({
       teacher={teacher}
       department={department}
       departments={departments}
+      attendances={attendances}
+      subjects={subjects}
     />
   );
 }
