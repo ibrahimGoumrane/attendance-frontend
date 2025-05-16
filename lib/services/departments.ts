@@ -24,10 +24,5 @@ export const deleteDepartment = (id: string) =>
 
 // These are already using arrow functions, so they're fine
 export const getDepartmentTeachers = async (id: string) => {
-  return departmentApiResource.getAllResource<Teacher[]>(`/${id}/teachers`);
-};
-export const getAllDepartmentsWithTeacherCount = async () => {
-  return departmentApiResource.getAllResource<Department>(
-    `/with-teacher-count`
-  );
+  return departmentApiResource.getAllResource<Teacher>(`/${id}/teachers`);
 };

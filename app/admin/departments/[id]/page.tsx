@@ -1,6 +1,9 @@
 "use server";
 import Main from "@/components/admin/departments/get";
-import { getDepartment } from "@/lib/services/departments";
+import {
+  getDepartment,
+  getDepartmentTeachers,
+} from "@/lib/services/departments";
 
 export default async function ClassDetailsPage({
   params,
@@ -9,8 +12,9 @@ export default async function ClassDetailsPage({
 }) {
   const { id } = await params;
   const departmentData = await getDepartment(id);
+  const teachers = await getDepartmentTeachers(id);
   if (!departmentData) {
     return <div>Department not found</div>;
   }
-  return <Main department={departmentData} />;
+  return <Main department={departmentData} teachers={teachers} />;
 }
