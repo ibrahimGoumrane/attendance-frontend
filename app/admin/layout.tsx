@@ -4,7 +4,9 @@ import type React from "react";
 
 import {
   BookOpen,
+  BookText,
   Building2,
+  CalendarCheck,
   GraduationCap,
   LayoutDashboard,
   LogOut,
@@ -66,6 +68,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: GraduationCap,
       href: "/admin/students",
       active: pathname.includes("/admin/students"),
+    },
+    {
+      label: "Subjects",
+      icon: BookText,
+      href: "/admin/subjects",
+      active: pathname.includes("/admin/subjects"),
+    },
+    {
+      label: "Attendance",
+      icon: CalendarCheck,
+      href: "/admin/attendances",
+      active: pathname.includes("/admin/attendance"),
     },
   ];
 

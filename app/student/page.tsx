@@ -1,4 +1,4 @@
-import { getLoggedInUser } from "@/lib/services/user";
+import { getLoggedInUser } from "@/lib/services/users";
 
 export default async function Home() {
   const user = await getLoggedInUser();

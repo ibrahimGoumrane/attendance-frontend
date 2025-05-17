@@ -7,7 +7,7 @@ import {
   createDepartmentSchema,
   updateDepartmentSchema,
   deleteDepartmentSchema,
-} from "../schemas/department";
+} from "../schemas/departments";
 
 /**
  * Add a new department

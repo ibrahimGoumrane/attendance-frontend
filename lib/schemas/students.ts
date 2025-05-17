@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { updateUserSchema, userSchema } from "./user";
+import { updateUserSchema, userSchema } from "./users";
 
 export const studentSchema = z.object({
   id: z.string(),

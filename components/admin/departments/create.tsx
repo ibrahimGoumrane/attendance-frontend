@@ -12,7 +12,7 @@ import { addDepartment } from "@/lib/actions/department";
 import {
   departmentCreateRenderFields,
   createDepartmentSchema,
-} from "@/lib/schemas/department";
+} from "@/lib/schemas/departments";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 

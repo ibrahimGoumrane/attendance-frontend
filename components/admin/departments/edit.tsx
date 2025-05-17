@@ -11,7 +11,7 @@ import { editDepartment } from "@/lib/actions/department";
 import {
   departmentUpdateRenderFields,
   updateDepartmentSchema,
-} from "@/lib/schemas/department";
+} from "@/lib/schemas/departments";
 import { Department } from "@/lib/types/department";
 import { useRouter } from "next/navigation";
 

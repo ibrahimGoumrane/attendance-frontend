@@ -5,17 +5,17 @@ export interface Attendance {
   id: string;
   subject: Subject;
   student: Student;
-  date: Date;
+  date: string;
   status: "present" | "absent";
 }
 export interface CreateAttendance {
   subject: string;
   student: string;
-  date: Date;
+  date: string;
   status: "present" | "absent";
 }
 export interface UpdateAttendance {
-  date?: Date;
+  date?: string;
   status?: "present" | "absent";
 }
 export interface DeleteAttendance {

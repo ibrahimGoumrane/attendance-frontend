@@ -16,7 +16,7 @@ import { deleteDepartment } from "@/lib/actions/department";
 import {
   departmentDeleteRenderFields,
   deleteDepartmentSchema,
-} from "@/lib/schemas/department";
+} from "@/lib/schemas/departments";
 
 interface DeleteProps {
   id: string;
@@ -31,8 +31,9 @@ const DeleteDepartment = ({ id, open, setIsOpen }: DeleteProps) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the department
-            and remove its data from our servers. All associated classes or staff may be affected.
+            This action cannot be undone. This will permanently delete the
+            department and remove its data from our servers. All associated
+            classes or staff may be affected.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
