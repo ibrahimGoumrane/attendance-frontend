@@ -94,6 +94,7 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
     revalidatePaths?: string | string[] // New parameter
   ): Promise<State> {
     try {
+      
       // Validate the data using the provided schema
       const parsed = schema.safeParse(data);
       if (!parsed.success) {

@@ -15,29 +15,43 @@ import {
   CreateAttendanceSchema,
   attendanceCreateRenderFields,
 } from "@/lib/schemas/attendances";
-import { Class } from "@/lib/types/class";
+import { Student } from "@/lib/types/student";
+import { Subject } from "@/lib/types/subject";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface FormProps {
   children: React.ReactNode;
-  classes: Class[];
+  subjects: Subject[];
+  students: Student[];
 }
 
-const CreateAttendanceForm = ({ children, classes }: FormProps) => {
+const CreateAttendanceForm = ({ children, subjects, students }: FormProps) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
   const updatedAttendanceFields: FieldConfig[] =
     attendanceCreateRenderFields.map((field) => {
-      if (field.type === "select" && field.name === "classId") {
+      if (field.type === "select" && field.name === "subject") {
         return {
           ...field,
           options: [
-            { value: "None", label: "Choose a class" },
-            ...classes.map((classItem) => ({
-              value: classItem.id,
-              label: classItem.name,
+            { value: "0", label: "Select a subject" },
+            ...subjects.map((subject) => ({
+              value: subject.id,
+              label: subject.name,
+            })),
+          ],
+        };
+      }
+      if (field.type === "select" && field.name === "student") {
+        return {
+          ...field,
+          options: [
+            { value: "0", label: "Select a student" },
+            ...students.map((student) => ({
+              value: student.id,
+              label: `${student.user.firstName} ${student.user.lastName}`,
             })),
           ],
         };

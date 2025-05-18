@@ -1,36 +1,24 @@
 import { Suspense } from "react";
-import Link from "next/link";
-import { Plus } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { SubjectsTable } from "@/components/admin/subjects/subject-table";
 import { SubjectsTableSkeleton } from "@/components/admin/subjects/subject-table-skeleton";
+import SubjectList from "@/components/admin/subjects/list";
+import { getAllSubjects } from "@/lib/services/subject";
+import { getAllTeachers } from "@/lib/services/teachers";
+import { getAllClasses } from "@/lib/services/classes";
 
 export const metadata = {
   title: "Subjects | Admin Dashboard",
   description: "Manage subjects in your educational institution",
 };
 
-export default function SubjectsPage() {
+export default async function SubjectsPage() {
+  // Fetch data
+  const subjects = await getAllSubjects();
+  const teachers = await getAllTeachers();
+  const classes = await getAllClasses();
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Subjects</h1>
-          <p className="text-muted-foreground">
-            Manage subjects and their assignments to teachers and classes
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/admin/subjects/create">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Subject
-          </Link>
-        </Button>
-      </div>
-      <Suspense fallback={<SubjectsTableSkeleton />}>
-        <SubjectsTable />
-      </Suspense>
-    </div>
+    <Suspense fallback={<SubjectsTableSkeleton />}>
+      <SubjectList subjects={subjects} teachers={teachers} classes={classes} />
+    </Suspense>
   );
 }
