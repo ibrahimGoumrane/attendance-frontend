@@ -1,30 +1,33 @@
+"use server";
+import Main from "@/components/admin/classes/get";
 import {
-  DeleteClassDialog,
-  EditClassDialog,
-} from "@/components/admin/dialogs/ClassDialogs";
-import StudentGrid from "@/components/admin/display/StudentGrid";
-import { StudentProvider } from "@/lib/contexts/StudentContext";
-import { getClassById, getClassStudents } from "@/lib/services/classes";
+  getClass,
+  getClassAttendance,
+  getClassStudents,
+  getClassSubjects,
+} from "@/lib/services/classes";
 
-interface ClassPageProps {
+export default async function ClassDetailsPage({
+  params,
+}: {
   params: Promise<{ id: string }>;
-}
-
-export default async function ClassPage({ params }: ClassPageProps) {
-  const id = (await params).id;
-  const cls = await getClassById(id);
-  const students = await getClassStudents(id);
-  console.log(cls);
-  console.log(students);
+}) {
+  const { id } = await params;
+  const [classData, students, attendances, subjects] = await Promise.all([
+    getClass(id),
+    getClassStudents(id),
+    getClassAttendance(id),
+    getClassSubjects(id),
+  ]);
+  if (!classData) {
+    return <div>Class not found</div>;
+  }
   return (
-    <>
-      <h1 className="font-bold text-2xl flex items-center gap-2">
-        {cls.name} <EditClassDialog cls={cls} /> <DeleteClassDialog cls={cls} />
-      </h1>
-      <h2 className="font-semibold text-xl text-neutral-700 mt-4 -mb-2">Students</h2>
-      <StudentProvider initialStudents={students}>
-        <StudentGrid/>
-      </StudentProvider>
-    </>
+    <Main
+      classData={classData}
+      students={students}
+      attendances={attendances}
+      subjects={subjects}
+    />
   );
 }

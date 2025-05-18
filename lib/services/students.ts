@@ -1,44 +1,27 @@
-"use server";
-import { z } from "zod";
-import {
-  StudentImageFormErrors,
-  studentImageFormSchema,
-} from "../schemas/students";
-import { Student, StudentImage } from "../types/api";
-import {
-  addResource,
-  deleteResource,
-  getAllResource,
-  getResourceById,
-} from "./utils";
+import { createApiResource } from "./base";
+import { CreateStudent, Student, UpdateStudent } from "../types/student";
+import { StudentImage } from "../types/user";
+import { Attendance } from "../types/attendance";
 
-export async function getStudentById(id: string): Promise<Student> {
-  return getResourceById<Student>("students", id);
-}
+export const studentApiResource = createApiResource<
+  Student,
+  CreateStudent,
+  UpdateStudent
+>("students");
+export const getAllStudents = () => studentApiResource.list();
+export const getStudent = (id: string) => studentApiResource.get(id);
+export const addStudent = (data: CreateStudent) =>
+  studentApiResource.create(data);
+export const editStudent = (id: string, data: UpdateStudent) =>
+  studentApiResource.update(id, data);
+export const deleteStudent = (id: string) => studentApiResource.delete(id);
 
-export async function getStudentImages(id: string): Promise<StudentImage[]> {
-  return getAllResource<StudentImage[]>(`images/?student_id=${id}`);
-}
+// Source for student images
+const studentImageApiResource = createApiResource<StudentImage>("images");
+export const getStudentImages = (id: string) => studentImageApiResource.get(id);
+export const addStudentImage = (data: StudentImage) =>
+  studentImageApiResource.create(data);
 
-export async function addStudentImage(
-  studentId: string,
-  formData: z.infer<typeof studentImageFormSchema>
-) {
-  console.log(formData.images);
-  const data = new FormData();
-  data.append('student_id', studentId);
-  for (const file of formData.images) {
-    data.append('images', file);
-  }
-  
-  console.log(data);
-  return addResource<FormData, StudentImage, StudentImageFormErrors>(
-    "images",
-    data,
-    "Image upload failed."
-  );
-}
-
-export async function deleteStudent(id: string): Promise<boolean> {
-  return deleteResource("students", id);
-}
+export const getStudentAttendances = async (id: string) => {
+  return studentApiResource.getAllResource<Attendance>(`/${id}/attendances/`);
+};

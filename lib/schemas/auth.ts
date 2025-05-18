@@ -1,28 +1,75 @@
 import { z } from "zod";
+import { userSignUpSchema } from "./users";
 
-export const loginFormSchema = z.object({
-  email: z.string().nonempty("Email is required").email("Invalid email"),
-  password: z.string(),
+export const LoginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
 });
 
-export const registerFormSchema = z
-  .object({
-    email: z.string().nonempty("Email is required").email(),
-    firstName: z.string().nonempty("First name is required."),
-    lastName: z.string().nonempty("Last name is required"),
-    section_promo: z.string(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
+export const SignupSchema = z.object({
+  user: userSignUpSchema,
+  section_promo: z.number(),
+});
 
+export const loginRenderFields = [
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter your password",
+    required: true,
+  },
+];
 
-export const registerEndpointRequestSchema = registerFormSchema.transform(
-  ({ email, firstName, lastName, password, section_promo }) => ({
-    user: { email, firstName, lastName, password },
-    section_promo,
-  })
-);
+export const signupRenderFields = [
+  {
+    name: "firstName",
+    label: "First Name",
+    type: "text",
+    placeholder: "Enter your first name",
+    required: true,
+  },
+  {
+    name: "lastName",
+    label: "Last Name",
+    type: "text",
+    placeholder: "Enter your last name",
+    required: true,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter your password",
+    required: true,
+  },
+  {
+    name: "confirmPassword",
+    label: "Confirm Password",
+    type: "password",
+    placeholder: "Confirm your password",
+    required: true,
+  },
+  {
+    name: "section_promo",
+    label: "Section Promo",
+    type: "select",
+    required: true,
+  },
+];

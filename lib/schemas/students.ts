@@ -1,9 +1,5 @@
 import { z } from "zod";
-import { userSchema } from "./user";
-import { ErrorWithRoot } from "../types/errors";
-import { StudentImage } from "../types/api";
-
-const isServer = typeof window === 'undefined'
+import { updateUserSchema, userSchema } from "./users";
 
 export const studentSchema = z.object({
   id: z.string(),
@@ -11,14 +7,96 @@ export const studentSchema = z.object({
   user: userSchema,
 });
 
-export const studentImageFormSchema = z.object({
-  images: (isServer ? z.any() : z.instanceof(FileList))
-    .refine(files => files.length > 0, "Please upload an image.")
-    .refine(files => {
-      const file = files.item(0);
-      return file?.type.startsWith("image/");
-    }, "Only image files are allowed"),
-  student_id: z.string().optional()
+export const createStudentSchema = z.object({
+  section_promo: z.string(),
+  user: userSchema,
+});
+export const updateStudentSchema = z.object({
+  id: z.string(),
+  section_promo: z.string(),
+  user: updateUserSchema,
 });
 
-export type StudentImageFormErrors = ErrorWithRoot<StudentImage>;
+export const deleteStudentSchema = z.object({
+  id: z.string().nonempty("ID is required"),
+});
+
+export const studentCreateRenderFields = [
+  {
+    name: "firstName",
+    label: "First Name",
+    type: "text",
+    placeholder: "Enter your first name",
+    required: true,
+  },
+  {
+    name: "lastName",
+    label: "Last Name",
+    type: "text",
+    placeholder: "Enter your last name",
+    required: true,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter your password",
+    required: true,
+  },
+  {
+    name: "section_promo",
+    label: "Section Promo",
+    type: "select",
+    placeholder: "Enter your section promo",
+    required: true,
+  },
+];
+export const studentUpdateRenderFields = [
+  {
+    name: "id",
+    label: "id",
+    type: "hidden",
+  },
+  {
+    name: "firstName",
+    label: "First Name",
+    type: "text",
+    placeholder: "Enter your first name",
+    required: true,
+  },
+  {
+    name: "lastName",
+    label: "Last Name",
+    type: "text",
+    placeholder: "Enter your last name",
+    required: true,
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+  },
+  {
+    name: "section_promo",
+    label: "Section Promo",
+    type: "select",
+    required: true,
+  },
+];
+
+export const studentDeleteRenderFields = [
+  {
+    name: "id",
+    label: "ID",
+    type: "hidden",
+  },
+];

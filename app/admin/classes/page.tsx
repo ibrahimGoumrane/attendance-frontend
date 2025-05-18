@@ -1,17 +1,8 @@
-import { AddClassDialog } from "@/components/admin/dialogs/ClassDialogs";
-import ClassGrid from "@/components/admin/display/ClassGrid";
-import { getAllClassesWithStudentCount } from "@/lib/services/classes";
-import { ClassProvider } from "@/lib/contexts/ClassContext";
+"use server";
 
-export default async function Classes() {
-  const classes = await getAllClassesWithStudentCount();
-  return (
-    <ClassProvider initialClasses={classes} >
-      <h1 className="font-bold text-2xl flex items-center gap-2">
-        Classes <AddClassDialog />
-      </h1>
-
-      <ClassGrid/>
-    </ClassProvider>
-  );
+import { getAllClasses } from "@/lib/services/classes";
+import ListClasses from "@/components/admin/classes/list";
+export default async function ClassesPage() {
+  const classes = await getAllClasses();
+  return <ListClasses classes={classes} />;
 }

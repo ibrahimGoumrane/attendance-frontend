@@ -1,73 +1,20 @@
-"use server";
+import { createApiResource } from "./base";
+import { CreateTeacher, Teacher, UpdateTeacher } from "../types/teacher";
+import { Attendance } from "../types/attendance";
+import { Subject } from "../types/subject";
 
-import { z } from "zod";
-import { Teacher } from "../types/api";
-import {
-  addResource,
-  deleteResource,
-  editResource,
-  getAllResource,
-} from "./utils";
-import {
-  editTeacherEndpointRequestSchema,
-  EditTeacherFormErrors,
-  editTeacherFormSchema,
-  teacherEndpointRequestSchema,
-  TeacherFormErrors,
-  teacherFormSchema,
-} from "../schemas/teachers";
-
-export async function getAllTeachers() {
-  return getAllResource<Teacher[]>("teachers");
-}
-
-export async function addTeacher(
-  formData: z.infer<typeof teacherFormSchema>
-): Promise<
-  | { success: true; data: Teacher }
-  | { success: false; errors: TeacherFormErrors }
-> {
-  const { success, data } = teacherEndpointRequestSchema.safeParse(formData);
-
-  if (!success) {
-    return {
-      success: false,
-      errors: { root: "Teacher account creation failed" },
-    };
-  }
-
-  return addResource<typeof data, Teacher, TeacherFormErrors>(
-    "teachers",
-    data,
-    "Teacher account creation failed"
-  );
-}
-
-export async function editTeacher(
-  id: string,
-  formData: z.infer<typeof editTeacherFormSchema>
-): Promise<
-  | { success: true; data: Teacher }
-  | { success: false; errors: EditTeacherFormErrors }
-> {
-  const { success, data } =
-    editTeacherEndpointRequestSchema.safeParse(formData);
-
-  if (!success) {
-    return {
-      success: false,
-      errors: { root: "Teacher account editing failed" },
-    };
-  }
-
-  return editResource<typeof data, Teacher, EditTeacherFormErrors>(
-    "teachers",
-    id,
-    data,
-    "Teacher account editing failed"
-  );
-}
-
-export async function deleteTeacher(id: string): Promise<boolean> {
-  return deleteResource("teachers", id);
-}
+export const teacherApiResource = createApiResource<
+  Teacher,
+  CreateTeacher,
+  UpdateTeacher
+>("teachers");
+export const getAllTeachers = () => teacherApiResource.list();
+export const getTeacher = (id: string) => teacherApiResource.get(id);
+export const addTeacher = (data: CreateTeacher) =>
+  teacherApiResource.create(data);
+export const editTeacher = (id: string, data: UpdateTeacher) =>
+  teacherApiResource.update(id, data);
+export const getTeacherAttendance = (id: string): Promise<Attendance[]> =>
+  teacherApiResource.getAllResource(`${id}/attendance/`);
+export const getTeacherSubjects = (id: string): Promise<Subject[]> =>
+  teacherApiResource.getAllResource(`${id}/subjects/`);

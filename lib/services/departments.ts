@@ -1,51 +1,28 @@
-"use server";
-
-import { z } from "zod";
+import { createApiResource } from "./base";
 import {
-  DeparmentFormErrors,
-  departmentFormSchema,
-} from "../schemas/departments";
-import { Department, Teacher } from "../types/api";
-import {
-  addResource,
-  deleteResource,
-  editResource,
-  getAllResource,
-} from "./utils";
+  CreateDepartment,
+  Department,
+  UpdateDepartment,
+} from "../types/department";
+import { Teacher } from "../types/teacher";
 
-export async function getAllDepartments() {
-  return getAllResource<Department[]>("departments");
-}
+export const departmentApiResource = createApiResource<
+  Department,
+  CreateDepartment,
+  UpdateDepartment
+>("departments");
 
-export async function getDepartmentTeachers(id: string) {
-  return getAllResource<Teacher[]>(`departments/${id}/teachers`);
-}
+// Change direct method references to arrow functions
+export const getAllDepartments = () => departmentApiResource.list();
+export const getDepartment = (id: string) => departmentApiResource.get(id);
+export const addDepartment = (data: CreateDepartment) =>
+  departmentApiResource.create(data);
+export const editDepartment = (id: string, data: UpdateDepartment) =>
+  departmentApiResource.update(id, data);
+export const deleteDepartment = (id: string) =>
+  departmentApiResource.delete(id);
 
-export async function getAllDepartmentsWithTeacherCount() {
-  return getAllResource<Department[]>("departments/with-teacher-count");
-}
-
-export async function addDepartment(
-  formData: z.infer<typeof departmentFormSchema>
-) {
-  return addResource<
-    z.infer<typeof departmentFormSchema>,
-    Department,
-    DeparmentFormErrors
-  >("departments", formData, "Department creation failed");
-}
-
-export async function editDepartment(
-  id: string,
-  formData: z.infer<typeof departmentFormSchema>
-) {
-  return editResource<
-    z.infer<typeof departmentFormSchema>,
-    Department,
-    DeparmentFormErrors
-  >("departments", id, formData, "Department update failed");
-}
-
-export async function deleteDepartment(id: string): Promise<boolean> {
-  return deleteResource("departments", id);
-}
+// These are already using arrow functions, so they're fine
+export const getDepartmentTeachers = async (id: string) => {
+  return departmentApiResource.getAllResource<Teacher>(`/${id}/teachers`);
+};

@@ -1,5 +1,12 @@
 "use client";
-import { createContext, ReactNode, useContext, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 /**
  * A generic context type to manage a list of items with basic CRUD operations.
@@ -36,6 +43,7 @@ interface ResourceProviderProps<T> {
  * A generic provider component to manage a list of resources.
  * @template T - The type of the items managed by this context.
  */
+
 export function ResourceProvider<T>({
   children,
   initialItems,
@@ -47,46 +55,47 @@ export function ResourceProvider<T>({
 }: ResourceProviderProps<T>) {
   const [items, setItems] = useState<T[]>(initialItems);
 
-  /**
-   * Adds an item to the list and optionally calls `onAddItem`.
-   */
-  const addItem = (item: T) => {
-    setItems((prev) => [...prev, item]);
-    onAddItem?.(item);
-  };
-
-  /**
-   * Deletes an item by ID and optionally calls `onDeleteItem`.
-   */
-  const deleteItem = (id: string) => {
-    setItems((prev) => prev.filter((item) => getId(item) !== id));
-    onDeleteItem?.(id);
-  };
-
-  /**
-   * Replaces an item with the same ID and optionally calls `onEditItem`.
-   */
-  const editItem = (updatedItem: T) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        getId(item) === getId(updatedItem) ? updatedItem : item
-      )
-    );
-    onEditItem?.(updatedItem);
-  };
-
-  return (
-    <context.Provider
-      value={{
-        items,
-        addItem,
-        deleteItem,
-        editItem,
-      }}
-    >
-      {children}
-    </context.Provider>
+  const addItem = useCallback(
+    (item: T) => {
+      if (item) {
+        setItems((prev) => [...prev, item]);
+        onAddItem?.(item);
+      }
+    },
+    [onAddItem]
   );
+
+  const deleteItem = useCallback(
+    (id: string) => {
+      setItems((prev) => prev.filter((item) => getId(item) !== id));
+      onDeleteItem?.(id);
+    },
+    [getId, onDeleteItem]
+  );
+
+  const editItem = useCallback(
+    (updatedItem: T) => {
+      setItems((prev) =>
+        prev.map((item) =>
+          getId(item) === getId(updatedItem) ? updatedItem : item
+        )
+      );
+      onEditItem?.(updatedItem);
+    },
+    [getId, onEditItem]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      items,
+      addItem,
+      deleteItem,
+      editItem,
+    }),
+    [items, addItem, deleteItem, editItem]
+  );
+
+  return <context.Provider value={contextValue}>{children}</context.Provider>;
 }
 
 /**

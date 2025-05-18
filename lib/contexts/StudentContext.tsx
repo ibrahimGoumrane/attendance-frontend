@@ -1,8 +1,8 @@
 "use client";
-import { Student } from "../types/api";
 import { createResourceContext, ResourceProvider } from "./ResourceContext";
-
-export const [StudentContext, useStudentContext] = createResourceContext<Student>();
+import { Student } from "../types/student";
+export const [StudentContext, useStudentContext] =
+  createResourceContext<Student>();
 
 export const StudentProvider = ({
   initialStudents,
@@ -15,7 +15,7 @@ export const StudentProvider = ({
     <ResourceProvider
       context={StudentContext}
       initialItems={initialStudents}
-      getId={(student) => student.id}
+      getId={(student) => student.id!}
     >
       {children}
     </ResourceProvider>
