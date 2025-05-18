@@ -36,7 +36,6 @@ const CreateSubjectForm = ({ children, teachers, classes }: FormProps) => {
         return {
           ...field,
           options: [
-            { value: "0", label: "Select a teacher" },
             ...teachers.map((teacher) => ({
               value: teacher.id,
               label: `${teacher.user.firstName} ${teacher.user.lastName}`,
@@ -48,7 +47,6 @@ const CreateSubjectForm = ({ children, teachers, classes }: FormProps) => {
         return {
           ...field,
           options: [
-            { value: "0", label: "Select a class" },
             ...classes.map((cls) => ({
               value: cls.id,
               label: cls.name,

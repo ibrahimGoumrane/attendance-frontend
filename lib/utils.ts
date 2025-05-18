@@ -15,3 +15,7 @@ export function getErrorMessage({ errors }: ErrorState, field: string) {
   }
   return "";
 }
+export const formatDatetimeLocal = (datetimeString: string) => {
+  const date = new Date(datetimeString);
+  return date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
+};

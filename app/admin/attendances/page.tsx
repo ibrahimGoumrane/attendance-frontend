@@ -16,7 +16,7 @@ export default async function AttendancePage() {
   const students = await getAllStudents();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 flex-1">
       <Suspense fallback={<AttendanceTableSkeleton />}>
         <ListAttendances
           attendances={attendances}

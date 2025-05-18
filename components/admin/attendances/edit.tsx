@@ -2,19 +2,20 @@
 
 import BaseForm from "@/components/form/base-form";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { editAttendance } from "@/lib/actions/attendance";
 import {
-    UpdateAttendanceSchema,
-    attendanceUpdateRenderFields,
+  UpdateAttendanceSchema,
+  attendanceUpdateRenderFields,
 } from "@/lib/schemas/attendances";
 import { Attendance } from "@/lib/types/attendance";
 import { useRouter } from "next/navigation";
+import { formatDatetimeLocal } from "@/lib/utils";
 
 interface FormProps {
   attendanceData: Attendance;
@@ -31,7 +32,7 @@ const UpdateAttendanceForm = ({
 
   const initialValues = {
     id: attendanceData.id,
-    date: attendanceData.date,
+    date: formatDatetimeLocal(attendanceData.date),
     status: attendanceData.status,
   };
 

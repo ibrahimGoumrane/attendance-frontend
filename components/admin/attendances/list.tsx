@@ -139,8 +139,7 @@ export function ListAttendances({
     totalAttendances > 0 ? (presentCount / totalAttendances) * 100 : 0;
 
   return (
-    <div className="flex flex-col gap-6">
-      {" "}
+    <div className="flex flex-col gap-6 flex-1  ">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Attendance</h1>
@@ -155,7 +154,7 @@ export function ListAttendances({
           </Button>
         </CreateAttendanceForm>
       </div>
-      <div className="space-y-6">
+      <div className="space-y-6 flex-1 flex flex-col">
         {/* Stat cards - already responsive with grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
@@ -199,7 +198,7 @@ export function ListAttendances({
           </Card>
         </div>
 
-        <Card>
+        <Card className="flex-1">
           <CardHeader>
             <CardTitle>Attendance Records</CardTitle>
             <CardDescription>

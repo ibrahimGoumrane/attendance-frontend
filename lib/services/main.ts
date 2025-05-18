@@ -82,6 +82,8 @@ export async function fetchData<T>(input: RequestInfo, init?: RequestInit) {
       return true;
     } else {
       console.log(
+        "METHOD:",
+        init.method,
         "ADDRESS:",
         serverAddress + input,
         "Response:",

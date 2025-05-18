@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const CreateAttendanceSchema = z.object({
-  subject: z.string().nonempty("Subject is required"),
-  student: z.string().nonempty("Student is required"),
+  subject_id: z.string().nonempty("Subject is required"),
+  student_id: z.string().nonempty("Student is required"),
   date: z.string().nonempty("Date is required"), // Using string for date input
   status: z.enum(["present", "absent"], {
     required_error: "Status is required",
@@ -22,14 +22,14 @@ export const DeleteAttendanceSchema = z.object({
 
 export const attendanceCreateRenderFields = [
   {
-    name: "subject",
+    name: "subject_id",
     label: "Subject",
     type: "select",
     placeholder: "Select a subject",
     required: true,
   },
   {
-    name: "student",
+    name: "student_id",
     label: "Student",
     type: "select",
     placeholder: "Select a student",
@@ -38,7 +38,7 @@ export const attendanceCreateRenderFields = [
   {
     name: "date",
     label: "Date",
-    type: "date",
+    type: "datetime-local",
     required: true,
   },
   {
@@ -62,7 +62,7 @@ export const attendanceUpdateRenderFields = [
   {
     name: "date",
     label: "Date",
-    type: "date",
+    type: "datetime-local",
   },
   {
     name: "status",
@@ -82,4 +82,3 @@ export const attendanceDeleteRenderFields = [
     type: "hidden",
   },
 ];
-

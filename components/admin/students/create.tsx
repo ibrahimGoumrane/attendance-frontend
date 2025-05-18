@@ -33,7 +33,6 @@ const CreateStudentForm = ({ children, classes }: FormProps) => {
       return {
         ...field,
         options: [
-          { value: "None", label: "Choose a class" },
           ...classes.map((classItem) => ({
             value: classItem.id,
             label: classItem.name,

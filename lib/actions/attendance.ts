@@ -16,18 +16,12 @@ export const addAttendance = async (
   prevState: State,
   newAttendance: FormData
 ) => {
-const data = {
-    subject: newAttendance.get("subject") as string,
-    student: newAttendance.get("student") as string,
-    date: newAttendance.get("date") as string, // Assuming the FormData value is an ISO string
-    status: newAttendance.get("status") as "present" | "absent",
-};
-
+  console.log("Adding attendance", newAttendance);
   return attendanceApiResource.createAction(
     prevState,
-    data,
+    newAttendance,
     CreateAttendanceSchema,
-    false,
+    true,
     ["/admin/attendances"] // Path to revalidate
   );
 };
@@ -40,17 +34,12 @@ export const editAttendance = async (
   updatedAttendance: FormData
 ) => {
   const id = updatedAttendance.get("id") as string;
-  const data = {
-    id,
-    date: updatedAttendance.get("date") as string,
-    status: updatedAttendance.get("status") as "present" | "absent",
-  };
 
   return attendanceApiResource.updateAction(
     prevState,
-    data,
+    updatedAttendance,
     UpdateAttendanceSchema,
-    false,
+    true,
     ["/admin/attendances", `/admin/attendances/${id}`] // Multiple paths to revalidate
   );
 };

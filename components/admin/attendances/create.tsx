@@ -32,11 +32,10 @@ const CreateAttendanceForm = ({ children, subjects, students }: FormProps) => {
 
   const updatedAttendanceFields: FieldConfig[] =
     attendanceCreateRenderFields.map((field) => {
-      if (field.type === "select" && field.name === "subject") {
+      if (field.name === "subject_id") {
         return {
           ...field,
           options: [
-            { value: "0", label: "Select a subject" },
             ...subjects.map((subject) => ({
               value: subject.id,
               label: subject.name,
@@ -44,11 +43,10 @@ const CreateAttendanceForm = ({ children, subjects, students }: FormProps) => {
           ],
         };
       }
-      if (field.type === "select" && field.name === "student") {
+      if (field.name === "student_id") {
         return {
           ...field,
           options: [
-            { value: "0", label: "Select a student" },
             ...students.map((student) => ({
               value: student.id,
               label: `${student.user.firstName} ${student.user.lastName}`,
