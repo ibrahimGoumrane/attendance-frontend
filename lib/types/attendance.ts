@@ -21,3 +21,5 @@ export interface UpdateAttendance {
 export interface DeleteAttendance {
   id: string;
 }
+
+

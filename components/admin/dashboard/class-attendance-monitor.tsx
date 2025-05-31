@@ -1,97 +1,68 @@
-"use client"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Clock, Eye, Users, UserX } from "lucide-react";
+import { getSubjectsAttendanceToday } from "@/lib/services/subject";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Clock, Users, UserX, Eye } from "lucide-react"
-
-const classData = [
-  {
-    id: 1,
-    subject: "Advanced Mathematics",
-    teacher: "Dr. Sarah Johnson",
-    time: "09:00 - 10:30",
-    totalStudents: 45,
-    presentStudents: 42,
-    absentStudents: [
-      { name: "John Smith", reason: "Sick leave" },
-      { name: "Emma Davis", reason: "Late arrival" },
-      { name: "Michael Brown", reason: "Unknown" },
-    ],
-    room: "Room 201",
-    status: "ongoing",
-  },
-  {
-    id: 2,
-    subject: "Computer Science Fundamentals",
-    teacher: "Prof. David Wilson",
-    time: "10:45 - 12:15",
-    totalStudents: 38,
-    presentStudents: 35,
-    absentStudents: [
-      { name: "Lisa Anderson", reason: "Medical appointment" },
-      { name: "James Taylor", reason: "Unknown" },
-      { name: "Sophie Miller", reason: "Family emergency" },
-    ],
-    room: "Lab 105",
-    status: "ongoing",
-  },
-  {
-    id: 3,
-    subject: "Physics Laboratory",
-    teacher: "Dr. Maria Garcia",
-    time: "13:30 - 15:00",
-    totalStudents: 32,
-    presentStudents: 29,
-    absentStudents: [
-      { name: "Alex Thompson", reason: "Sports event" },
-      { name: "Rachel Green", reason: "Unknown" },
-      { name: "Tom Wilson", reason: "Late arrival" },
-    ],
-    room: "Lab 203",
-    status: "upcoming",
-  },
-  {
-    id: 4,
-    subject: "English Literature",
-    teacher: "Ms. Jennifer Lee",
-    time: "15:15 - 16:45",
-    totalStudents: 41,
-    presentStudents: 38,
-    absentStudents: [
-      { name: "Daniel Clark", reason: "Unknown" },
-      { name: "Olivia Martinez", reason: "Sick leave" },
-      { name: "Ryan Adams", reason: "Personal reasons" },
-    ],
-    room: "Room 301",
-    status: "upcoming",
-  },
-]
-
-export function ClassAttendanceMonitor() {
+export async function ClassAttendanceMonitor() {
+  const subjectAttendance = await getSubjectsAttendanceToday();
+  if (!subjectAttendance || subjectAttendance.length === 0) {
+    return (
+      <div className="text-center text-muted-foreground min-h-[300px] flex items-center justify-center">
+        No classes today
+      </div>
+    );
+  }
   return (
     <div className="space-y-4">
-      {classData.map((classItem) => {
-        const attendanceRate = (classItem.presentStudents / classItem.totalStudents) * 100
+      {subjectAttendance.map((classItem) => {
+        const attendanceRate =
+          (classItem.presentStudents /
+            (classItem.presentStudents + classItem.absentStudents.length)) *
+          100;
+        // Determine class status based on current time and class date
+        const now = new Date();
+        const classDate = new Date(classItem.date);
+
+        let status: "ongoing" | "upcoming" | "ended";
+        if (now.toISOString().slice(0, 10) === classItem.date) {
+          status = "ongoing";
+        } else if (now < classDate) {
+          status = "upcoming";
+        } else {
+          status = "ended";
+        }
+
+        const statusColor =
+          status === "ongoing"
+            ? "secondary"
+            : status === "upcoming"
+            ? "default"
+            : "destructive";
 
         return (
-          <div key={classItem.id} className="border rounded-lg p-4 space-y-4">
+          <div
+            key={classItem.subject.id}
+            className="border rounded-lg p-4 space-y-4"
+          >
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-lg">{classItem.subject}</h3>
-                  <Badge variant={classItem.status === "ongoing" ? "default" : "secondary"}>{classItem.status}</Badge>
+                  <h3 className="font-semibold text-lg">
+                    {classItem.subject.name}
+                  </h3>
+                  <Badge variant={statusColor}>{status}</Badge>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Users className="h-4 w-4" />
-                    {classItem.teacher}
+                    {classItem.subject.teacher.user.firstName}{" "}
+                    {classItem.subject.teacher.user.lastName}
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
-                    {classItem.time}
+                    {classItem.date}
                   </span>
-                  <span>{classItem.room}</span>
                 </div>
               </div>
               <Button variant="outline" size="sm">
@@ -104,18 +75,24 @@ export function ClassAttendanceMonitor() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Attendance Rate</span>
-                  <span className="text-sm font-bold">{attendanceRate.toFixed(1)}%</span>
+                  <span className="text-sm font-bold">
+                    {attendanceRate.toFixed(1)}%
+                  </span>
                 </div>
                 <Progress value={attendanceRate} className="h-2" />
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Present:</span>
-                    <span className="font-medium text-green-600">{classItem.presentStudents}</span>
+                    <span className="font-medium text-green-600">
+                      {classItem.presentStudents}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Absent:</span>
-                    <span className="font-medium text-red-600">{classItem.absentStudents.length}</span>
+                    <span className="font-medium text-red-600">
+                      {classItem.absentStudents.length}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -127,19 +104,21 @@ export function ClassAttendanceMonitor() {
                 </div>
                 <div className="space-y-1 max-h-20 overflow-y-auto">
                   {classItem.absentStudents.map((student, index) => (
-                    <div key={index} className="flex items-center justify-between text-xs bg-muted/50 rounded p-2">
-                      <span className="font-medium">{student.name}</span>
-                      <Badge variant="outline" className="text-xs">
-                        {student.reason}
-                      </Badge>
+                    <div
+                      key={index}
+                      className="flex items-center justify-between text-xs bg-muted/50 rounded p-2"
+                    >
+                      <span className="font-medium">
+                        {student.user.firstName + " " + student.user.lastName}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

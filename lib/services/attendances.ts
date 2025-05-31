@@ -18,3 +18,4 @@ export const editAttendance = (id: string, data: UpdateAttendance) =>
   attendanceApiResource.update(id, data);
 export const deleteAttendance = (id: string) =>
   attendanceApiResource.delete(id);
+
