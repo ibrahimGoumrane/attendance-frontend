@@ -3,6 +3,7 @@ import { Class, CreateClass, UpdateClass } from "../types/class";
 import { Student } from "../types/student";
 import { Attendance } from "../types/attendance";
 import { Subject } from "../types/subject";
+import { Total } from "../types/base";
 
 export const classApiResource = createApiResource<
   Class,
@@ -25,3 +26,6 @@ export const getClassAttendance = async (id: string) => {
 export const getClassSubjects = async (id: string) => {
   return classApiResource.getAllResource<Subject>(`/${id}/subjects/`);
 };
+
+export const getTotalClasses = async () =>
+  classApiResource.getResource<Total>("total");

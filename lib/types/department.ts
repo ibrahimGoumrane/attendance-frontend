@@ -15,3 +15,7 @@ export interface UpdateDepartment {
 export interface DeleteDepartment {
   id: string;
 }
+export interface DepartmentAttendance {
+  attendance: number;
+  department: string;
+}

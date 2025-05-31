@@ -3,6 +3,7 @@ import {
   CreateAttendance,
   Attendance,
   UpdateAttendance,
+  DailyAttendance,
 } from "../types/attendance";
 export const attendanceApiResource = createApiResource<
   Attendance,
@@ -19,3 +20,7 @@ export const editAttendance = (id: string, data: UpdateAttendance) =>
 export const deleteAttendance = (id: string) =>
   attendanceApiResource.delete(id);
 
+export const getAttendanceLast30Days = async () =>
+  attendanceApiResource.getResource<DailyAttendance[]>(
+    "attendance-last-30-days"
+  );

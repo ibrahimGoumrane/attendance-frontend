@@ -21,5 +21,7 @@ export interface UpdateAttendance {
 export interface DeleteAttendance {
   id: string;
 }
-
-
+export interface DailyAttendance {
+  date: string;
+  attendance: number;
+}

@@ -1,36 +1,51 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Clock, Eye, Users, UserX } from "lucide-react";
-import { getSubjectsAttendanceToday } from "@/lib/services/subject";
+import { SubjectAttendance } from "@/lib/types/subject";
+import { formatDatetimeLocal } from "@/lib/utils";
 
-export async function ClassAttendanceMonitor() {
-  const subjectAttendance = await getSubjectsAttendanceToday();
-  if (!subjectAttendance || subjectAttendance.length === 0) {
+interface SubjectAttendanceProps {
+  subjectsAttendance: SubjectAttendance[];
+}
+
+export function SubjectAttendanceMonitor({
+  subjectsAttendance,
+}: SubjectAttendanceProps) {
+  if (!subjectsAttendance || subjectsAttendance.length === 0) {
     return (
       <div className="text-center text-muted-foreground min-h-[300px] flex items-center justify-center">
         No classes today
       </div>
     );
   }
+
   return (
     <div className="space-y-4">
-      {subjectAttendance.map((classItem) => {
+      {subjectsAttendance.map((classItem) => {
         const attendanceRate =
           (classItem.presentStudents /
             (classItem.presentStudents + classItem.absentStudents.length)) *
           100;
+
         // Determine class status based on current time and class date
         const now = new Date();
-        const classDate = new Date(classItem.date);
+        const classDate = new Date(formatDatetimeLocal(classItem.date));
+        const classEndDate = new Date(classDate.getTime() + 2 * 60 * 60 * 1000);
 
         let status: "ongoing" | "upcoming" | "ended";
-        if (now.toISOString().slice(0, 10) === classItem.date) {
-          status = "ongoing";
-        } else if (now < classDate) {
-          status = "upcoming";
-        } else {
+
+        if (now.getTime() > classEndDate.getTime()) {
           status = "ended";
+        } else if (
+          now.getTime() >= classDate.getTime() &&
+          now.getTime() <= classEndDate.getTime()
+        ) {
+          status = "ongoing";
+        } else {
+          status = "upcoming";
         }
 
         const statusColor =
@@ -39,6 +54,15 @@ export async function ClassAttendanceMonitor() {
             : status === "upcoming"
             ? "default"
             : "destructive";
+
+        // Format the time in a consistent way that won't change between server and client
+        const formattedTime = new Date(
+          formatDatetimeLocal(classItem.date)
+        ).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false, // Use 24-hour format
+        });
 
         return (
           <div
@@ -61,7 +85,7 @@ export async function ClassAttendanceMonitor() {
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
-                    {classItem.date}
+                    {formattedTime}
                   </span>
                 </div>
               </div>
