@@ -609,7 +609,7 @@ export default function LandingPage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                    className="w-full sm:w-auto border-primary text-primary hover:bg-primary-foreground hover:text-foreground dark:hover:text-primary-foreground"
                   >
                     Request Demo
                   </Button>

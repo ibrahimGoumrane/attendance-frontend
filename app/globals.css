@@ -88,7 +88,7 @@
   --sidebar-ring: oklch(0.55 0.05 250);
 
   /* Custom colors for landing page */
-  --primary-50: oklch(96.7% 0.015 277);
+  /* --primary-50: oklch(96.7% 0.015 277);
   --primary-100: oklch(92.3% 0.033 268);
   --primary-200: oklch(86.3% 0.063 263);
   --primary-300: oklch(77.6% 0.108 257);
@@ -108,7 +108,7 @@
   --secondary-600: oklch(50.8% 0.214 137);
   --secondary-700: oklch(44.2% 0.223 137);
   --secondary-800: oklch(38% 0.221 137);
-  --secondary-900: oklch(32.4% 0.21 137);
+  --secondary-900: oklch(32.4% 0.21 137); */
 }
 
 .dark {
