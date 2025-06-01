@@ -4,6 +4,7 @@ import {
   Attendance,
   UpdateAttendance,
 } from "../types/attendance";
+import { fetchData } from "./main";
 export const attendanceApiResource = createApiResource<
   Attendance,
   CreateAttendance,
@@ -12,6 +13,10 @@ export const attendanceApiResource = createApiResource<
 
 export const getAllAttendances = () => attendanceApiResource.list();
 export const getAttendance = (id: string) => attendanceApiResource.get(id);
+export const getAttendanceByStudentId = async (id: string) => {
+  const attendances = await fetchData<Attendance[]>(`${process.env.API_URL}/attendances/students/${id}`, {method: "GET"});
+  return attendances;
+}
 export const addAttendance = (data: CreateAttendance) =>
   attendanceApiResource.create(data);
 export const editAttendance = (id: string, data: UpdateAttendance) =>

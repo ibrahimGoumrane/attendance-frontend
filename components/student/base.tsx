@@ -41,17 +41,16 @@ export default function Layout({ children, user }: LayoutProps) {
 
   const routes = [
     {
-      label: "Images",
-      icon: Image,
-      href: "/student/images",
-      active: pathname === "/student/images",
-    },
-    
-    {
       label: "Attendance",
       icon: CalendarCheck,
       href: "/student",
       active: pathname === "/student",
+    },
+    {
+      label: "Images",
+      icon: Image,
+      href: "/student/images",
+      active: pathname === "/student/images",
     },
   ];
 
