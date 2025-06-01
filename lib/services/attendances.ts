@@ -24,3 +24,7 @@ export const getAttendanceLast30Days = async () =>
   attendanceApiResource.getResource<DailyAttendance[]>(
     "attendance-last-30-days"
   );
+export const getAttendanceThisWeek = async () =>
+  attendanceApiResource.getResource<DailyAttendance[]>(
+    "attendance-week"
+  );  

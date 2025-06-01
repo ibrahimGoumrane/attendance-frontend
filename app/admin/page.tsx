@@ -21,7 +21,10 @@ import { WeeklyTrendsChart } from "@/components/admin/dashboard/weekly-trends-ch
 import { getSubjectsAttendanceToday } from "@/lib/services/subject";
 import { getTotalStudents } from "@/lib/services/students";
 import { getTotalClasses } from "@/lib/services/classes";
-import { getAttendanceLast30Days } from "@/lib/services/attendances";
+import {
+  getAttendanceLast30Days,
+  getAttendanceThisWeek,
+} from "@/lib/services/attendances";
 import { getDepartmentsAttendances } from "@/lib/services/departments";
 import { LastUpdated } from "@/components/admin/dashboard/last-updated";
 
@@ -31,6 +34,7 @@ export default async function AdminDashboard() {
   const { total: totalClasses } = await getTotalClasses();
   const departmentsAttendance = await getDepartmentsAttendances();
   const dailyAttendance = await getAttendanceLast30Days();
+  const attendanceLast7Days = await getAttendanceThisWeek();
   const attendanceStats = subjectsAttendance.reduce(
     (acc, subject) => {
       const present = subject.presentStudents;
@@ -179,7 +183,7 @@ export default async function AdminDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <WeeklyTrendsChart />
+            <WeeklyTrendsChart data={attendanceLast7Days} />
           </CardContent>
         </Card>
 

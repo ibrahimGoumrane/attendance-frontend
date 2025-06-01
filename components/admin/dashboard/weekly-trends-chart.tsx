@@ -1,5 +1,6 @@
 "use client";
 
+import { DailyAttendance } from "@/lib/types/attendance";
 import {
   Area,
   AreaChart,
@@ -9,22 +10,15 @@ import {
   YAxis,
 } from "recharts";
 
-const data = [
-  { day: "Mon", attendance: 88 },
-  { day: "Tue", attendance: 91 },
-  { day: "Wed", attendance: 89 },
-  { day: "Thu", attendance: 87 },
-  { day: "Fri", attendance: 85 },
-  { day: "Sat", attendance: 82 },
-  { day: "Sun", attendance: 79 },
-];
-
-export function WeeklyTrendsChart() {
+interface AttendanceData {
+  data: DailyAttendance[];
+}
+export function WeeklyTrendsChart({ data }: AttendanceData) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <AreaChart data={data}>
         <XAxis
-          dataKey="day"
+          dataKey="date"
           stroke="#888888"
           fontSize={12}
           tickLine={false}
