@@ -4,6 +4,7 @@ import {
   Attendance,
   UpdateAttendance,
   DailyAttendance,
+  AttendanceHourlyWeek,
 } from "../types/attendance";
 export const attendanceApiResource = createApiResource<
   Attendance,
@@ -25,6 +26,8 @@ export const getAttendanceLast30Days = async () =>
     "attendance-last-30-days"
   );
 export const getAttendanceThisWeek = async () =>
-  attendanceApiResource.getResource<DailyAttendance[]>(
-    "attendance-week"
-  );  
+  attendanceApiResource.getResource<DailyAttendance[]>("attendance-week");
+export const getAttendanceHourlyThisWeek = async () =>
+  attendanceApiResource.getResource<AttendanceHourlyWeek[]>(
+    "attendance-hourly-week"
+  );

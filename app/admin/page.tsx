@@ -16,12 +16,13 @@ import { AttendanceOverviewChart } from "@/components/admin/dashboard/attendance
 import { DepartmentPerformanceChart } from "@/components/admin/dashboard/department-performance-chart";
 import { AttendanceHeatmap } from "@/components/admin/dashboard/attendance-heatmap";
 import { SubjectAttendanceMonitor } from "@/components/admin/dashboard/class-attendance-monitor";
-import { AttendanceDistributionChart } from "@/components/admin/dashboard/attendance-distribution-chart";
+// import { AttendanceDistributionChart } from "@/components/admin/dashboard/attendance-distribution-chart";
 import { WeeklyTrendsChart } from "@/components/admin/dashboard/weekly-trends-chart";
 import { getSubjectsAttendanceToday } from "@/lib/services/subject";
 import { getTotalStudents } from "@/lib/services/students";
 import { getTotalClasses } from "@/lib/services/classes";
 import {
+  getAttendanceHourlyThisWeek,
   getAttendanceLast30Days,
   getAttendanceThisWeek,
 } from "@/lib/services/attendances";
@@ -35,6 +36,7 @@ export default async function AdminDashboard() {
   const departmentsAttendance = await getDepartmentsAttendances();
   const dailyAttendance = await getAttendanceLast30Days();
   const attendanceLast7Days = await getAttendanceThisWeek();
+  const attendanceHourlyThisWeek = await getAttendanceHourlyThisWeek();
   const attendanceStats = subjectsAttendance.reduce(
     (acc, subject) => {
       const present = subject.presentStudents;
@@ -174,7 +176,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Secondary Charts Row */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 ">
         <Card>
           <CardHeader>
             <CardTitle>Weekly Attendance Patterns</CardTitle>
@@ -187,17 +189,17 @@ export default async function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Attendance Distribution</CardTitle>
             <CardDescription>
-              Student attendance rate distribution
+              Student attendance rate distribution this week
             </CardDescription>
           </CardHeader>
           <CardContent>
             <AttendanceDistributionChart />
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Heatmap */}
@@ -209,7 +211,7 @@ export default async function AdminDashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <AttendanceHeatmap />
+          <AttendanceHeatmap data={attendanceHourlyThisWeek} />
         </CardContent>
       </Card>
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { AttendanceHourlyWeek } from "@/lib/types/attendance"; // Ensure this path is correct
+
 const hours = [
   "8:00 - 10:00",
   "10:00 - 12:00",
@@ -8,14 +10,6 @@ const hours = [
   "16:00 - 18:00",
 ];
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-
-const heatmapData = [
-  [85, 88, 92, 89, 87, 85, 82],
-  [87, 90, 94, 91, 89, 87, 84],
-  [89, 92, 96, 93, 91, 89, 86],
-  [91, 94, 98, 95, 93, 91, 88],
-  [88, 91, 95, 92, 90, 88, 85],
-];
 
 function getColorIntensity(value: number) {
   if (value >= 95) return "bg-green-600";
@@ -26,18 +20,40 @@ function getColorIntensity(value: number) {
   return "bg-red-400";
 }
 
-export function AttendanceHeatmap() {
+interface AttendanceHeatmapProps {
+  data: AttendanceHourlyWeek[];
+}
+
+export function AttendanceHeatmap({ data }: AttendanceHeatmapProps) {
+  const attendanceMap: {
+    [day: string]: { [hour_range: string]: number };
+  } = {};
+
+  data.forEach((dayEntry) => {
+    attendanceMap[dayEntry.day] = {};
+    dayEntry.hourly_data.forEach((hourData) => {
+      attendanceMap[dayEntry.day][hourData.hour_range] = hourData.attendance;
+    });
+  });
+
+  console.log("Transformed Attendance Map:", attendanceMap); // For debugging
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-6 gap-1 text-xs">
+        {/* Empty div for top-left corner */}
         <div></div>
+        {/* Render day headers */}
         {days.map((day) => (
           <div key={day} className="text-center font-medium">
             {day}
           </div>
         ))}
-        {hours.map((hour, hourIndex) => (
+
+        {/* Render hours (rows) and their corresponding daily data (cells) */}
+        {hours.map((hour) => (
           <div key={hour} className="contents">
+            {/* Hour label */}
             <div
               className={`text-right pr-2 font-medium ${
                 hour.includes("Break") ? "text-blue-500 italic" : ""
@@ -45,9 +61,10 @@ export function AttendanceHeatmap() {
             >
               {hour}
             </div>
-            {days.map((day, dayIndex) => {
-              const value = heatmapData[hourIndex][dayIndex];
-              // If it's the break hour, show a break cell instead of value
+
+            {/* Daily cells for this hour */}
+            {days.map((day) => {
+              // Check if it's the break hour
               if (hour.includes("Break")) {
                 return (
                   <div
@@ -58,6 +75,11 @@ export function AttendanceHeatmap() {
                   </div>
                 );
               }
+
+              // Retrieve the attendance value from the transformed map
+              // Use .get() or optional chaining with default for safety
+              const value = attendanceMap[day]?.[hour] ?? 0; // Default to 0 if data not found
+
               return (
                 <div
                   key={`${hour}-${day}`}

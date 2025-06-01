@@ -25,3 +25,13 @@ export interface DailyAttendance {
   date: string;
   attendance: number;
 }
+export interface AttendanceHourlyData {
+  hour_range: string;
+  attendance: number;
+}
+
+export interface AttendanceHourlyWeek {
+  day: string;
+  date: string;
+  hourly_data: AttendanceHourlyData[];
+}
