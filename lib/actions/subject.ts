@@ -9,16 +9,30 @@ import {
   DeleteSubjectSchema,
 } from "../schemas/subjects";
 
+// Helper function to construct revalidation paths based on role
+const getRevalidationPaths = (basePath: string, id?: string): string[] => {
+  const paths = [`${basePath}/subjects`];
+  if (id) {
+    paths.push(`${basePath}/subjects/${id}`);
+  }
+  return paths;
+};
+
 /**
  * Add a new subject
  */
-export const addSubject = async (prevState: State, newSubject: FormData) => {
+export const addSubject = async (
+  prevState: State,
+  newSubject: FormData,
+  role: "admin" | "teacher" = "admin" // Default to admin
+) => {
+  const basePath = role === "admin" ? "/admin" : "/teacher";
   return subjectApiResource.createAction(
     prevState,
     newSubject,
     CreateSubjectSchema,
     true,
-    ["/admin/subjects"] // Path to revalidate
+    getRevalidationPaths(basePath) // Dynamic revalidation paths
   );
 };
 
@@ -27,28 +41,34 @@ export const addSubject = async (prevState: State, newSubject: FormData) => {
  */
 export const editSubject = async (
   prevState: State,
-  updatedSubject: FormData
+  updatedSubject: FormData,
+  role: "admin" | "teacher" = "admin" // Default to admin
 ) => {
   const id = updatedSubject.get("id") as string;
-
+  const basePath = role === "admin" ? "/admin" : "/teacher";
   return subjectApiResource.updateAction(
     prevState,
     updatedSubject,
     UpdateSubjectSchema,
     true,
-    ["/admin/subjects", `/admin/subjects/${id}`] // Multiple paths to revalidate
+    getRevalidationPaths(basePath, id) // Dynamic revalidation paths with ID
   );
 };
 
 /**
  * Delete a subject
  */
-export const deleteSubject = async (prevState: State, formData: FormData) => {
+export const deleteSubject = async (
+  prevState: State,
+  formData: FormData,
+  role: "admin" | "teacher" = "admin" // Default to admin
+) => {
+  const basePath = role === "admin" ? "/admin" : "/teacher";
   await subjectApiResource.deleteAction(
     prevState,
     formData,
     DeleteSubjectSchema,
-    ["/admin/subjects"]
+    getRevalidationPaths(basePath)
   );
-  redirect("/admin/subjects");
+  redirect(`${basePath}/subjects`);
 };
