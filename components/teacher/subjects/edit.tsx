@@ -23,7 +23,6 @@ const UpdateSubjectForm = ({ subjectData, teacher, classes, open, setIsOpen }: F
   const initialValues = {
     id: subjectData.id,
     name: subjectData.name,
-    teacher_id: teacher.id,
     section_promo_id: subjectData.section_promo.id,
   };
 

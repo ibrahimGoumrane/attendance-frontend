@@ -1,12 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 
 export function SubjectsTableSkeleton() {
@@ -23,9 +16,7 @@ export function SubjectsTableSkeleton() {
             <TableHeader>
               <TableRow>
                 <TableHead>Subject Name</TableHead>
-                <TableHead>Teacher</TableHead>
                 <TableHead>Class</TableHead>
-                <TableHead>Students</TableHead>
                 <TableHead className="w-[100px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -34,7 +25,6 @@ export function SubjectsTableSkeleton() {
                 <TableRow key={i}>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Skeleton className="h-4 w-4" />
                       <Skeleton className="h-4 w-[180px]" />
                     </div>
                   </TableCell>
@@ -42,14 +32,7 @@ export function SubjectsTableSkeleton() {
                     <Skeleton className="h-4 w-[150px]" />
                   </TableCell>
                   <TableCell>
-                    <Skeleton className="h-4 w-[100px]" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-5 w-[80px]" />
-                  </TableCell>
-                  <TableCell>
                     <div className="flex items-center gap-2">
-                      <Skeleton className="h-8 w-8 rounded-md" />
                       <Skeleton className="h-8 w-8 rounded-md" />
                     </div>
                   </TableCell>
