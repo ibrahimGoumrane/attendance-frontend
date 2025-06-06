@@ -19,7 +19,7 @@ import { Attendance } from "@/lib/types/attendance";
 import { Department } from "@/lib/types/department";
 import { Subject } from "@/lib/types/subject";
 import { Teacher } from "@/lib/types/teacher";
-import { AttendanceHistory } from "./attendance-history";
+import { AttendanceHistory } from "../attendance-history";
 
 interface MainProps {
   id: string;

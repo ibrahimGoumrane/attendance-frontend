@@ -61,9 +61,9 @@ export function AttendanceHistory({
       selectedStatus === "all" || attendance.status === selectedStatus;
     const dateMatch =
       !selectedDate ||
-      (attendance.date.getDate() === selectedDate.getDate() &&
-        attendance.date.getMonth() === selectedDate.getMonth() &&
-        attendance.date.getFullYear() === selectedDate.getFullYear());
+      (new Date(attendance.date).getDate() === selectedDate.getDate() &&
+        new Date(attendance.date).getMonth() === selectedDate.getMonth() &&
+        new Date(attendance.date).getFullYear() === selectedDate.getFullYear());
 
     return subjectMatch && statusMatch && dateMatch;
   });

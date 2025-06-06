@@ -22,8 +22,6 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Class } from "@/lib/types/class";
-import UpdateForm from "./edit";
-import Delete from "./delete";
 import { Student } from "@/lib/types/student";
 import { Attendance } from "@/lib/types/attendance";
 import { AttendanceHistory } from "../attendance-history";
@@ -60,7 +58,7 @@ export default function Main({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link href="/admin/classes">
+            <Link href="/teacher/classes">
               <ArrowLeft className="h-4 w-4" />
               <span className="sr-only">Back</span>
             </Link>
@@ -200,7 +198,7 @@ export default function Main({
                             </TableCell>
                             <TableCell>
                               <Button variant="ghost" size="sm" asChild>
-                                <Link href={`/admin/students/${student.id}`}>
+                                <Link href={`/teacher/students/${student.id}`}>
                                   View
                                 </Link>
                               </Button>
@@ -222,20 +220,6 @@ export default function Main({
           </Tabs>
         </div>
       </div>
-      {selectedClass && (
-        <>
-          <UpdateForm
-            classData={selectedClass}
-            open={editModalOpen}
-            setIsOpen={setEditModalOpen}
-          />
-          <Delete
-            id={selectedClass.id}
-            open={deleteModalOpen}
-            setIsOpen={setDeleteModalOpen}
-          />
-        </>
-      )}
     </div>
   );
 }
