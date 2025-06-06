@@ -1,4 +1,5 @@
 import { Class } from "./class";
+import { Student } from "./student";
 import { Teacher } from "./teacher";
 
 export interface Subject {
@@ -19,4 +20,10 @@ export interface UpdateSubject {
 }
 export interface DeleteSubject {
   id: string;
+}
+export interface SubjectAttendance {
+  subject: Subject;
+  date: string;
+  presentStudents: number;
+  absentStudents: Array<Student>;
 }

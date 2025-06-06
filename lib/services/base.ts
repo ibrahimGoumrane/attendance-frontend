@@ -83,6 +83,17 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
       }
     )) as T[];
   }
+  /**
+   * Get a specific resource of a specific type
+   */
+  async getResource<T>(resourcePath: string): Promise<T> {
+    return (await fetchData<T>(
+      `${this.baseUrl}${resourcePath.replace(/^\/|\/$/g, "")}/`,
+      {
+        method: "GET",
+      }
+    )) as T;
+  }
 
   /**
    * Server Action wrapper for fetching resources
@@ -94,7 +105,6 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
     revalidatePaths?: string | string[] // New parameter
   ): Promise<State> {
     try {
-      
       // Validate the data using the provided schema
       const parsed = schema.safeParse(data);
       if (!parsed.success) {
