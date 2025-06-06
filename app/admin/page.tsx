@@ -6,214 +6,225 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  BookOpen,
-  Building2,
-  GraduationCap,
   Users,
-  UserCheck,
-  UserX,
-  TrendingUp,
+  GraduationCap,
+  BookOpen,
+  AlertTriangle,
+  Check,
 } from "lucide-react";
+import { AttendanceOverviewChart } from "@/components/admin/dashboard/attendance-overview-chart";
+import { DepartmentPerformanceChart } from "@/components/admin/dashboard/department-performance-chart";
+import { AttendanceHeatmap } from "@/components/admin/dashboard/attendance-heatmap";
+import { SubjectAttendanceMonitor } from "@/components/admin/dashboard/class-attendance-monitor";
+// import { AttendanceDistributionChart } from "@/components/admin/dashboard/attendance-distribution-chart";
+import { WeeklyTrendsChart } from "@/components/admin/dashboard/weekly-trends-chart";
+import { getSubjectsAttendanceToday } from "@/lib/services/subject";
+import { getTotalStudents } from "@/lib/services/students";
+import { getTotalClasses } from "@/lib/services/classes";
+import {
+  getAttendanceHourlyThisWeek,
+  getAttendanceLast30Days,
+  getAttendanceThisWeek,
+} from "@/lib/services/attendances";
+import { getDepartmentsAttendances } from "@/lib/services/departments";
+import { LastUpdated } from "@/components/admin/dashboard/last-updated";
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
+  const subjectsAttendance = await getSubjectsAttendanceToday();
+  const { total: totalStudents } = await getTotalStudents();
+  const { total: totalClasses } = await getTotalClasses();
+  const departmentsAttendance = await getDepartmentsAttendances();
+  const dailyAttendance = await getAttendanceLast30Days();
+  const attendanceLast7Days = await getAttendanceThisWeek();
+  const attendanceHourlyThisWeek = await getAttendanceHourlyThisWeek();
+  const attendanceStats = subjectsAttendance.reduce(
+    (acc, subject) => {
+      const present = subject.presentStudents;
+      const absent = subject.absentStudents.length;
+      acc.present += present;
+      acc.absent += absent;
+      return acc;
+    },
+    { present: 0, absent: 0 }
+  );
+
+  // The calculation assumes that the class is only active if at least one of the subjects has that class today
+  const activeClassesSet = new Set<string>();
+  subjectsAttendance.forEach((subject) => {
+    activeClassesSet.add(subject.subject.section_promo.id);
+  });
+  const activeClasses = activeClassesSet.size;
+
+  // calculate the low attendance classes ( A class is considered low attendance if the attendance rate is below 75% )
+  const lowAttendanceClasses = subjectsAttendance.filter((subject) => {
+    const totalStudents =
+      subject.presentStudents + subject.absentStudents.length;
+    const attendanceRate = (subject.presentStudents / totalStudents) * 100;
+    return attendanceRate < 75;
+  });
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight dark:text-white">
-          Dashboard
-        </h1>
-        <p className="text-muted-foreground dark:text-gray-400">
-          Welcome to the FaceTrack admin panel.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Real-time attendance analytics and insights
+          </p>
+        </div>
+        <LastUpdated />
       </div>
 
-      {/* Stats overview */}
+      {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium">
               Total Students
             </CardTitle>
-            <GraduationCap className="w-4 h-4 text-muted-foreground" />
+            <Users className="w-4 h-4 text-primary" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">1,284</div>
-            <p className="text-xs text-muted-foreground mt-1 flex items-center">
-              <TrendingUp className="w-3 h-3 mr-1 text-green-500" />
-              <span className="text-green-500 font-medium">+2.5%</span> from
-              last month
-            </p>
+          <CardContent className="text-2xl font-bold flex items-stretch ">
+            {totalStudents}
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium">
-              Total Teachers
+              Today&apos;s Attendance
             </CardTitle>
-            <Users className="w-4 h-4 text-muted-foreground" />
+            <GraduationCap className="w-4 h-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">86</div>
-            <p className="text-xs text-muted-foreground mt-1 flex items-center">
-              <TrendingUp className="w-3 h-3 mr-1 text-green-500" />
-              <span className="text-green-500 font-medium">+1.2%</span> from
-              last month
+            <div className="text-2xl font-bold text-green-600">
+              {(attendanceStats.present /
+                (attendanceStats.present + attendanceStats.absent || 1)) *
+                100}{" "}
+              %
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {attendanceStats.present} students present
             </p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Total Classes</CardTitle>
-            <BookOpen className="w-4 h-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">
+              Active Classes
+            </CardTitle>
+            <BookOpen className="w-4 h-4 text-blue-600" />{" "}
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">42</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              No change from last month
+            <div className="text-2xl font-bold">{activeClasses}</div>
+            <p className="text-xs text-muted-foreground">
+              Out of {totalClasses} total classes
             </p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Departments</CardTitle>
-            <Building2 className="w-4 h-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Alerts</CardTitle>
+            {lowAttendanceClasses.length > 0 ? (
+              <AlertTriangle className="w-4 h-4 text-orange-600" />
+            ) : (
+              <Check className="w-4 h-4 text-green-600" />
+            )}
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              No change from last month
+            <div
+              className={`text-2xl font-bold ${
+                lowAttendanceClasses.length > 0
+                  ? "text-orange-600"
+                  : "text-green-600"
+              }`}
+            >
+              {lowAttendanceClasses.length}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Low attendance classes
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Attendance overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {/* Main Charts Row */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="col-span-2">
           <CardHeader>
             <CardTitle>Attendance Overview</CardTitle>
             <CardDescription>
-              Daily attendance statistics for the current month
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="h-[300px] flex items-center justify-center">
-            {/* Placeholder for chart */}
-            <div className="w-full h-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-              <p className="text-muted-foreground">Attendance Chart</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Today&apos;s Attendance</CardTitle>
-            <CardDescription>
-              Summary for {new Date().toLocaleDateString()}
+              Daily attendance trends over the past 30 days
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center">
-                <div className="w-full">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium dark:text-gray-300">
-                      Present
-                    </span>
-                    <span className="text-sm font-medium dark:text-gray-300">
-                      85%
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
-                    <div
-                      className="bg-green-500 h-2 rounded-full"
-                      style={{ width: "85%" }}
-                    ></div>
-                  </div>
-                </div>
-                <UserCheck className="ml-4 h-5 w-5 text-green-500" />
-              </div>
-              <div className="flex items-center">
-                <div className="w-full">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium dark:text-gray-300">
-                      Absent
-                    </span>
-                    <span className="text-sm font-medium dark:text-gray-300">
-                      15%
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
-                    <div
-                      className="bg-red-500 h-2 rounded-full"
-                      style={{ width: "15%" }}
-                    ></div>
-                  </div>
-                </div>
-                <UserX className="ml-4 h-5 w-5 text-red-500" />
-              </div>
-            </div>
-            <div className="mt-6 space-y-2">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Total Students</span>
-                <span className="font-medium dark:text-white">1,284</span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Present</span>
-                <span className="font-medium dark:text-white">1,091</span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Absent</span>
-                <span className="font-medium dark:text-white">193</span>
-              </div>
-            </div>
+            <AttendanceOverviewChart data={dailyAttendance} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Department Performance</CardTitle>
+            <CardDescription>Attendance rates by department</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DepartmentPerformanceChart data={departmentsAttendance} />
           </CardContent>
         </Card>
       </div>
 
-      {/* Recent activity */}
+      {/* Secondary Charts Row */}
+      <div className="grid gap-6 ">
+        <Card>
+          <CardHeader>
+            <CardTitle>Weekly Attendance Patterns</CardTitle>
+            <CardDescription>
+              Attendance distribution throughout the week
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <WeeklyTrendsChart data={attendanceLast7Days} />
+          </CardContent>
+        </Card>
+
+        {/* <Card>
+          <CardHeader>
+            <CardTitle>Attendance Distribution</CardTitle>
+            <CardDescription>
+              Student attendance rate distribution this week
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AttendanceDistributionChart />
+          </CardContent>
+        </Card> */}
+      </div>
+
+      {/* Heatmap */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Latest actions in the system</CardDescription>
+          <CardTitle>Attendance Heatmap</CardTitle>
+          <CardDescription>
+            Hourly attendance patterns across the week
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div
-                key={i}
-                className="flex items-center gap-4 border-b pb-4 last:border-0 last:pb-0 dark:border-gray-800"
-              >
-                <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-gray-800 flex items-center justify-center">
-                  <span className="text-primary-700 dark:text-primary-400 font-medium text-sm">
-                    {["JD", "AS", "MK", "RL", "PT"][i - 1]}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium dark:text-white">
-                    {
-                      [
-                        "John Doe marked attendance for Class 10A",
-                        "Admin Smith added a new teacher",
-                        "Mary King updated department information",
-                        "Robert Lee uploaded student photos",
-                        "Paul Thompson created a new class",
-                      ][i - 1]
-                    }
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {
-                      [
-                        "2 hours ago",
-                        "5 hours ago",
-                        "Yesterday at 4:30 PM",
-                        "Yesterday at 2:15 PM",
-                        "2 days ago",
-                      ][i - 1]
-                    }
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <AttendanceHeatmap data={attendanceHourlyThisWeek} />
+        </CardContent>
+      </Card>
+
+      {/* Class Attendance Monitor */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Live Class Attendance Monitor</CardTitle>
+          <CardDescription>
+            Real-time attendance tracking for all active classes
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SubjectAttendanceMonitor subjectsAttendance={subjectsAttendance} />
         </CardContent>
       </Card>
     </div>

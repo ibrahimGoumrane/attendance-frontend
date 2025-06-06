@@ -2,6 +2,7 @@ import { createApiResource } from "./base";
 import { CreateStudent, Student, UpdateStudent } from "../types/student";
 import { StudentImage } from "../types/user";
 import { Attendance } from "../types/attendance";
+import { Total } from "../types/base";
 
 export const studentApiResource = createApiResource<
   Student,
@@ -25,3 +26,5 @@ export const addStudentImage = (data: StudentImage) =>
 export const getStudentAttendances = async (id: string) => {
   return studentApiResource.getAllResource<Attendance>(`/${id}/attendances/`);
 };
+export const getTotalStudents = async () =>
+  studentApiResource.getResource<Total>("total");
