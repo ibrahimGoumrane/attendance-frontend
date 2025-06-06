@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { SubjectsTableSkeleton } from "@/components/teacher/subjects/subject-table-skeleton";
 import SubjectList from "@/components/teacher/subjects/list";
-import { getAllTeachers, getTeacherSubjects } from "@/lib/services/teachers";
+import { getTeacherSubjects } from "@/lib/services/teachers";
 import { getAllClasses } from "@/lib/services/classes";
-import { getLoggedInUser } from "@/lib/services/users";
+import { getLoggedInTeacher } from "@/lib/services/users";
 
 export const metadata = {
   title: "Subjects | Teacher Dashboard",
@@ -11,14 +11,9 @@ export const metadata = {
 };
 
 export default async function SubjectsPage() {
-  const user = await getLoggedInUser();
-  if (!user) {
-    return <div>Please log in to view your subjects.</div>;
-  }
-  const teachers = await getAllTeachers();
-  const loggedInTeacher = teachers.find(teacher => teacher.user.id === user.id);
+  const loggedInTeacher = await getLoggedInTeacher();
   if (!loggedInTeacher) {
-    return <div>You are not assigned as a teacher.</div>;
+    return <div>Please log in to view your subjects.</div>;
   }
   const teacher_subjects = await getTeacherSubjects(loggedInTeacher.id);
   const classes = await getAllClasses();
