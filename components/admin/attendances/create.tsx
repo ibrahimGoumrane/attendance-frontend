@@ -28,30 +28,35 @@ interface FormProps {
 
 const CreateAttendanceForm = ({ children, subjects, students }: FormProps) => {
   const [open, setOpen] = useState(false);
+  const [selectedSubjectId, setSelectedSubjectId] = useState<string>("");
   const router = useRouter();
+
+  // Filter students based on selected subject's section_promo.id
+  const filteredStudents = students.filter(student => {
+    const subject = subjects.find(s => s.id == selectedSubjectId);
+    return subject ? student.section_promo === subject.section_promo.id : false;
+  });
 
   const updatedAttendanceFields: FieldConfig[] =
     attendanceCreateRenderFields.map((field) => {
       if (field.name === "subject_id") {
         return {
           ...field,
-          options: [
-            ...subjects.map((subject) => ({
-              value: subject.id,
-              label: subject.name,
-            })),
-          ],
+          options: subjects.map(subject => ({
+            value: subject.id,
+            label: subject.name,
+          })),
+          onValueChange: (value: string) => setSelectedSubjectId(value),
         };
       }
       if (field.name === "student_id") {
         return {
           ...field,
-          options: [
-            ...students.map((student) => ({
-              value: student.id,
-              label: `${student.user.firstName} ${student.user.lastName}`,
-            })),
-          ],
+          options: filteredStudents.map(student => ({
+            value: student.id,
+            label: `${student.user.firstName} ${student.user.lastName}`,
+          })),
+          disabled: filteredStudents.length === 0 || !selectedSubjectId,
         };
       }
       return field;
