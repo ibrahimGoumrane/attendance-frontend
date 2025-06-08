@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Download, Edit, MoreHorizontal, Plus, Search, Trash2, Upload } from "lucide-react";
+import { Download, Edit, MoreHorizontal, Plus, Search, Trash2, Upload, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,12 +38,18 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   const filteredSubjects = teacher_subjects.filter(subject => {
     const matchesSearch = subject.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesClass = selectedClass === "All Classes" || subject?.section_promo?.id === selectedClass;
 
     return matchesSearch && matchesClass;
   });
+
+  const totalPages = Math.ceil(filteredSubjects.length / itemsPerPage);
+  const paginatedSubjects = filteredSubjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleEditClick = (subject: Subject) => {
     setDeleteModalOpen(false);
@@ -100,7 +106,13 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
                 onChange={e => setSearchQuery(e.target.value)}
               />
             </div>
-            <Select value={selectedClass} onValueChange={val => setSelectedClass(val)}>
+            <Select
+              value={selectedClass}
+              onValueChange={val => {
+                setSelectedClass(val);
+                setCurrentPage(1);
+              }}
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Filter by class" />
               </SelectTrigger>
@@ -125,8 +137,8 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredSubjects.length > 0 ? (
-                  filteredSubjects.map(subject => (
+                {paginatedSubjects.length > 0 ? (
+                  paginatedSubjects.map(subject => (
                     <TableRow key={subject.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                       <TableCell className="dark:text-white font-medium">
                         <Link href={`/teacher/subjects/${subject.id}`} className="hover:underline">
@@ -176,20 +188,35 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
             </Table>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-muted-foreground">
-              Showing <strong>1</strong> to <strong>{filteredSubjects.length}</strong> of{" "}
-              <strong>{teacher_subjects.length}</strong> subjects
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
+              <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                {Math.min(currentPage * itemsPerPage, filteredSubjects.length)} of {filteredSubjects.length} subjects
+              </div>
+              <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="text-sm">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" disabled>
-                Previous
-              </Button>
-              <Button variant="outline" size="sm" disabled>
-                Next
-              </Button>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
 
