@@ -66,11 +66,11 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" className="h-9">
-            <Upload className="h-4 w-4 mr-2" />
+            <Download className="h-4 w-4 mr-2" />
             Import
           </Button>
           <Button variant="outline" size="sm" className="h-9">
-            <Download className="h-4 w-4 mr-2" />
+            <Upload className="h-4 w-4 mr-2" />
             Export
           </Button>
           <CreateSubjectForm teacher={teacher} classes={classes}>
