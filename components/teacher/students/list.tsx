@@ -2,48 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  Download,
-  Edit,
-  MoreHorizontal,
-  Plus,
-  Search,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { MoreHorizontal, Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Student } from "@/lib/types/student";
 import { Class } from "@/lib/types/class";
 
@@ -55,60 +27,29 @@ interface StudentListProps {
 export default function StudentList({ students, classes }: StudentListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState("All Classes");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-
-  const filteredStudents = students.filter((student) => {
+  const filteredStudents = students.filter(student => {
     const matchesSearch =
-      student
-        .user!.firstName.toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      student
-        .user!.lastName.toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
+      student.user!.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student.user!.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.user!.email.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesClass =
-      selectedClass === "All Classes" ||
-      student.section_promo === selectedClass;
+    const matchesClass = selectedClass === "All Classes" || student.section_promo === selectedClass;
 
     return matchesSearch && matchesClass;
   });
 
-  const handleEditClick = (student: Student) => {
-    setDeleteModalOpen(false);
-    setEditModalOpen(true);
-    setSelectedStudent(student);
-  };
-
-  const handleDeleteClick = (student: Student) => {
-    setEditModalOpen(false);
-    setDeleteModalOpen(true);
-    setSelectedStudent(student);
-  };
+  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+  const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:text-white">
-            Students
-          </h1>
-          <p className="text-muted-foreground dark:text-gray-400">
-            Manage student accounts and information.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-9">
-            <Upload className="h-4 w-4 mr-2" />
-            Import
-          </Button>
-          <Button variant="outline" size="sm" className="h-9">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+          <h1 className="text-3xl font-bold tracking-tight dark:text-white">Students</h1>
+          <p className="text-muted-foreground dark:text-gray-400">View student accounts and information.</p>
         </div>
       </div>
 
@@ -127,19 +68,22 @@ export default function StudentList({ students, classes }: StudentListProps) {
                 placeholder="Search Students..."
                 className="pl-8"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
               />
             </div>
             <Select
               value={selectedClass}
-              onValueChange={(val) => setSelectedClass(val)}
+              onValueChange={val => {
+                setSelectedClass(val);
+                setCurrentPage(1);
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Filter by class" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="All Classes">All Classes</SelectItem>
-                {classes.map((cls) => (
+                {classes.map(cls => (
                   <SelectItem key={cls.id} value={cls.id}>
                     {cls.name}
                   </SelectItem>
@@ -155,64 +99,39 @@ export default function StudentList({ students, classes }: StudentListProps) {
                   <TableHead className="font-medium">Name</TableHead>
                   <TableHead className="font-medium">Email</TableHead>
                   <TableHead className="font-medium">Class</TableHead>
-                  <TableHead className="w-[100px]"></TableHead>
+                  <TableHead className="font-medium"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredStudents.length > 0 ? (
-                  filteredStudents.map((student) => (
-                    <TableRow
-                      key={student.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-900"
-                    >
+                {paginatedStudents.length > 0 ? (
+                  paginatedStudents.map(student => (
+                    <TableRow key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                       <TableCell className="dark:text-white font-medium">
-                        <Link
-                          href={`/teacher/students/${student.id}`}
-                          className="hover:underline"
-                        >
+                        <Link href={`/teacher/students/${student.id}`} className="hover:underline">
                           {student.user!.firstName} {student.user!.lastName}
                         </Link>
                       </TableCell>
+                      <TableCell className="dark:text-gray-300">{student.user!.email}</TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {student.user!.email}
-                      </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {
-                          classes.find((cls) => cls.id == student.section_promo)
-                            ?.name
-                        }
+                        {classes.find(cls => cls.id == student.section_promo)?.name}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8"
-                            >
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
                               <MoreHorizontal className="h-4 w-4" />
                               <span className="sr-only">Open menu</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                              onClick={() => handleEditClick(student)}
-                            >
-                              <button className="flex items-center justify-start ">
-                                <Edit className="h-4 w-4 mr-2" />
-                                Edit
-                              </button>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-red-600 dark:text-red-400"
-                              onClick={() => handleDeleteClick(student)}
-                            >
-                              <button className="flex items-center justify-start">
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </button>
+                            <DropdownMenuItem>
+                              <Link
+                                href={`/teacher/students/${student.id}`}
+                                className="flex items-center justify-start"
+                              >
+                                View Details
+                              </Link>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -230,21 +149,35 @@ export default function StudentList({ students, classes }: StudentListProps) {
             </Table>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-muted-foreground">
-              Showing <strong>1</strong> to{" "}
-              <strong>{filteredStudents.length}</strong> of{" "}
-              <strong>{filteredStudents.length}</strong> students
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
+              <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
+              </div>
+              <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="text-sm">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" disabled>
-                Previous
-              </Button>
-              <Button variant="outline" size="sm" disabled>
-                Next
-              </Button>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
