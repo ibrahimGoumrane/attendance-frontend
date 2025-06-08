@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Scan,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -114,7 +115,7 @@ export default function Layout({ children, user }: LayoutProps) {
                   whileHover={{ rotate: 10 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <GraduationCap className="h-6 w-6 text-primary dark:text-primary-400" />
+                  <Scan className="h-6 w-6 text-primary" />
                 </motion.div>
                 <span className="dark:text-white">FaceTrack</span>
               </Link>
