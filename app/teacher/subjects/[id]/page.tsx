@@ -12,6 +12,12 @@ export default async function SubjectPage({ params }: { params: { id: string } }
     return <div>Please log in to view your subjects.</div>;
   }
   const subject = await getSubject(id);
+  if (!subject) {
+    return <div>Subject not found.</div>;
+  }
+  if (subject.teacher.id !== loggedInTeacher.id) {
+    return <div>You do not have permission to view this subject.</div>;
+  }
   const classes = await getAllClasses();
 
   return (
