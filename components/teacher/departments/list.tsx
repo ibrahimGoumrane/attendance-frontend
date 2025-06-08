@@ -1,40 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Department } from "@/lib/types/department";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Plus,
-  Search,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Download,
-  Upload,
-} from "lucide-react";
+import { MoreHorizontal, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -44,57 +22,27 @@ interface DepartmentListProps {
 
 export default function DepartmentList({ departments }: DepartmentListProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] =
-    useState<Department | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  const filteredDepartments = departments.filter((d) =>
-    d.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredDepartments = departments.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  const handleEditClick = (dept: Department) => {
-    setDeleteModalOpen(false);
-    setEditModalOpen(true);
-    setSelectedDepartment(dept);
-  };
-
-  const handleDeleteClick = (dept: Department) => {
-    setEditModalOpen(false);
-    setDeleteModalOpen(true);
-    setSelectedDepartment(dept);
-  };
+  const totalPages = Math.ceil(filteredDepartments.length / itemsPerPage);
+  const paginatedDepartments = filteredDepartments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:text-white">
-            Departments
-          </h1>
-          <p className="text-muted-foreground dark:text-gray-400">
-            Manage academic departments.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-9">
-            <Upload className="h-4 w-4 mr-2" />
-            Import
-          </Button>
-          <Button variant="outline" size="sm" className="h-9">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+          <h1 className="text-3xl font-bold tracking-tight dark:text-white">Departments</h1>
+          <p className="text-muted-foreground dark:text-gray-400">View academic departments.</p>
         </div>
       </div>
 
       <Card>
         <CardHeader className="pb-3">
           <CardTitle>Departments List</CardTitle>
-          <CardDescription>
-            Showing {filteredDepartments.length} of {departments.length}{" "}
-            departments
-          </CardDescription>
+          <CardDescription>View and search through departments</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="relative mb-6">
@@ -103,7 +51,7 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
               placeholder="Search departments..."
               className="pl-8"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
             />
           </div>
 
@@ -113,66 +61,40 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
                 <TableRow className="bg-gray-50 dark:bg-gray-800">
                   <TableHead className="font-medium">Name</TableHead>
                   <TableHead className="font-medium">Description</TableHead>
-                  <TableHead className="font-medium">Classes</TableHead>
+                  <TableHead className="font-medium">Teachers</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredDepartments.length > 0 ? (
-                  filteredDepartments.map((dept) => (
-                    <TableRow
-                      key={dept.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-900"
-                    >
+                {paginatedDepartments.length > 0 ? (
+                  paginatedDepartments.map(dept => (
+                    <TableRow key={dept.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                       <TableCell className="font-medium dark:text-white">
-                        <Link
-                          href={`/teacher/departments/${dept.id}`}
-                          className="hover:underline"
-                        >
+                        <Link href={`/teacher/departments/${dept.id}`} className="hover:underline">
                           {dept.name}
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {dept.description || (
-                          <span className="italic text-muted-foreground">
-                            No description
-                          </span>
-                        )}
+                        {dept.description || <span className="italic text-muted-foreground">No description</span>}
                       </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {dept.teacherCount}
-                      </TableCell>
+                      <TableCell className="dark:text-gray-300">{dept.teacherCount}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8"
-                            >
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
                               <MoreHorizontal className="h-4 w-4" />
                               <span className="sr-only">Open menu</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                              onClick={() => handleEditClick(dept)}
-                            >
-                              <button className="flex items-center justify-start ">
-                                <Edit className="h-4 w-4 mr-2" />
-                                Edit
-                              </button>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-red-600 dark:text-red-400"
-                              onClick={() => handleDeleteClick(dept)}
-                            >
-                              <button className="flex items-center justify-start">
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </button>
+                            <DropdownMenuItem>
+                              <Link
+                                href={`/teacher/departments/${dept.id}`}
+                                className="flex items-center justify-start"
+                              >
+                                View Details
+                              </Link>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -190,21 +112,36 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
             </Table>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-muted-foreground">
-              Showing <strong>1</strong> to{" "}
-              <strong>{filteredDepartments.length}</strong> of{" "}
-              <strong>{filteredDepartments.length}</strong> departments
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
+              <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                {Math.min(currentPage * itemsPerPage, filteredDepartments.length)} of {filteredDepartments.length}{" "}
+                departments
+              </div>
+              <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="text-sm">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" disabled>
-                Previous
-              </Button>
-              <Button variant="outline" size="sm" disabled>
-                Next
-              </Button>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
