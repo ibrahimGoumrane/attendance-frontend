@@ -92,7 +92,7 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
         <CardHeader className="pb-3">
           <CardTitle>Your Subjects</CardTitle>
           <CardDescription>
-            Showing {filteredSubjects.length} of {teacher_subjects.length} subjects
+            View and filter your subjects by class or search by name.
           </CardDescription>
         </CardHeader>
         <CardContent>

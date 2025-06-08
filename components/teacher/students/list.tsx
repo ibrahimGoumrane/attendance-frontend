@@ -57,7 +57,7 @@ export default function StudentList({ students, classes }: StudentListProps) {
         <CardHeader className="pb-3">
           <CardTitle>Students List</CardTitle>
           <CardDescription>
-            Showing {filteredStudents.length} of {students.length} students
+            View and filter students by class or search by name or email.
           </CardDescription>
         </CardHeader>
         <CardContent>
