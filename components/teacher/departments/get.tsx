@@ -1,43 +1,21 @@
 "use client";
 
-import { ArrowLeft, Building2, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Building2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import type { Department } from "@/lib/types/department";
 import type { Teacher } from "@/lib/types/teacher";
 
 interface MainProps {
   department: Department;
-  teachers: Teacher[];
+  departmentTeachers: Teacher[];
 }
 
-export default function Main({ department, teachers }: MainProps) {
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  // Filter teachers and classes for this department
-  const departmentTeachers = teachers.filter(
-    (teacher) => teacher.department === department.id
-  );
-
+export default function Main({ department, departmentTeachers }: MainProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -49,33 +27,9 @@ export default function Main({ department, teachers }: MainProps) {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight dark:text-white">
-              {department.name}
-            </h1>
-            <p className="text-muted-foreground dark:text-gray-400">
-              Department Information
-            </p>
+            <h1 className="text-3xl font-bold tracking-tight dark:text-white">{department.name}</h1>
+            <p className="text-muted-foreground dark:text-gray-400">Department Information</p>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-9"
-            onClick={() => setEditModalOpen(true)}
-          >
-            <Edit className="h-4 w-4 mr-2" />
-            Edit
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setDeleteModalOpen(true)}
-            className=""
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete
-          </Button>
         </div>
       </div>
 
@@ -90,28 +44,18 @@ export default function Main({ department, teachers }: MainProps) {
               <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                 <Building2 className="h-8 w-8 text-primary-600 dark:text-primary-400" />
               </div>
-              <h3 className="text-xl font-semibold dark:text-white">
-                {department.name}
-              </h3>
+              <h3 className="text-xl font-semibold dark:text-white">{department.name}</h3>
             </div>
 
             <div className="space-y-4">
               <div>
-                <p className="text-sm font-medium dark:text-gray-300">
-                  Description
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {department.description || "No description available"}
-                </p>
+                <p className="text-sm font-medium dark:text-gray-300">Description</p>
+                <p className="text-sm text-muted-foreground">{department.description || "No description available"}</p>
               </div>
               <div className="flex justify-between">
                 <div>
-                  <p className="text-sm font-medium dark:text-gray-300">
-                    Teachers
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {department.teacherCount || departmentTeachers.length}
-                  </p>
+                  <p className="text-sm font-medium dark:text-gray-300">Teachers</p>
+                  <p className="text-sm text-muted-foreground">{departmentTeachers.length}</p>
                 </div>
               </div>
             </div>
@@ -125,9 +69,7 @@ export default function Main({ department, teachers }: MainProps) {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div>
                     <CardTitle>Department Teachers</CardTitle>
-                    <CardDescription>
-                      Teachers in this department
-                    </CardDescription>
+                    <CardDescription>Teachers in this department</CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -138,46 +80,22 @@ export default function Main({ department, teachers }: MainProps) {
                           <TableHead className="font-medium">Name</TableHead>
                           <TableHead className="font-medium">Email</TableHead>
                           <TableHead className="font-medium">Role</TableHead>
-                          <TableHead className="w-[100px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {departmentTeachers.length > 0 ? (
-                          departmentTeachers.map((teacher) => (
-                            <TableRow
-                              key={teacher.id}
-                              className="hover:bg-gray-50 dark:hover:bg-gray-900"
-                            >
+                          departmentTeachers.map(teacher => (
+                            <TableRow key={teacher.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                               <TableCell className="font-medium dark:text-white">
-                                <Link
-                                  href={`/teacher/teachers/${teacher.id}`}
-                                  className="hover:underline"
-                                >
-                                  {teacher.user.firstName}{" "}
-                                  {teacher.user.lastName}
-                                </Link>
+                                {teacher.user.firstName} {teacher.user.lastName}
                               </TableCell>
-                              <TableCell className="dark:text-gray-300">
-                                {teacher.user.email}
-                              </TableCell>
-                              <TableCell className="dark:text-gray-300">
-                                {teacher.user.role}
-                              </TableCell>
-                              <TableCell>
-                                <Button variant="ghost" size="sm" asChild>
-                                  <Link href={`/teacher/teachers/${teacher.id}`}>
-                                    View
-                                  </Link>
-                                </Button>
-                              </TableCell>
+                              <TableCell className="dark:text-gray-300">{teacher.user.email}</TableCell>
+                              <TableCell className="dark:text-gray-300">{teacher.user.role}</TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
-                            <TableCell
-                              colSpan={4}
-                              className="text-center py-4 text-muted-foreground"
-                            >
+                            <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
                               No teachers in this department
                             </TableCell>
                           </TableRow>
