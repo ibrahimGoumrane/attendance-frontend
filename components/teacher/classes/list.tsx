@@ -2,98 +2,51 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  Download,
-  Edit,
-  MoreHorizontal,
-  Plus,
-  Search,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { MoreHorizontal, Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Class } from "@/lib/types/class";
+
 interface ClassesPageProps {
   classes: Class[];
 }
+
 export default function List({ classes }: ClassesPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedClass, setSelectedClass] = useState<Class | null>(null);
-  const handleEditClick = (cls: Class) => {
-    setDeleteModalOpen(false);
-    setEditModalOpen(true);
-    setSelectedClass(cls);
-  };
-  const handleDeleteClick = (cls: Class) => {
-    setEditModalOpen(false);
-    setDeleteModalOpen(true);
-    setSelectedClass(cls);
-  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  // Filter classes based on search query and selected department
-  const filteredClasses = classes.filter((cls) => {
-    const matchesSearch = cls.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+  const filteredClasses = classes.filter(cls => {
+    const matchesSearch = cls.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSearch;
   });
+
+  const totalPages = Math.ceil(filteredClasses.length / itemsPerPage);
+  const paginatedClasses = filteredClasses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:text-white">
-            Classes
-          </h1>
-          <p className="text-muted-foreground dark:text-gray-400">
-            Manage classes and course information.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-9">
-            <Upload className="h-4 w-4 mr-2" />
-            Import
-          </Button>
-          <Button variant="outline" size="sm" className="h-9">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+          <h1 className="text-3xl font-bold tracking-tight dark:text-white">Classes</h1>
+          <p className="text-muted-foreground dark:text-gray-400">View classes information.</p>
         </div>
       </div>
 
       <Card>
         <CardHeader className="pb-3">
           <CardTitle>Classes List</CardTitle>
-          <CardDescription>
-            Showing {filteredClasses.length} of {classes.length} classes
-          </CardDescription>
+          <CardDescription>View and search through classes</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -103,7 +56,7 @@ export default function List({ classes }: ClassesPageProps) {
                 placeholder="Search classes..."
                 className="pl-8"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
@@ -118,54 +71,29 @@ export default function List({ classes }: ClassesPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredClasses.length > 0 ? (
-                  filteredClasses.map((cls) => (
-                    <TableRow
-                      key={cls.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-900"
-                    >
+                {paginatedClasses.length > 0 ? (
+                  paginatedClasses.map(cls => (
+                    <TableRow key={cls.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                       <TableCell className="font-medium dark:text-white">
-                        <Link
-                          href={`/teacher/classes/${cls.id}`}
-                          className="hover:underline"
-                        >
+                        <Link href={`/teacher/classes/${cls.id}`} className="hover:underline">
                           {cls.name}
                         </Link>
                       </TableCell>
-                      <TableCell className="dark:text-gray-300">
-                        {cls.studentCount}
-                      </TableCell>
+                      <TableCell className="dark:text-gray-300">{cls.studentCount}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8"
-                            >
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
                               <MoreHorizontal className="h-4 w-4" />
                               <span className="sr-only">Open menu</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                              onClick={() => handleEditClick(cls)}
-                            >
-                              <button className="flex items-center justify-start ">
-                                <Edit className="h-4 w-4 mr-2" />
-                                Edit
-                              </button>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-red-600 dark:text-red-400"
-                              onClick={() => handleDeleteClick(cls)}
-                            >
-                              <button className="flex items-center justify-start">
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </button>
+                            <DropdownMenuItem>
+                              <Link href={`/teacher/classes/${cls.id}`} className="flex items-center justify-start">
+                                View Details
+                              </Link>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -183,21 +111,35 @@ export default function List({ classes }: ClassesPageProps) {
             </Table>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-muted-foreground">
-              Showing <strong>1</strong> to{" "}
-              <strong>{filteredClasses.length}</strong> of{" "}
-              <strong>{filteredClasses.length}</strong> classes
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
+              <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                {Math.min(currentPage * itemsPerPage, filteredClasses.length)} of {filteredClasses.length} classes
+              </div>
+              <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="text-sm">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" disabled>
-                Previous
-              </Button>
-              <Button variant="outline" size="sm" disabled>
-                Next
-              </Button>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
