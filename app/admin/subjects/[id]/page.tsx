@@ -8,9 +8,9 @@ import { getAllClasses } from "@/lib/services/classes";
 export default async function SubjectPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
   const subject = await getSubject(id);
   const teachers = await getAllTeachers();
   const classes = await getAllClasses();

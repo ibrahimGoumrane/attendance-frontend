@@ -5,8 +5,8 @@ import { getSubject } from "@/lib/services/subject";
 import { getAllClasses } from "@/lib/services/classes";
 import { getLoggedInTeacher } from "@/lib/services/users";
 
-export default async function SubjectPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function SubjectPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const loggedInTeacher = await getLoggedInTeacher();
   if (!loggedInTeacher) {
     return <div>Please log in to view your subjects.</div>;
