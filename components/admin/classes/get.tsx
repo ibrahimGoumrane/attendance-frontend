@@ -26,7 +26,7 @@ import UpdateForm from "./edit";
 import Delete from "./delete";
 import { Student } from "@/lib/types/student";
 import { Attendance } from "@/lib/types/attendance";
-import { AttendanceHistory } from "../teachers/attendance-history";
+import { AttendanceHistory } from "../attendance-history";
 import { Subject } from "@/lib/types/subject";
 
 interface MainProps {

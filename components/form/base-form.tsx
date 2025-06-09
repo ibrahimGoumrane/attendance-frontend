@@ -94,8 +94,10 @@ function BaseForm({
                       options={fieldConfig.options!}
                       placeholder={fieldConfig.placeholder}
                       required={fieldConfig.required}
+                      disabled={fieldConfig.disabled}
                       helpText={fieldConfig.helpText}
                       className={fieldConfig.className}
+                      onValueChange={fieldConfig.onValueChange}
                     />
                   ) : (
                     <TextField

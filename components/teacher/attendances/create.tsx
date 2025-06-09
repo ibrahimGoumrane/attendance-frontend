@@ -11,10 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { addAttendance } from "@/lib/actions/attendance";
 import { FieldConfig } from "@/lib/schemas/base";
-import {
-  CreateAttendanceSchema,
-  attendanceCreateRenderFields,
-} from "@/lib/schemas/attendances";
+import { CreateAttendanceSchema, attendanceCreateRenderFields } from "@/lib/schemas/attendances";
 import { Student } from "@/lib/types/student";
 import { Subject } from "@/lib/types/subject";
 import { useRouter } from "next/navigation";
@@ -37,30 +34,29 @@ const CreateAttendanceForm = ({ children, subjects, students }: FormProps) => {
     return subject ? student.section_promo === subject.section_promo.id : false;
   });
 
-  const updatedAttendanceFields: FieldConfig[] =
-    attendanceCreateRenderFields.map((field) => {
-      if (field.name === "subject_id") {
-        return {
-          ...field,
-          options: subjects.map(subject => ({
-            value: subject.id,
-            label: subject.name,
-          })),
-          onValueChange: (value: string) => setSelectedSubjectId(value),
-        };
-      }
-      if (field.name === "student_id") {
-        return {
-          ...field,
-          options: filteredStudents.map(student => ({
-            value: student.id,
-            label: `${student.user.firstName} ${student.user.lastName}`,
-          })),
-          disabled: filteredStudents.length === 0 || !selectedSubjectId,
-        };
-      }
-      return field;
-    });
+  const updatedAttendanceFields: FieldConfig[] = attendanceCreateRenderFields.map(field => {
+    if (field.name === "subject_id") {
+      return {
+        ...field,
+        options: subjects.map(subject => ({
+          value: subject.id,
+          label: subject.name,
+        })),
+        onValueChange: (value: string) => setSelectedSubjectId(value),
+      };
+    }
+    if (field.name === "student_id") {
+      return {
+        ...field,
+        options: filteredStudents.map(student => ({
+          value: student.id,
+          label: `${student.user.firstName} ${student.user.lastName}`,
+        })),
+        disabled: filteredStudents.length === 0 || !selectedSubjectId,
+      };
+    }
+    return field;
+  });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -68,9 +64,7 @@ const CreateAttendanceForm = ({ children, subjects, students }: FormProps) => {
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Create Attendance</DialogTitle>
-          <DialogDescription>
-            Fill in the details to register a new attendance record.
-          </DialogDescription>
+          <DialogDescription>Fill in the details to register a new attendance record.</DialogDescription>
         </DialogHeader>
         <BaseForm
           initialState={{ success: false, errors: {} }}
@@ -81,7 +75,7 @@ const CreateAttendanceForm = ({ children, subjects, students }: FormProps) => {
           loadingText="Creating Attendance..."
           onSuccess={() => {
             setOpen(false);
-            router.push("/admin/attendances");
+            router.push("/teacher/attendances");
           }}
         />
       </DialogContent>

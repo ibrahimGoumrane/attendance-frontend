@@ -34,6 +34,7 @@ interface SelectFieldsProps {
   readOnly?: boolean; // If the field is read-only
   icon?: React.ReactNode; // Optional icon to display
   helpText?: React.ReactNode; // Optional help text
+  onValueChange?: (value: string) => void; // Optional value change handler
 }
 
 export function SelectField({

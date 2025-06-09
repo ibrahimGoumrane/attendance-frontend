@@ -12,7 +12,6 @@ import {
   LogOut,
   Menu,
   Scan,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -48,44 +47,38 @@ export default function Layout({ children, user }: LayoutProps) {
     {
       label: "Dashboard",
       icon: LayoutDashboard,
-      href: "/admin",
-      active: pathname === "/admin",
-    },
-    {
-      label: "Teachers",
-      icon: Users,
-      href: "/admin/teachers",
-      active: pathname.includes("/admin/teachers"),
+      href: "/teacher",
+      active: pathname === "/teacher",
     },
     {
       label: "Classes",
       icon: BookOpen,
-      href: "/admin/classes",
-      active: pathname.includes("/admin/classes"),
+      href: "/teacher/classes",
+      active: pathname.includes("/teacher/classes"),
     },
     {
       label: "Departments",
       icon: Building2,
-      href: "/admin/departments",
-      active: pathname.includes("/admin/departments"),
+      href: "/teacher/departments",
+      active: pathname.includes("/teacher/departments"),
     },
     {
       label: "Students",
       icon: GraduationCap,
-      href: "/admin/students",
-      active: pathname.includes("/admin/students"),
+      href: "/teacher/students",
+      active: pathname.includes("/teacher/students"),
     },
     {
       label: "Subjects",
       icon: BookText,
-      href: "/admin/subjects",
-      active: pathname.includes("/admin/subjects"),
+      href: "/teacher/subjects",
+      active: pathname.includes("/teacher/subjects"),
     },
     {
       label: "Attendance",
       icon: CalendarCheck,
-      href: "/admin/attendances",
-      active: pathname.includes("/admin/attendance"),
+      href: "/teacher/attendances",
+      active: pathname.includes("/teacher/attendance"),
     },
   ];
 
@@ -101,20 +94,9 @@ export default function Layout({ children, user }: LayoutProps) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="hidden md:flex h-full w-64 flex-col fixed inset-y-0 z-50 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800"
           >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="p-6"
-            >
-              <Link
-                href="/admin"
-                className="flex items-center gap-2 font-bold text-xl"
-              >
-                <motion.div
-                  whileHover={{ rotate: 10 }}
-                  transition={{ duration: 0.2 }}
-                >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="p-6">
+              <Link href="/teacher" className="flex items-center gap-2 font-bold text-xl">
+                <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.2 }}>
                   <Scan className="h-6 w-6 text-primary" />
                 </motion.div>
                 <span className="dark:text-white">FaceTrack</span>
@@ -137,16 +119,11 @@ export default function Layout({ children, user }: LayoutProps) {
                         : "text-gray-700 dark:text-gray-300"
                     )}
                   >
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.2 }}
-                    >
+                    <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
                       <route.icon
                         className={cn(
                           "h-4 w-4",
-                          route.active
-                            ? "text-primary dark:text-primary-400"
-                            : "text-gray-500 dark:text-gray-400"
+                          route.active ? "text-primary dark:text-primary-400" : "text-gray-500 dark:text-gray-400"
                         )}
                       />
                     </motion.div>
@@ -175,17 +152,11 @@ export default function Layout({ children, user }: LayoutProps) {
                   <p className="text-sm font-medium dark:text-white">
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {user.email}
-                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                 </div>
               </div>
               <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start gap-2 mt-2"
-                >
+                <Button variant="outline" size="sm" className="w-full justify-start gap-2 mt-2">
                   <LogOut className="h-4 w-4" />
                   Sign Out
                 </Button>
@@ -199,11 +170,7 @@ export default function Layout({ children, user }: LayoutProps) {
       <Sheet>
         <SheetTrigger asChild>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              variant="outline"
-              size="icon"
-              className="md:hidden absolute left-4 top-3 z-50"
-            >
+            <Button variant="outline" size="icon" className="md:hidden absolute left-4 top-3 z-50">
               <Menu className="h-5 w-5" />
               <span className="sr-only">Toggle Menu</span>
             </Button>
@@ -216,14 +183,8 @@ export default function Layout({ children, user }: LayoutProps) {
             transition={{ duration: 0.3 }}
             className="p-6 border-b"
           >
-            <Link
-              href="/admin"
-              className="flex items-center gap-2 font-bold text-xl"
-            >
-              <motion.div
-                whileHover={{ rotate: 10 }}
-                transition={{ duration: 0.2 }}
-              >
+            <Link href="/teacher" className="flex items-center gap-2 font-bold text-xl">
+              <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.2 }}>
                 <GraduationCap className="h-6 w-6 text-primary dark:text-primary-400" />
               </motion.div>
               <span>FaceTrack</span>
@@ -246,16 +207,11 @@ export default function Layout({ children, user }: LayoutProps) {
                       : "text-gray-700 dark:text-gray-300"
                   )}
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                  <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
                     <route.icon
                       className={cn(
                         "h-4 w-4",
-                        route.active
-                          ? "text-primary dark:text-primary-400"
-                          : "text-gray-500 dark:text-gray-400"
+                        route.active ? "text-primary dark:text-primary-400" : "text-gray-500 dark:text-gray-400"
                       )}
                     />
                   </motion.div>
@@ -288,11 +244,7 @@ export default function Layout({ children, user }: LayoutProps) {
               </div>
             </div>
             <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full justify-start gap-2 mt-2"
-              >
+              <Button variant="outline" size="sm" className="w-full justify-start gap-2 mt-2">
                 <LogOut className="h-4 w-4" />
                 Sign Out
               </Button>
@@ -320,10 +272,7 @@ export default function Layout({ children, user }: LayoutProps) {
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="hidden md:flex"
             >
-              <motion.div
-                animate={{ rotate: isSidebarOpen ? 0 : 180 }}
-                transition={{ duration: 0.3 }}
-              >
+              <motion.div animate={{ rotate: isSidebarOpen ? 0 : 180 }} transition={{ duration: 0.3 }}>
                 <Menu className="h-5 w-5" />
               </motion.div>
               <span className="sr-only">Toggle Sidebar</span>
@@ -336,10 +285,7 @@ export default function Layout({ children, user }: LayoutProps) {
             </motion.div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button variant="ghost" size="icon" className="rounded-full">
                     <div className="relative w-8 h-8 rounded-full bg-primary-100 dark:bg-gray-800 flex items-center justify-center">
                       <span className="text-primary-700 dark:text-primary-400 font-medium text-sm">
@@ -357,9 +303,7 @@ export default function Layout({ children, user }: LayoutProps) {
                     <span>
                       {user.firstName} {user.lastName}
                     </span>
-                    <span className="text-xs text-muted-foreground">
-                      {user.email}
-                    </span>
+                    <span className="text-xs text-muted-foreground">{user.email}</span>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
