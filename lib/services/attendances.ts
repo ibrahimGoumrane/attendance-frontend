@@ -16,7 +16,7 @@ export const attendanceApiResource = createApiResource<
 export const getAllAttendances = () => attendanceApiResource.list();
 export const getAttendance = (id: string) => attendanceApiResource.get(id);
 export const getAttendanceByStudentId = async (id: string) => {
-  const attendances = await fetchData<Attendance[]>(`${process.env.API_URL}/attendances/students/${id}`, {method: "GET"});
+  const attendances = await fetchData<Attendance[]>(`${process.env.API_URL}/attendances/students/${id}`, { method: "GET" });
   return attendances;
 }
 export const addAttendance = (data: CreateAttendance) =>
@@ -39,4 +39,12 @@ export const getAttendanceHourlyThisWeek = async () =>
 export const getTeacherAttendanceLast30Days = async (id: string) =>
   attendanceApiResource.getResource<DailyAttendance[]>(
     `attendance-last-30-days/teacher/${id}/`
+  );
+
+export const getTeacherAttendanceThisWeek = async (id: string) =>
+  attendanceApiResource.getResource<DailyAttendance[]>(`attendance-week/teacher/${id}/`);
+
+export const getTeacherAttendanceHourlyThisWeek = async (id: string) =>
+  attendanceApiResource.getResource<AttendanceHourlyWeek[]>(
+    `attendance-hourly-week/teacher/${id}/`
   );
