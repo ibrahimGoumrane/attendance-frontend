@@ -1,18 +1,14 @@
 "use server";
 
 import StudentMain from "@/components/teacher/students/get";
-import { getAllClasses, getClass } from "@/lib/services/classes";
-import { getStudent, getStudentAttendances } from "@/lib/services/students";
+import { getClass } from "@/lib/services/classes";
+import { getStudent, getStudentAttendances, getStudentSubjects } from "@/lib/services/students";
 
-export default async function StudentDetailsPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function StudentDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [studentData, classes, attendances] = await Promise.all([
+  const [studentData, studentSubjects, attendances] = await Promise.all([
     getStudent(id),
-    getAllClasses(),
+    getStudentSubjects(id),
     getStudentAttendances(id),
   ]);
 
@@ -28,8 +24,8 @@ export default async function StudentDetailsPage({
 
   return (
     <StudentMain
-      classes={classes}
       student={studentData}
+      studentSubjects={studentSubjects}
       classData={classData}
       attendances={attendances}
     />

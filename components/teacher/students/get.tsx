@@ -1,40 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, GraduationCap } from "lucide-react";
+import { ArrowLeft, GraduationCap, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Student } from "@/lib/types/student";
+import type { Subject } from "@/lib/types/subject";
 import type { Class } from "@/lib/types/class";
 import type { Attendance } from "@/lib/types/attendance";
 import { Badge } from "@/components/ui/badge";
 
 interface MainProps {
   student: Student;
-  classes: Class[];
+  studentSubjects: Subject[];
   classData: Class;
   attendances: Attendance[];
 }
 
-export default function StudentDetailsPage({ student, classData, attendances }: MainProps) {
+export default function StudentDetailsPage({ student, studentSubjects, classData, attendances }: MainProps) {
+  // Add pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // Calculate attendance statistics
   const totalAttendances = attendances.length;
   const presentCount = attendances.filter(a => a.status === "present").length;
   const attendanceRate = totalAttendances > 0 ? Math.round((presentCount / totalAttendances) * 100) : 0;
 
-  // Group attendances by subject
-  const subjectAttendances = attendances.reduce((acc, attendance) => {
-    const subjectId = attendance.subject.id;
-    if (!acc[subjectId]) {
-      acc[subjectId] = {
-        subject: attendance.subject,
-        records: [],
-      };
-    }
-    acc[subjectId].records.push(attendance);
-    return acc;
-  }, {} as Record<string, { subject: Attendance["subject"]; records: Attendance[] }>);
+  // Calculate paginated attendances
+  const totalPages = Math.ceil(attendances.length / itemsPerPage);
+  const paginatedAttendances = attendances
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="space-y-6">
@@ -125,7 +124,7 @@ export default function StudentDetailsPage({ student, classData, attendances }: 
                   <CardDescription>Courses taken by this student</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {Object.values(subjectAttendances).length > 0 ? (
+                  {studentSubjects.length > 0 ? (
                     <div className="rounded-md border dark:border-gray-800">
                       <table className="w-full">
                         <thead>
@@ -137,7 +136,7 @@ export default function StudentDetailsPage({ student, classData, attendances }: 
                           </tr>
                         </thead>
                         <tbody className="divide-y dark:divide-gray-800">
-                          {Object.values(subjectAttendances).map(({ subject }) => (
+                          {studentSubjects.map(subject => (
                             <tr key={subject.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                               <td className="py-3 px-4 text-sm font-medium dark:text-white">
                                 <Link href={`/teacher/subjects/${subject.id}`} className="hover:underline">
@@ -209,7 +208,7 @@ export default function StudentDetailsPage({ student, classData, attendances }: 
                         <Card>
                           <CardContent className="pt-6">
                             <div className="text-center">
-                              <div className="text-2xl font-bold">{Object.keys(subjectAttendances).length}</div>
+                              <div className="text-2xl font-bold">{studentSubjects.length}</div>
                               <p className="text-xs text-muted-foreground">Subjects</p>
                             </div>
                           </CardContent>
@@ -227,51 +226,76 @@ export default function StudentDetailsPage({ student, classData, attendances }: 
                             </tr>
                           </thead>
                           <tbody className="divide-y dark:divide-gray-800">
-                            {attendances
-                              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                              .map(attendance => (
-                                <tr key={attendance.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
-                                  <td className="py-3 px-4 text-sm font-medium dark:text-white">
-                                    {new Date(attendance.date).toLocaleDateString("en-US", {
-                                      year: "numeric",
-                                      month: "short",
-                                      day: "numeric",
-                                    })}
-                                  </td>
-                                  <td className="py-3 px-4 text-sm dark:text-gray-300">
-                                    <Link
-                                      href={`/teacher/subjects/${attendance.subject.id}`}
-                                      className="hover:underline"
-                                    >
-                                      {attendance.subject.name}
-                                    </Link>
-                                  </td>
-                                  <td className="py-3 px-4 text-sm dark:text-gray-300">
-                                    <Link
-                                      href={`/teacher/teachers/${attendance.subject.teacher.id}`}
-                                      className="hover:underline"
-                                    >
-                                      {attendance.subject.teacher.user.firstName}{" "}
-                                      {attendance.subject.teacher.user.lastName}
-                                    </Link>
-                                  </td>
-                                  <td className="py-3 px-4 text-sm">
-                                    <Badge
-                                      variant={attendance.status === "present" ? "default" : "destructive"}
-                                      className={`${
-                                        attendance.status === "present"
-                                          ? "bg-green-100 text-green-800 hover:bg-green-100"
-                                          : "bg-red-100 text-red-300 hover:bg-red-100"
-                                      }`}
-                                    >
-                                      {attendance.status === "present" ? "Present" : "Absent"}
-                                    </Badge>
-                                  </td>
-                                </tr>
-                              ))}
+                            {paginatedAttendances.map(attendance => (
+                              <tr key={attendance.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                                <td className="py-3 px-4 text-sm font-medium dark:text-white">
+                                  {new Date(attendance.date).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  })}
+                                </td>
+                                <td className="py-3 px-4 text-sm dark:text-gray-300">
+                                  <Link href={`/teacher/subjects/${attendance.subject.id}`} className="hover:underline">
+                                    {attendance.subject.name}
+                                  </Link>
+                                </td>
+                                <td className="py-3 px-4 text-sm dark:text-gray-300">
+                                  <Link
+                                    href={`/teacher/teachers/${attendance.subject.teacher.id}`}
+                                    className="hover:underline"
+                                  >
+                                    {attendance.subject.teacher.user.firstName}{" "}
+                                    {attendance.subject.teacher.user.lastName}
+                                  </Link>
+                                </td>
+                                <td className="py-3 px-4 text-sm">
+                                  <Badge
+                                    variant={attendance.status === "present" ? "default" : "destructive"}
+                                    className={`${
+                                      attendance.status === "present"
+                                        ? "bg-green-100 text-green-800 hover:bg-green-100"
+                                        : "bg-red-100 text-red-300 hover:bg-red-100"
+                                    }`}
+                                  >
+                                    {attendance.status === "present" ? "Present" : "Absent"}
+                                  </Badge>
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
                       </div>
+
+                      {totalPages > 1 && (
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
+                            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                            {Math.min(currentPage * itemsPerPage, attendances.length)} of {attendances.length} records
+                          </div>
+                          <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                              disabled={currentPage === 1}
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <div className="text-sm">
+                              Page {currentPage} of {totalPages}
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                              disabled={currentPage === totalPages}
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-[300px]">
