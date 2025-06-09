@@ -4,8 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { SubjectAttendance } from "@/lib/types/subject";
-import { Clock, Edit, Users, UserX, Plus } from "lucide-react";
+import { Clock, Users, UserX, ViewIcon } from "lucide-react";
 import { BookOpen } from "lucide-react";
+import Link from "next/link";
 
 interface TeacherSubjectAttendanceMonitorProps {
   subjectsAttendance: SubjectAttendance[];
@@ -68,16 +69,12 @@ export function TeacherSubjectAttendanceMonitor({ subjectsAttendance }: TeacherS
                   </span>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <Link href={`/teacher/subjects/${subjectAttendance.subject.id}`}>
                 <Button variant="outline" size="sm">
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit Attendance
+                  <ViewIcon className="h-4 w-4 mr-2" />
+                  View Subject Details
                 </Button>
-                <Button variant="default" size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Take Attendance
-                </Button>
-              </div>
+              </Link>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
