@@ -67,7 +67,7 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:text-white">My Subjects</h1>
+          <h1 className="text-3xl font-bold tracking-tight dark:text-white">Your Subjects</h1>
           <p className="text-muted-foreground dark:text-gray-400">Manage your assigned subjects.</p>
         </div>
         <div className="flex items-center gap-2">
