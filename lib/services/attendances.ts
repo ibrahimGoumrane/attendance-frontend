@@ -36,3 +36,7 @@ export const getAttendanceHourlyThisWeek = async () =>
   attendanceApiResource.getResource<AttendanceHourlyWeek[]>(
     "attendance-hourly-week"
   );
+export const getTeacherAttendanceLast30Days = async (id: string) =>
+  attendanceApiResource.getResource<DailyAttendance[]>(
+    `attendance-last-30-days/teacher/${id}/`
+  );
