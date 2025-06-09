@@ -22,3 +22,6 @@ export const deleteSubject = (id: string) => subjectApiResource.delete(id);
 
 export const getSubjectsAttendanceToday = () =>
   subjectApiResource.getAllResource<SubjectAttendance>("attendance-today");
+
+export const getTeacherSubjectsAttendanceToday = (id: string) =>
+  subjectApiResource.getAllResource<SubjectAttendance>(`attendance-today/teacher/${id}/`);
