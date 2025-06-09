@@ -7,6 +7,7 @@ import { UpdateAttendanceSchema, attendanceUpdateRenderFields } from "@/lib/sche
 import { Attendance } from "@/lib/types/attendance";
 import { useRouter } from "next/navigation";
 import { formatDatetimeLocal } from "@/lib/utils";
+import { State } from "@/lib/schemas/base";
 
 interface FormProps {
   attendanceData: Attendance;
@@ -23,6 +24,10 @@ const UpdateAttendanceForm = ({ attendanceData, open, setIsOpen }: FormProps) =>
     status: attendanceData.status,
   };
 
+  const handleEditAttendance = async (prevState: State, formData: FormData) => {
+    return editAttendance(prevState, formData, "teacher");
+  };
+
   return (
     <Dialog open={open} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[600px]">
@@ -37,7 +42,7 @@ const UpdateAttendanceForm = ({ attendanceData, open, setIsOpen }: FormProps) =>
         </DialogHeader>
         <BaseForm
           initialState={{ success: false, errors: {} }}
-          action={editAttendance}
+          action={handleEditAttendance}
           schema={UpdateAttendanceSchema}
           fields={attendanceUpdateRenderFields}
           submitText="Update Attendance"

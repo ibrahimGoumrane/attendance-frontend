@@ -9,20 +9,30 @@ import {
   DeleteAttendanceSchema,
 } from "../schemas/attendances";
 
+// Helper function to construct revalidation paths based on role
+const getRevalidationPaths = (basePath: string, id?: string): string[] => {
+  const paths = [`${basePath}/attendances`];
+  if (id) {
+    paths.push(`${basePath}/attendances/${id}`);
+  }
+  return paths;
+};
+
 /**
  * Add a new attendance record
  */
 export const addAttendance = async (
   prevState: State,
-  newAttendance: FormData
+  newAttendance: FormData,
+  role: "admin" | "teacher" = "admin" // Default to admin
 ) => {
-  console.log("Adding attendance", newAttendance);
+  const basePath = role === "admin" ? "/admin" : "/teacher";
   return attendanceApiResource.createAction(
     prevState,
     newAttendance,
     CreateAttendanceSchema,
     true,
-    ["/admin/attendances"] // Path to revalidate
+    getRevalidationPaths(basePath)
   );
 };
 
@@ -31,16 +41,17 @@ export const addAttendance = async (
  */
 export const editAttendance = async (
   prevState: State,
-  updatedAttendance: FormData
+  updatedAttendance: FormData,
+  role: "admin" | "teacher" = "admin" // Default to admin
 ) => {
   const id = updatedAttendance.get("id") as string;
-
+  const basePath = role === "admin" ? "/admin" : "/teacher";
   return attendanceApiResource.updateAction(
     prevState,
     updatedAttendance,
     UpdateAttendanceSchema,
     true,
-    ["/admin/attendances", `/admin/attendances/${id}`] // Multiple paths to revalidate
+    getRevalidationPaths(basePath, id)
   );
 };
 
@@ -49,13 +60,15 @@ export const editAttendance = async (
  */
 export const deleteAttendance = async (
   prevState: State,
-  formData: FormData
+  formData: FormData,
+  role: "admin" | "teacher" = "admin" // Default to admin
 ) => {
+  const basePath = role === "admin" ? "/admin" : "/teacher";
   await attendanceApiResource.deleteAction(
     prevState,
     formData,
     DeleteAttendanceSchema,
-    ["/admin/attendances"]
+    getRevalidationPaths(basePath)
   );
-  redirect("/admin/attendances");
+  redirect(`${basePath}/attendances`);
 };

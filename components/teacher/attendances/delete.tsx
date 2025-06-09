@@ -14,6 +14,7 @@ import {
 import { deleteAttendance } from "@/lib/actions/attendance";
 
 import { attendanceDeleteRenderFields, DeleteAttendanceSchema } from "@/lib/schemas/attendances";
+import { State } from "@/lib/schemas/base";
 
 interface DeleteProps {
   id: string;
@@ -22,6 +23,10 @@ interface DeleteProps {
 }
 
 const DeleteAttendance = ({ id, open, setIsOpen }: DeleteProps) => {
+  const handleDeleteAttendance = async (prevState: State, formData: FormData) => {
+    return deleteAttendance(prevState, formData, "teacher");
+  };
+
   return (
     <AlertDialog open={open} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -37,7 +42,7 @@ const DeleteAttendance = ({ id, open, setIsOpen }: DeleteProps) => {
           <BaseForm
             initialState={{ success: false, errors: {} }}
             className=""
-            action={deleteAttendance}
+            action={handleDeleteAttendance}
             schema={DeleteAttendanceSchema}
             fields={attendanceDeleteRenderFields}
             defaultValues={{ id }}
