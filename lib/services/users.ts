@@ -1,6 +1,7 @@
 import { fetchData } from "./main";
 import { User } from "../types/user";
 import { Teacher } from "../types/teacher";
+import { Student } from "../types/student";
 
 export const getLoggedInUser = async () => {
   try {
@@ -13,6 +14,14 @@ export const getLoggedInUser = async () => {
 export const getLoggedInTeacher = async () => {
   try {
     return (await fetchData<Teacher>("/user/teacher/")) as Teacher;
+  } catch {
+    return null;
+  }
+};
+
+export const getLoggedInStudent = async () => {
+  try {
+    return (await fetchData<Student>("/user/student/")) as Student;
   } catch {
     return null;
   }

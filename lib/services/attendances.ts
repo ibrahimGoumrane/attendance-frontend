@@ -16,6 +16,7 @@ export const attendanceApiResource = createApiResource<
 export const getAllAttendances = () => attendanceApiResource.list();
 export const getAttendance = (id: string) => attendanceApiResource.get(id);
 export const getAttendanceByStudentId = async (id: string) => {
+  console.log("URLLLL! " + `${process.env.API_URL}/attendances/students/${id}`);
   const attendances = await fetchData<Attendance[]>(`${process.env.API_URL}/attendances/students/${id}`, { method: "GET" });
   return attendances;
 }
