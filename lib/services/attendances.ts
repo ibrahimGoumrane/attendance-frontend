@@ -6,7 +6,6 @@ import {
   DailyAttendance,
   AttendanceHourlyWeek,
 } from "../types/attendance";
-import { fetchData } from "./main";
 export const attendanceApiResource = createApiResource<
   Attendance,
   CreateAttendance,
@@ -15,11 +14,7 @@ export const attendanceApiResource = createApiResource<
 
 export const getAllAttendances = () => attendanceApiResource.list();
 export const getAttendance = (id: string) => attendanceApiResource.get(id);
-export const getAttendanceByStudentId = async (id: string) => {
-  console.log("URLLLL! " + `${process.env.API_URL}/attendances/students/${id}`);
-  const attendances = await fetchData<Attendance[]>(`${process.env.API_URL}/attendances/students/${id}`, { method: "GET" });
-  return attendances;
-}
+
 export const addAttendance = (data: CreateAttendance) =>
   attendanceApiResource.create(data);
 export const editAttendance = (id: string, data: UpdateAttendance) =>
@@ -43,7 +38,13 @@ export const getTeacherAttendanceLast30Days = async (id: string) =>
   );
 
 export const getTeacherAttendanceThisWeek = async (id: string) =>
-  attendanceApiResource.getResource<DailyAttendance[]>(`attendance-week/teacher/${id}/`);
+  attendanceApiResource.getResource<DailyAttendance[]>(
+    `attendance-week/teacher/${id}/`
+  );
+export const getAttendanceByStudentId = async (id: string) =>
+  attendanceApiResource.getResource<Attendance[]>(
+    `students/${id}/`
+  );
 
 export const getTeacherAttendanceHourlyThisWeek = async (id: string) =>
   attendanceApiResource.getResource<AttendanceHourlyWeek[]>(
