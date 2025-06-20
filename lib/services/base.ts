@@ -77,7 +77,7 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
    */
   async getAllResource<T>(resourcePath: string): Promise<T[]> {
     return (await fetchData<T[]>(
-      `${this.baseUrl}${resourcePath.replace(/^\/|\/$/g, "")}/`,
+      `${this.baseUrl}${resourcePath.replace(/^\/|\/$/g, "")}`,
       {
         method: "GET",
       }
@@ -88,7 +88,7 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
    */
   async getResource<T>(resourcePath: string): Promise<T> {
     return (await fetchData<T>(
-      `${this.baseUrl}${resourcePath.replace(/^\/|\/$/g, "")}/`,
+      `${this.baseUrl}${resourcePath.replace(/^\/|\/$/g, "")}`,
       {
         method: "GET",
       }
@@ -216,25 +216,49 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
   };
   /**
    * Helper to convert FormData to a plain object
-   */
-  private formDataToObject(formData: FormData): Record<string, string | File> {
-    const data: Record<string, string | File> = {};
+   */ private formDataToObject(
+    formData: FormData
+  ): Record<string, string | File | File[]> {
+    const data: Record<string, string | File | File[]> = {};
+
+    // First pass: collect all values for each key
+    const keyValueMap = new Map<string, (string | File)[]>();
     formData.forEach((value, key) => {
-      // Skip empty values
       if (value !== null && value !== undefined && value !== "") {
-        data[key] = value;
+        if (!keyValueMap.has(key)) {
+          keyValueMap.set(key, []);
+        }
+        keyValueMap.get(key)!.push(value);
       }
     });
+
+    // Second pass: determine if key has multiple values
+    keyValueMap.forEach((values, key) => {
+      if (values.length === 1) {
+        data[key] = values[0];
+      } else {
+        // Multiple values - keep as array
+        data[key] = values as File[];
+      }
+    });
+
     return data;
   }
   /**
    * Helper to convert a plain object to FormData
    */
-  private toFormData(data: Record<string, string | File>): FormData {
+  private toFormData(data: Record<string, string | File | File[]>): FormData {
     const formData = new FormData();
     for (const key in data) {
       const value = data[key];
-      if (value instanceof File) {
+      if (Array.isArray(value)) {
+        // Handle array of files
+        value.forEach((file) => {
+          if (file instanceof File) {
+            formData.append(key, file);
+          }
+        });
+      } else if (value instanceof File) {
         formData.append(key, value);
       } else if (value !== null && value !== undefined) {
         formData.append(key, String(value));
