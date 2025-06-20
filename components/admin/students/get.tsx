@@ -1,9 +1,10 @@
 "use client";
 
+import { ArrowLeft, Edit, GraduationCap, Mail, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowLeft, Edit, GraduationCap, Mail, Trash2 } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,21 +14,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import type { Student } from "@/lib/types/student";
-import type { Class } from "@/lib/types/class";
 import type { Attendance } from "@/lib/types/attendance";
-import { Badge } from "@/components/ui/badge";
+import type { Class } from "@/lib/types/class";
+import type { Student } from "@/lib/types/student";
+import DeleteStudent from "./delete";
+import UpdateStudentForm from "./edit";
 
 interface MainProps {
   student: Student;
@@ -38,12 +29,12 @@ interface MainProps {
 
 export default function StudentDetailsPage({
   student,
-  // classes,
+  classes,
   classData,
   attendances,
 }: MainProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   // Calculate attendance statistics
   const totalAttendances = attendances.length;
   const presentCount = attendances.filter((a) => a.status === "present").length;
@@ -64,6 +55,14 @@ export default function StudentDetailsPage({
     acc[subjectId].records.push(attendance);
     return acc;
   }, {} as Record<string, { subject: Attendance["subject"]; records: Attendance[] }>);
+  const handleEditButtonClick = () => {
+    setIsEditDialogOpen(true);
+    setIsDeleteDialogOpen(false);
+  };
+  const handleDeleteButtonClick = () => {
+    setIsDeleteDialogOpen(true);
+    setIsEditDialogOpen(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -85,38 +84,14 @@ export default function StudentDetailsPage({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/admin/students/${student.id}/edit`}>
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Link>
+          <Button variant="outline" size="sm" onClick={handleEditButtonClick}>
+            <Edit className="h-4 w-4 mr-2" />
+            Edit
           </Button>
-          <AlertDialog
-            open={isDeleteDialogOpen}
-            onOpenChange={setIsDeleteDialogOpen}
-          >
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  student account and remove their data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-red-600 hover:bg-red-700">
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <Button variant="outline" size="sm" onClick={handleDeleteButtonClick}>
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete
+          </Button>
         </div>
       </div>
 
@@ -458,6 +433,20 @@ export default function StudentDetailsPage({
           </Tabs>
         </div>
       </div>
+
+      <>
+        <UpdateStudentForm
+          studentData={student}
+          classes={classes}
+          open={isEditDialogOpen}
+          setIsOpen={setIsEditDialogOpen}
+        />
+        <DeleteStudent
+          id={student.id}
+          open={isDeleteDialogOpen}
+          setIsOpen={setIsDeleteDialogOpen}
+        />
+      </>
     </div>
   );
 }
