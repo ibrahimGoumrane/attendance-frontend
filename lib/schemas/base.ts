@@ -10,6 +10,9 @@ export interface FieldConfig {
   disabled?: boolean;
   className?: string;
   helpText?: React.ReactNode;
+  multiple?: boolean;
+  accept?: string;
+  showPreview?: boolean;
   options?: { value: string; label: string }[];
   onValueChange?: (value: string) => void;
   customRender?: (form: UseFormReturn, state: State) => React.ReactElement;
