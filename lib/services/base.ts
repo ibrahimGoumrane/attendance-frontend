@@ -214,6 +214,18 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
       revalidatePaths
     );
   };
+
+  /**
+   * Custom POST endpoint handler
+   */
+  async customPost<ResponseType>(endpoint: string, data: unknown): Promise<ResponseType> {
+    const url = `${this.baseUrl}${endpoint.replace(/^\/|\/$/g, "")}/`;
+    return (await fetchData<ResponseType>(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+    })) as ResponseType;
+  }
+
   /**
    * Helper to convert FormData to a plain object
    */

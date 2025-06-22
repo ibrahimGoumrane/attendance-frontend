@@ -35,3 +35,9 @@ export interface AttendanceHourlyWeek {
   date: string;
   hourly_data: AttendanceHourlyData[];
 }
+
+export interface SubjectAttendanceConfirm {
+  date: string;
+  subject_id: string;
+  students: { student_id: string; status: "present" | "absent" }[];
+}
