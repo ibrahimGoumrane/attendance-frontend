@@ -218,11 +218,11 @@ export class ApiResource<T, CreateDTO = T, UpdateDTO = Partial<T>> {
   /**
    * Custom POST endpoint handler
    */
-  async customPost<ResponseType>(endpoint: string, data: unknown): Promise<ResponseType> {
+  async customPost<ResponseType>(endpoint: string, data: FormData | object): Promise<ResponseType> {
     const url = `${this.baseUrl}${endpoint.replace(/^\/|\/$/g, "")}/`;
     return (await fetchData<ResponseType>(url, {
       method: "POST",
-      body: JSON.stringify(data),
+      body: data instanceof FormData ? data : JSON.stringify(data),
     })) as ResponseType;
   }
 
