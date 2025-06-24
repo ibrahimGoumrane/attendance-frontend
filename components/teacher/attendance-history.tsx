@@ -5,48 +5,22 @@ import { format } from "date-fns";
 import { Calendar, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Attendance } from "@/lib/types/attendance";
 import { Subject } from "@/lib/types/subject";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface AttendanceHistoryProps {
   attendances: Attendance[];
   subjects: Subject[];
 }
 
-export function AttendanceHistory({
-  attendances,
-  subjects,
-}: AttendanceHistoryProps) {
+export function AttendanceHistory({ attendances, subjects }: AttendanceHistoryProps) {
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
@@ -54,11 +28,9 @@ export function AttendanceHistory({
   const itemsPerPage = 10;
 
   // Filter attendances based on selected filters
-  const filteredAttendances = attendances.filter((attendance) => {
-    const subjectMatch =
-      selectedSubject === "all" || attendance.subject.id === selectedSubject;
-    const statusMatch =
-      selectedStatus === "all" || attendance.status === selectedStatus;
+  const filteredAttendances = attendances.filter(attendance => {
+    const subjectMatch = selectedSubject === "all" || attendance.subject.id === selectedSubject;
+    const statusMatch = selectedStatus === "all" || attendance.status === selectedStatus;
     const dateMatch =
       !selectedDate ||
       (new Date(attendance.date).getDate() === selectedDate.getDate() &&
@@ -92,10 +64,9 @@ export function AttendanceHistory({
 
   // Calculate overall statistics
   const totalAttendances = attendances.length;
-  const presentCount = attendances.filter((a) => a.status === "present").length;
-  const absentCount = attendances.filter((a) => a.status === "absent").length;
-  const presentPercentage =
-    totalAttendances > 0 ? (presentCount / totalAttendances) * 100 : 0;
+  const presentCount = attendances.filter(a => a.status === "present").length;
+  const absentCount = attendances.filter(a => a.status === "absent").length;
+  const presentPercentage = totalAttendances > 0 ? (presentCount / totalAttendances) * 100 : 0;
 
   return (
     <div className="space-y-6">
@@ -114,14 +85,10 @@ export function AttendanceHistory({
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Attendance Rate
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Attendance Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {presentPercentage.toFixed(1)}%
-            </div>
+            <div className="text-2xl font-bold">{presentPercentage.toFixed(1)}%</div>
             <p className="text-xs text-muted-foreground">
               {presentCount} present, {absentCount} absent
             </p>
@@ -133,9 +100,7 @@ export function AttendanceHistory({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{subjects.length}</div>
-            <p className="text-xs text-muted-foreground">
-              With recorded attendance
-            </p>
+            <p className="text-xs text-muted-foreground">With recorded attendance</p>
           </CardContent>
         </Card>
       </div>
@@ -143,19 +108,23 @@ export function AttendanceHistory({
       <Card>
         <CardHeader>
           <CardTitle>Attendance Records</CardTitle>
-          <CardDescription>
-            View and filter attendance records by subject, date, and status
-          </CardDescription>
+          <CardDescription>View and filter attendance records by subject, date, and status</CardDescription>
 
           {/* Filter controls - improved responsive layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-4 place-items-center">
-            <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+            <Select
+              value={selectedSubject}
+              onValueChange={val => {
+                setSelectedSubject(val);
+                setCurrentPage(1);
+              }}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Filter by subject" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Subjects</SelectItem>
-                {subjects.map((subject) => (
+                {subjects.map(subject => (
                   <SelectItem key={subject.id} value={subject.id}>
                     {subject.name}
                   </SelectItem>
@@ -165,10 +134,7 @@ export function AttendanceHistory({
 
             <Popover>
               <PopoverTrigger asChild className="w-full">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
+                <Button variant="outline" className="w-full justify-start text-left font-normal">
                   <Calendar className="mr-2 h-4 w-4" />
                   {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
                 </Button>
@@ -177,13 +143,22 @@ export function AttendanceHistory({
                 <CalendarComponent
                   mode="single"
                   selected={selectedDate}
-                  onSelect={setSelectedDate}
+                  onSelect={val => {
+                    setSelectedDate(val);
+                    setCurrentPage(1);
+                  }}
                   initialFocus
                 />
               </PopoverContent>
             </Popover>
 
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <Select
+              value={selectedStatus}
+              onValueChange={val => {
+                setSelectedStatus(val);
+                setCurrentPage(1);
+              }}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
@@ -201,6 +176,7 @@ export function AttendanceHistory({
                 setSelectedSubject("all");
                 setSelectedDate(undefined);
                 setSelectedStatus("all");
+                setCurrentPage(1);
               }}
             >
               Reset Filters
@@ -223,34 +199,25 @@ export function AttendanceHistory({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {paginatedAttendances.map((attendance) => (
+                    {paginatedAttendances.map(attendance => (
                       <TableRow key={attendance.id}>
                         <TableCell className="whitespace-nowrap">
                           {format(new Date(attendance.date), "PP")}
                         </TableCell>
-                        <TableCell className="font-medium">
-                          {attendance.subject.name}
-                        </TableCell>
+                        <TableCell className="font-medium">{attendance.subject.name}</TableCell>
                         <TableCell>
-                          {attendance.student.user.firstName}{" "}
-                          {attendance.student.user.lastName}
+                          {attendance.student.user.firstName} {attendance.student.user.lastName}
                         </TableCell>
                         <TableCell>
                           <Badge
-                            variant={
-                              attendance.status === "present"
-                                ? "default"
-                                : "destructive"
-                            }
+                            variant={attendance.status === "present" ? "default" : "destructive"}
                             className={
                               attendance.status === "present"
                                 ? "bg-green-100 text-green-800 hover:bg-green-100 hover:text-green-800"
                                 : ""
                             }
                           >
-                            {attendance.status === "present"
-                              ? "Present"
-                              : "Absent"}
+                            {attendance.status === "present" ? "Present" : "Absent"}
                           </Badge>
                         </TableCell>
                       </TableRow>
@@ -264,19 +231,14 @@ export function AttendanceHistory({
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
                   <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
                     Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                    {Math.min(
-                      currentPage * itemsPerPage,
-                      filteredAttendances.length
-                    )}{" "}
-                    of {filteredAttendances.length} records
+                    {Math.min(currentPage * itemsPerPage, filteredAttendances.length)} of{" "}
+                    {filteredAttendances.length} records
                   </div>
                   <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.max(prev - 1, 1))
-                      }
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
                     >
                       <ChevronLeft className="h-4 w-4" />
@@ -287,9 +249,7 @@ export function AttendanceHistory({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                      }
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                       disabled={currentPage === totalPages}
                     >
                       <ChevronRight className="h-4 w-4" />
@@ -305,8 +265,8 @@ export function AttendanceHistory({
               </div>
               <h3 className="text-lg font-semibold mb-1">No records found</h3>
               <p className="text-sm text-muted-foreground text-center max-w-sm">
-                No attendance records match your current filters. Try adjusting
-                your filters or adding new attendance records.
+                No attendance records match your current filters. Try adjusting your filters or adding new
+                attendance records.
               </p>
             </div>
           )}

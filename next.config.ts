@@ -4,6 +4,11 @@ const IMAGE_HOST = process.env.NEXT_PUBLIC_IMAGE_HOST || 'localhost';
 const IMAGE_PORT = process.env.NEXT_PUBLIC_IMAGE_PORT || '';
 
 const nextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '5mb',
+    },
+  },
   images: {
     remotePatterns: [
       {

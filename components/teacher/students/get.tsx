@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, GraduationCap, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,7 +9,7 @@ import type { Student } from "@/lib/types/student";
 import type { Subject } from "@/lib/types/subject";
 import type { Class } from "@/lib/types/class";
 import type { Attendance } from "@/lib/types/attendance";
-import { Badge } from "@/components/ui/badge";
+import { AttendanceHistory } from "../attendance-history";
 
 interface MainProps {
   student: Student;
@@ -20,20 +19,10 @@ interface MainProps {
 }
 
 export default function StudentDetailsPage({ student, studentSubjects, classData, attendances }: MainProps) {
-  // Add pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   // Calculate attendance statistics
   const totalAttendances = attendances.length;
   const presentCount = attendances.filter(a => a.status === "present").length;
   const attendanceRate = totalAttendances > 0 ? Math.round((presentCount / totalAttendances) * 100) : 0;
-
-  // Calculate paginated attendances
-  const totalPages = Math.ceil(attendances.length / itemsPerPage);
-  const paginatedAttendances = attendances
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="space-y-6">
@@ -168,145 +157,7 @@ export default function StudentDetailsPage({ student, studentSubjects, classData
               </Card>
             </TabsContent>
             <TabsContent value="attendance" className="mt-4">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <div>
-                    <CardTitle>Attendance Records</CardTitle>
-                    <CardDescription>Student&apos;s attendance history</CardDescription>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-1">
-                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                      <span className="text-xs text-muted-foreground">Present</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                      <span className="text-xs text-muted-foreground">Absent</span>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {attendances.length > 0 ? (
-                    <div className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Card>
-                          <CardContent className="pt-6">
-                            <div className="text-center">
-                              <div className="text-2xl font-bold">{totalAttendances}</div>
-                              <p className="text-xs text-muted-foreground">Total Records</p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardContent className="pt-6">
-                            <div className="text-center">
-                              <div className="text-2xl font-bold">{attendanceRate}%</div>
-                              <p className="text-xs text-muted-foreground">Attendance Rate</p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardContent className="pt-6">
-                            <div className="text-center">
-                              <div className="text-2xl font-bold">{studentSubjects.length}</div>
-                              <p className="text-xs text-muted-foreground">Subjects</p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-
-                      <div className="rounded-md border dark:border-gray-800">
-                        <table className="w-full">
-                          <thead>
-                            <tr className="bg-gray-50 dark:bg-gray-800">
-                              <th className="py-3 px-4 text-left text-sm font-medium">Date</th>
-                              <th className="py-3 px-4 text-left text-sm font-medium">Subject</th>
-                              <th className="py-3 px-4 text-left text-sm font-medium">Teacher</th>
-                              <th className="py-3 px-4 text-left text-sm font-medium">Status</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y dark:divide-gray-800">
-                            {paginatedAttendances.map(attendance => (
-                              <tr key={attendance.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
-                                <td className="py-3 px-4 text-sm font-medium dark:text-white">
-                                  {new Date(attendance.date).toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                  })}
-                                </td>
-                                <td className="py-3 px-4 text-sm dark:text-gray-300">
-                                  <Link href={`/teacher/subjects/${attendance.subject.id}`} className="hover:underline">
-                                    {attendance.subject.name}
-                                  </Link>
-                                </td>
-                                <td className="py-3 px-4 text-sm dark:text-gray-300">
-                                  <Link
-                                    href={`/teacher/teachers/${attendance.subject.teacher.id}`}
-                                    className="hover:underline"
-                                  >
-                                    {attendance.subject.teacher.user.firstName}{" "}
-                                    {attendance.subject.teacher.user.lastName}
-                                  </Link>
-                                </td>
-                                <td className="py-3 px-4 text-sm">
-                                  <Badge
-                                    variant={attendance.status === "present" ? "default" : "destructive"}
-                                    className={`${
-                                      attendance.status === "present"
-                                        ? "bg-green-100 text-green-800 hover:bg-green-100"
-                                        : "bg-red-100 text-red-300 hover:bg-red-100"
-                                    }`}
-                                  >
-                                    {attendance.status === "present" ? "Present" : "Absent"}
-                                  </Badge>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-
-                      {totalPages > 1 && (
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                          <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
-                            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                            {Math.min(currentPage * itemsPerPage, attendances.length)} of {attendances.length} records
-                          </div>
-                          <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                              disabled={currentPage === 1}
-                            >
-                              <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <div className="text-sm">
-                              Page {currentPage} of {totalPages}
-                            </div>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                              disabled={currentPage === totalPages}
-                            >
-                              <ChevronRight className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-[300px]">
-                      <p className="text-muted-foreground mb-2">No attendance records found</p>
-                      <p className="text-sm text-muted-foreground">
-                        Attendance records will appear here once they are recorded
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <AttendanceHistory attendances={attendances} subjects={studentSubjects} />
             </TabsContent>
           </Tabs>
         </div>

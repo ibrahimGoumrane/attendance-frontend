@@ -25,10 +25,15 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const filteredDepartments = departments.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredDepartments = departments.filter(d =>
+    d.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const totalPages = Math.ceil(filteredDepartments.length / itemsPerPage);
-  const paginatedDepartments = filteredDepartments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedDepartments = filteredDepartments.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="space-y-6">
@@ -51,7 +56,10 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
               placeholder="Search departments..."
               className="pl-8"
               value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
+              onChange={e => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
             />
           </div>
 
@@ -75,7 +83,9 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
                         </Link>
                       </TableCell>
                       <TableCell className="dark:text-gray-300">
-                        {dept.description || <span className="italic text-muted-foreground">No description</span>}
+                        {dept.description || (
+                          <span className="italic text-muted-foreground">No description</span>
+                        )}
                       </TableCell>
                       <TableCell className="dark:text-gray-300">{dept.teacherCount}</TableCell>
                       <TableCell>
@@ -116,8 +126,8 @@ export default function DepartmentList({ departments }: DepartmentListProps) {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
               <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
                 Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                {Math.min(currentPage * itemsPerPage, filteredDepartments.length)} of {filteredDepartments.length}{" "}
-                departments
+                {Math.min(currentPage * itemsPerPage, filteredDepartments.length)} of{" "}
+                {filteredDepartments.length} departments
               </div>
               <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
                 <Button

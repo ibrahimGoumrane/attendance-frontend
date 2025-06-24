@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Download, Edit, MoreHorizontal, Plus, Search, Trash2, Upload, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Download,
+  Edit,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Trash2,
+  Upload,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +59,10 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
   });
 
   const totalPages = Math.ceil(filteredSubjects.length / itemsPerPage);
-  const paginatedSubjects = filteredSubjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedSubjects = filteredSubjects.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleEditClick = (subject: Subject) => {
     setDeleteModalOpen(false);
@@ -91,9 +104,7 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
       <Card>
         <CardHeader className="pb-3">
           <CardTitle>Your Subjects</CardTitle>
-          <CardDescription>
-            View and filter your subjects by class or search by name.
-          </CardDescription>
+          <CardDescription>View and filter your subjects by class or search by name.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -103,7 +114,10 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
                 placeholder="Search Subjects..."
                 className="pl-8"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={e => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
             <Select
@@ -192,7 +206,8 @@ export default function SubjectList({ teacher_subjects, teacher, classes }: Subj
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
               <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
                 Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                {Math.min(currentPage * itemsPerPage, filteredSubjects.length)} of {filteredSubjects.length} subjects
+                {Math.min(currentPage * itemsPerPage, filteredSubjects.length)} of {filteredSubjects.length}{" "}
+                subjects
               </div>
               <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
                 <Button

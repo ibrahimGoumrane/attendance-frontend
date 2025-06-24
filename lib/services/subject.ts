@@ -1,3 +1,4 @@
+import { Attendance } from "../types/attendance";
 import {
   CreateSubject,
   Subject,
@@ -25,3 +26,6 @@ export const getSubjectsAttendanceToday = () =>
 
 export const getTeacherSubjectsAttendanceToday = (id: string) =>
   subjectApiResource.getAllResource<SubjectAttendance>(`attendance-today/teacher/${id}/`);
+
+export const getSubjectAttendance = (id: string) =>
+  subjectApiResource.getAllResource<Attendance>(`${id}/attendance/`);
