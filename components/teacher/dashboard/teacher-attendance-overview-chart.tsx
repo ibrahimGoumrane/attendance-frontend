@@ -36,7 +36,7 @@ export function TeacherAttendanceOverviewChart({ data }: TeacherAttendanceOvervi
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[0.70rem] uppercase text-muted-foreground">Attendance</span>
-                      <span className="font-bold text-foreground">{payload[0].value}%</span>
+                      <span className="font-bold text-foreground">{Number(payload[0].value).toFixed(2)}%</span>
                     </div>
                   </div>
                 </div>
