@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import SubjectDetailsPage from "@/components/teacher/subjects/get";
-import { getSubject } from "@/lib/services/subject";
+import { getSubject, getSubjectAttendance } from "@/lib/services/subject";
 import { getAllClasses } from "@/lib/services/classes";
 import { getLoggedInTeacher } from "@/lib/services/users";
 
@@ -18,11 +18,14 @@ export default async function SubjectPage({ params }: { params: Promise<{ id: st
   if (subject.teacher.id !== loggedInTeacher.id) {
     return <div>You do not have permission to view this subject.</div>;
   }
+
+  const attendance = await getSubjectAttendance(subject.id);
+
   const classes = await getAllClasses();
 
   return (
     <Suspense fallback={<div>Loading subject details...</div>}>
-      <SubjectDetailsPage subject={subject} teacher={loggedInTeacher} classes={classes} />
+      <SubjectDetailsPage subject={subject} teacher={loggedInTeacher} classes={classes} subjectAttendace={attendance} />
     </Suspense>
   );
 }

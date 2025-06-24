@@ -8,6 +8,7 @@ import {
   UpdateAttendanceSchema,
   DeleteAttendanceSchema,
 } from "../schemas/attendances";
+import { SubjectAttendanceProcessResponse } from "../types/attendance";
 
 // Helper function to construct revalidation paths based on role
 const getRevalidationPaths = (basePath: string, id?: string): string[] => {
@@ -72,3 +73,32 @@ export const deleteAttendance = async (
   );
   redirect(`${basePath}/attendances`);
 };
+
+/**
+ * Confirm attendance records
+ */
+export const confirmAttendance = async (
+  data: FormData | object,
+) => {
+  try {
+    await attendanceApiResource.customPost('confirm', data);
+    return { success: true, error: null };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+/**
+ * Process attendance images
+ */
+export const processAttendanceImages = async (
+  data: FormData,
+) => {
+  try {
+    console.log("Preparing request data:", data);
+    const response = await attendanceApiResource.customPost<SubjectAttendanceProcessResponse>('process', data);
+    return { success: true, data: response, error: null };
+  } catch (error) {
+    return { success: false, data: null, error: (error as Error).message };
+  }
+}

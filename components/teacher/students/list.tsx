@@ -68,7 +68,7 @@ export default function StudentList({ students, classes }: StudentListProps) {
                 placeholder="Search Students..."
                 className="pl-8"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={e => {setSearchQuery(e.target.value); setCurrentPage(1);}}
               />
             </div>
             <Select
