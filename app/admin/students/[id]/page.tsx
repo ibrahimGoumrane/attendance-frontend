@@ -2,7 +2,11 @@
 
 import StudentMain from "@/components/admin/students/get";
 import { getAllClasses, getClass } from "@/lib/services/classes";
-import { getStudent, getStudentAttendances } from "@/lib/services/students";
+import {
+  getStudent,
+  getStudentAttendances,
+  getStudentImages,
+} from "@/lib/services/students";
 
 export default async function StudentDetailsPage({
   params,
@@ -10,10 +14,11 @@ export default async function StudentDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [studentData, classes, attendances] = await Promise.all([
+  const [studentData, classes, attendances, studentImages] = await Promise.all([
     getStudent(id),
     getAllClasses(),
     getStudentAttendances(id),
+    getStudentImages(id),
   ]);
 
   if (!studentData) {
@@ -32,6 +37,7 @@ export default async function StudentDetailsPage({
       student={studentData}
       classData={classData}
       attendances={attendances}
+      studentImages={studentImages}
     />
   );
 }

@@ -27,4 +27,5 @@ export type StudentImage = {
   id: string;
   image: string;
   is_encoded: boolean;
+  uploaded_at: string;
 };

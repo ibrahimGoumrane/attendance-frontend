@@ -19,9 +19,14 @@ export const editStudent = (id: string, data: UpdateStudent) =>
 export const deleteStudent = (id: string) => studentApiResource.delete(id);
 
 // Source for student images
-const studentImageApiResource = createApiResource<StudentImage>("images");
-export const getStudentImages = (id: string) => studentImageApiResource.get(id);
-export const addStudentImage = (data: StudentImage) =>
+export const studentImageApiResource = createApiResource<
+  StudentImage,
+  FormData,
+  FormData
+>("images", true);
+export const getStudentImages = (id: string) =>
+  studentImageApiResource.getAllResource<StudentImage>(`?student_id=${id}`);
+export const addStudentImage = (data: FormData) =>
   studentImageApiResource.create(data);
 
 export const getStudentAttendances = async (id: string) => {

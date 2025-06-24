@@ -11,6 +11,7 @@ import { ZodSchema } from "zod";
 import { TextField } from "./text-field";
 import { FieldConfig, State } from "@/lib/schemas/base";
 import { SelectField } from "./select-field";
+import { FileField } from "./file-field";
 
 interface BaseFormProps {
   initialState: State;
@@ -85,33 +86,50 @@ function BaseForm({
                 key={fieldConfig.name}
                 name={fieldConfig.name}
                 control={form.control}
-                render={({ field }) =>
-                  fieldConfig.type === "select" ? (
-                    <SelectField
-                      label={fieldConfig.label}
-                      field={field}
-                      state={state}
-                      options={fieldConfig.options!}
-                      placeholder={fieldConfig.placeholder}
-                      required={fieldConfig.required}
-                      disabled={fieldConfig.disabled}
-                      helpText={fieldConfig.helpText}
-                      className={fieldConfig.className}
-                      onValueChange={fieldConfig.onValueChange}
-                    />
-                  ) : (
-                    <TextField
-                      label={fieldConfig.label}
-                      type={fieldConfig.type}
-                      field={field}
-                      state={state}
-                      placeholder={fieldConfig.placeholder}
-                      required={fieldConfig.required}
-                      helpText={fieldConfig.helpText}
-                      className={fieldConfig.className}
-                    />
-                  )
-                }
+                render={({ field }) => {
+                  if (fieldConfig.type === "select") {
+                    return (
+                      <SelectField
+                        label={fieldConfig.label}
+                        field={field}
+                        state={state}
+                        options={fieldConfig.options!}
+                        placeholder={fieldConfig.placeholder}
+                        required={fieldConfig.required}
+                        disabled={fieldConfig.disabled}
+                        helpText={fieldConfig.helpText}
+                        className={fieldConfig.className}
+                        onValueChange={fieldConfig.onValueChange}
+                      />
+                    );
+                  } else if (fieldConfig.type === "file") {
+                    return (
+                      <FileField
+                        label={fieldConfig.label}
+                        field={field}
+                        state={state}
+                        required={fieldConfig.required}
+                        helpText={fieldConfig.helpText}
+                        className={fieldConfig.className}
+                        multiple={fieldConfig.multiple}
+                        accept={fieldConfig.accept}
+                      />
+                    );
+                  } else {
+                    return (
+                      <TextField
+                        label={fieldConfig.label}
+                        type={fieldConfig.type}
+                        field={field}
+                        state={state}
+                        placeholder={fieldConfig.placeholder}
+                        required={fieldConfig.required}
+                        helpText={fieldConfig.helpText}
+                        className={fieldConfig.className}
+                      />
+                    );
+                  }
+                }}
               />
             )
           )}
