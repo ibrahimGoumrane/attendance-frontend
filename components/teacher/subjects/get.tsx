@@ -7,22 +7,28 @@ import { ArrowLeft, BookOpen, Edit, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Subject } from "@/lib/types/subject";
 import { Teacher } from "@/lib/types/teacher";
 import { Class } from "@/lib/types/class";
 import UpdateSubjectForm from "./edit";
 import DeleteSubject from "./delete";
+import { Attendance } from "@/lib/types/attendance";
+import { AttendanceHistory } from "../attendance-history";
 
 interface MainProps {
   subject: Subject;
   teacher: Teacher;
   classes: Class[];
+  subjectAttendace: Attendance[];
 }
 
-export default function SubjectDetailsPage({ subject, teacher, classes }: MainProps) {
+export default function SubjectDetailsPage({ subject, teacher, classes, subjectAttendace }: MainProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const totalAttendances = subjectAttendace.length;
+  const presentCount = subjectAttendace.filter(a => a.status === "present").length;
+  const presentPercentage = totalAttendances > 0 ? (presentCount / totalAttendances) * 100 : 0;
 
   return (
     <div className="space-y-6">
@@ -97,73 +103,22 @@ export default function SubjectDetailsPage({ subject, teacher, classes }: MainPr
                   <BookOpen className="h-5 w-5 text-green-500" />
                   <span className="text-sm font-medium">Attendance Rate</span>
                 </div>
-                <p className="text-2xl font-bold">N/A</p>
+                <p className="text-2xl font-bold">{presentPercentage.toFixed(1)}%</p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs defaultValue="students">
-        <TabsList>
-          <TabsTrigger value="students">Students</TabsTrigger>
-          <TabsTrigger value="attendance">Attendance</TabsTrigger>
+      <Tabs defaultValue="attendance" className="w-full">
+        <TabsList className="w-full justify-start border-b">
+          <TabsTrigger value="attendance" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Attendance History
+          </TabsTrigger>
         </TabsList>
-        <TabsContent value="students" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Enrolled Students</CardTitle>
-              <CardDescription>Students currently taking this subject</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={2} className="text-center py-10">
-                        No student data available.
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="attendance" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Attendance Records</CardTitle>
-              <CardDescription>Recent attendance for this subject</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Present</TableHead>
-                      <TableHead>Absent</TableHead>
-                      <TableHead>Rate</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={4} className="text-center py-10">
-                        No attendance data available.
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="attendance" className="mt-4 pt-2">
+          <AttendanceHistory attendances={subjectAttendace} subjects={[subject]} />
         </TabsContent>
       </Tabs>
 
