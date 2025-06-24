@@ -32,7 +32,10 @@ export default function List({ classes }: ClassesPageProps) {
   });
 
   const totalPages = Math.ceil(filteredClasses.length / itemsPerPage);
-  const paginatedClasses = filteredClasses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedClasses = filteredClasses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="space-y-6">
@@ -56,7 +59,10 @@ export default function List({ classes }: ClassesPageProps) {
                 placeholder="Search classes..."
                 className="pl-8"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={e => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
           </div>
@@ -91,7 +97,10 @@ export default function List({ classes }: ClassesPageProps) {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>
-                              <Link href={`/teacher/classes/${cls.id}`} className="flex items-center justify-start">
+                              <Link
+                                href={`/teacher/classes/${cls.id}`}
+                                className="flex items-center justify-start"
+                              >
                                 View Details
                               </Link>
                             </DropdownMenuItem>
@@ -115,7 +124,8 @@ export default function List({ classes }: ClassesPageProps) {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-0 sm:mt-4">
               <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
                 Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                {Math.min(currentPage * itemsPerPage, filteredClasses.length)} of {filteredClasses.length} classes
+                {Math.min(currentPage * itemsPerPage, filteredClasses.length)} of {filteredClasses.length}{" "}
+                classes
               </div>
               <div className="flex items-center justify-center sm:justify-end space-x-2 order-1 sm:order-2">
                 <Button
