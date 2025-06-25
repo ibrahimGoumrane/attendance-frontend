@@ -16,7 +16,6 @@ import {
   studentImageCreateRenderFields,
 } from "@/lib/schemas/student-images";
 import { Student } from "@/lib/types/student";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface FormProps {
@@ -27,7 +26,6 @@ interface FormProps {
 
 const CreateStudentImageForm = ({ children, students, student }: FormProps) => {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
   const initialValues: Record<string, string> = {
     student_id: student ? student.id : "",
   };
@@ -75,7 +73,7 @@ const CreateStudentImageForm = ({ children, students, student }: FormProps) => {
           onSuccess={() => {
             setOpen(false);
             console.log("Image uploaded successfully");
-            router.refresh();
+            // router.refresh();
           }}
           defaultValues={initialValues}
         />
