@@ -16,7 +16,7 @@ export const addTeacher = (data: CreateTeacher) =>
 export const editTeacher = (id: string, data: UpdateTeacher) =>
   teacherApiResource.update(id, data);
 export const getTeacherAttendance = (id: string): Promise<Attendance[]> =>
-  teacherApiResource.getAllResource(`${id}/attendance/`);
+  teacherApiResource.getAllResource(`${id}/attendances/`);
 export const getTeacherSubjects = (id: string): Promise<Subject[]> =>
   teacherApiResource.getAllResource(`${id}/subjects/`);
 export const getTeacherTotalStudents = async (id: string) => teacherApiResource.getResource<Total>(`${id}/total/students/`);
